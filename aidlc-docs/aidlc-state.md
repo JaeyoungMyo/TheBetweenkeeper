@@ -18,8 +18,8 @@
 ## Stage Progress
 - [x] INCEPTION - Workspace Detection
 - [x] INCEPTION - Requirements Analysis
-- [x] INCEPTION - Workflow Planning (승인 대기)
-- [ ] INCEPTION - Application Design [EXECUTE]
+- [x] INCEPTION - Workflow Planning
+- [ ] INCEPTION - Application Design [EXECUTE] (계획 질문 AD-1~AD-8 답변 대기)
 - [ ] INCEPTION - Units Generation [EXECUTE]
 - [ ] INCEPTION - User Stories [SKIP: 단일 플레이어, 페르소나 없음]
 - [ ] INCEPTION - Reverse Engineering [SKIP: Greenfield]

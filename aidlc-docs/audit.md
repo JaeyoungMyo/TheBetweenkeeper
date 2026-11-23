@@ -80,3 +80,19 @@
 **Context**: Requirements 변경 (상점 흐름)
 
 ---
+## Workflow Planning - Approval
+**Timestamp**: 2026-11-23T21:33:41+09:00
+**AI Prompt**: "이 계획으로 진행할까요?" (실행 계획: Application Design, Units Generation 등 7개 stage 실행, 상점 흐름 및 입력·출력공간 반영)
+**User Response**: "승인"
+**Status**: Approved
+**Context**: Workflow Planning 완료. Application Design 실행
+
+---
+
+## Application Design (계획 작성)
+**Timestamp**: 2026-11-23T21:33:41+09:00
+**User Input**: (위 승인 입력과 동일 턴)
+**AI Response**: `aidlc-docs/inception/plans/application-design-plan.md` 작성. 질문 8개 (AD-1 ~ AD-8): 오토로드 구성, 입력·출력공간 형태, 순수 로직 위치, 통신 방식, 던전 흐름 관리, 요청 타이머, 데이터 형식, 세이브 형식. 답변 전까지 설계 산출물 생성 보류.
+**Context**: Application Design Step 2~5 (계획 및 질문 작성)
+
+---
