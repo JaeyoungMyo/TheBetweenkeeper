@@ -110,7 +110,7 @@ B) 지금 User Stories stage 를 추가로 실행한 뒤 스토리 기준으로 
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: B (사용자 답변: User Stories 추가. Units Generation 은 User Stories 완료 후 재개, 스토리 기준으로 unit 을 나눔)
 
 ---
 

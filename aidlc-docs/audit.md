@@ -117,3 +117,10 @@
 **Context**: Units Generation Part 1 Step 1~5 (계획 작성, 질문 생성)
 
 ---
+## User Stories 추가 (Units Generation UG-6 답변 B)
+**Timestamp**: 2026-11-23T21:46:10+09:00
+**User Input**: "User Stories 추가"
+**AI Response**: UG-6 에서 B 선택 확인. Units Generation 을 일시 중단하고 User Stories 를 실행. user-stories-assessment.md 작성 (실행 Yes, 근거: 사용자 경험 변경, 복잡한 비즈니스 로직, 범위, 모호성, 선택지). story-generation-plan.md 작성, 질문 US-1 ~ US-7 (persona 수, 분할 방식, 문장 형식, 인수 조건 형식, 범위, 세분화 수준, 시스템 스토리). 답변 전까지 stories.md, personas.md 생성 보류.
+**Context**: User Stories Part 1 Step 1~7 (평가, 계획, 질문 생성)
+
+---
