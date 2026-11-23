@@ -159,3 +159,10 @@
 **Context**: CONSTRUCTION Phase 진입, Functional Design (U1) Step 2~4
 
 ---
+## U1 Functional Design 답변 확인 및 산출물 생성
+**Timestamp**: 2026-11-23T23:57:25+09:00
+**User Input**: "답변한거말고는 모두 추천대로 진행"
+**AI Response**: FD-U1-6 X 답변 ("무조건 캐릭터 아래로 버려짐") 반영. FD-U1-7 답변 ("하나의 칸 무게 10, 회복약 1, 스크롤 1, 무기 3") 을 해석 FD-A1 로 기록: 칸 한도 10, 시설 최대 = 칸 수 × 10, 칸 안에 여러 아이템 가능. 기획서 10장의 시설 최대 무게 (40, 15 등) 와 충돌하므로 승인 단계에서 확인 필요. 나머지 FD-U1-1~5 는 추천안 채택. business-logic-model.md, business-rules.md, domain-entities.md 생성.
+**Context**: Functional Design (U1) Step 5~6 (답변 분석, 산출물 생성)
+
+---
