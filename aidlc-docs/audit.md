@@ -173,3 +173,10 @@
 **Context**: Functional Design (U1) 정정 반영
 
 ---
+## U1 설계 정정 (속도 무관, 칸 12, 기획서 반영) 및 Code Generation 계획
+**Timestamp**: 2026-11-24T05:52:42+09:00
+**User Input**: "무게 등급 기준 (경량 ≤2 / 중량 ≤4 / 고중량 >4) 이 맞는지 → 맞음. 다만 무게에 따라서 속도는 바뀌지 않게 하자 ... 기획서의 무게 예시 (4.2) 와 시설별 최대 무게 (10장) 를 정수 무게에 맞게 고칠지 → 모두 12로 고쳐줘" / 그 후 "이어서 진행"
+**AI Response**: (1) 속도 정정: BR-U1-09 와 business-logic-model 1-5 를 무게와 무관한 일정 속도로 수정. FR-08, US-07 (AC-07-1~3), D-19 추가. (2) 기획서 4.2 무게 예시를 정수 기준 (경량 1~2, 중량 3~4, 고중량 6 이상) 으로 수정, 10장 시설 최대 무게를 칸당 12 (고정) 및 칸 수 × 12 (선반 3칸 = 36) 로 수정. 속도 페널티 행 (운반 속도 향상) 삭제. (3) U1 Code Generation 계획 작성: u1-storage-controls-code-generation-plan.md (Step 1~11, 추적성 표).
+**Context**: Functional Design 정정 반영, Code Generation Part 1 Step 2~6 (계획 작성, 승인 요청 준비)
+
+---

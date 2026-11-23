@@ -12,7 +12,7 @@
 | `display_name` | String | 표시 이름 (한국어) |
 | `category` | String | 카테고리 (무기, 물약, 재료 등) |
 | `weight` | int | 무게 (1, 2, 3, 4, 6 중 하나) |
-| `weight_class` | enum | 경량 (≤2) · 중량 (≤4) · 고중량 (>4), BR-U1-10 |
+| `weight_class` | enum | 경량 (≤2) · 중량 (≤4) · 고중량 (>4), 분류 정보 (BR-U1-10) |
 | `footprint` | Vector2 | 물리 충돌 크기 (적재 규칙에 사용하지 않음) |
 | `base_price` | int | 판매가 (U4 에서 사용) |
 | `exp_value` | int | 수납 EXP (U2 에서 사용) |
@@ -58,7 +58,7 @@
 | 필드 | 타입 | 설명 |
 | --- | --- | --- |
 | `held_item_id` | int (nullable) | 손에 든 아이템 (최대 1, BR-U1-06) |
-| `move_speed_factor` | float | 무게 등급에 따른 배율 (BR-U1-09) |
+| `move_speed` | float | 기본 이동 속도 (무게와 무관, BR-U1-09). 배율 필드 없음 |
 
 ## 2. 관계
 
@@ -75,6 +75,6 @@ PlayerCarry 0..1 ── 1 ItemInstance (held_item_id)
 
 | 클래스 | 입력 | 출력 | 관련 BR |
 | --- | --- | --- | --- |
-| `WeightRules` | 무게 목록, 한도 | 합계, 적재 가능 여부, 속도 배율 | BR-U1-01 ~ 03, 09 ~ 11 |
+| `WeightRules` | 무게 목록, 한도 | 합계, 적재 가능 여부, 무게 등급 | BR-U1-01 ~ 03, 10, 11 |
 | `PlacementRules` | 사각형 2개, 빈 자리 목록 | 겹침 여부, 빈 자리 | 겹침 검사 (기획서 3.4) |
 | `SlotRules` (신규, U1 전용) | 칸 상태, 아이템 무게 | 칸 적재 가능, 배정 결과 | BR-U1-01, 12, 13 |

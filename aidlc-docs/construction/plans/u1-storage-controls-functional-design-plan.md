@@ -21,7 +21,7 @@ B) 같으면 거부 (합계 < 최대)
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A
 
 ---
 
@@ -34,7 +34,7 @@ B) 처음부터 증강으로 늘릴 수 있는 값 (carry_capacity) 을 두고 �
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A
 
 ---
 
@@ -49,7 +49,7 @@ C) 3단계 고정 배율: 경량 (×0.9), 중량 (×0.75), 고중량 (×0.5). �
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: X 이동속도는 항상 기본 속도로 고정. 향후 증강으로 늘리기만 가능.
 
 ---
 
@@ -64,7 +64,7 @@ C) 아이템 이름 표시 (호버) 와 줍기 거리를 다르게 둠 (호버 6
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A. 해당 부분도 향후 증강으로 주울 수 있는 거리도 늘릴 수 있게.
 
 ---
 
@@ -79,7 +79,7 @@ C) `carried` 를 유지하고 손에서만 떨어뜨림
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A
 
 ---
 
