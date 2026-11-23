@@ -152,3 +152,10 @@
 **Context**: Units Generation Part 2 Step 13~14 (산출물 생성)
 
 ---
+## Units 승인 (Approval) 및 CONSTRUCTION 시작
+**Timestamp**: 2026-11-23T23:53:07+09:00
+**User Input**: "승인"
+**AI Response**: Units Generation 승인 기록. CONSTRUCTION 진입. 실행 순서 (UG-3 B 슬라이스): U1 → U2 → U3 → U4 → U5. 첫 unit U1 의 Functional Design 계획 작성 (FD-U1-1 ~ FD-U1-7, 추천안 표시). 답변 전까지 산출물 생성 보류.
+**Context**: CONSTRUCTION Phase 진입, Functional Design (U1) Step 2~4
+
+---
