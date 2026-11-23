@@ -17,5 +17,12 @@
 
 ## Stage Progress
 - [x] INCEPTION - Workspace Detection
-- [ ] INCEPTION - Requirements Analysis (질문 답변 대기)
+- [x] INCEPTION - Requirements Analysis (승인 대기)
 - [ ] INCEPTION - Workflow Planning
+
+## Extension Configuration
+| Extension | Enabled | Decided At |
+|---|---|---|
+| Resiliency Baseline | No | Requirements Analysis |
+| Security Baseline | No | Requirements Analysis |
+| Property-Based Testing | Yes | Requirements Analysis |

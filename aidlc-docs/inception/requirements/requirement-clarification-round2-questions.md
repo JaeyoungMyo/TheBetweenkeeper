@@ -21,7 +21,7 @@ C) 10회 누적
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A
 
 ---
 
@@ -36,7 +36,7 @@ C) 정리 완료를 요구하되, 30초 수면 후에도 남은 아이템이 있
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: 30초 수면 후에는 용사가 바로 상점을 들러서 이벤트가 진행됨. 용사는 User를 기다려주지않는 컨셉이야. 정리가 늦어지면 계속 아이템이 쌓이는식으로. 컨셉을 이렇게 이해해줘. 필요하면 기획서도 변경해줘.
 
 ---
 
@@ -51,4 +51,4 @@ C) 마우스 호버로 이름 표시 후 아이템 목록으로 드래그앤드�
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: B
