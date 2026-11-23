@@ -11,8 +11,8 @@
 | `item_id` | String | 아이템 종류 ID |
 | `display_name` | String | 표시 이름 (한국어) |
 | `category` | String | 카테고리 (무기, 물약, 재료 등) |
-| `weight` | float | 무게 (≥ 0.1) |
-| `weight_class` | enum | 경량 · 중량 · 고중량 (무게에서 자동 계산 가능, BR-U1-10) |
+| `weight` | int | 무게 (1, 2, 3, 4, 6 중 하나) |
+| `weight_class` | enum | 경량 (≤2) · 중량 (≤4) · 고중량 (>4), BR-U1-10 |
 | `footprint` | Vector2 | 물리 충돌 크기 (적재 규칙에 사용하지 않음) |
 | `base_price` | int | 판매가 (U4 에서 사용) |
 | `exp_value` | int | 수납 EXP (U2 에서 사용) |
@@ -36,8 +36,8 @@
 | `facility_id` | String | 시설 ID |
 | `display_name` | String | 표시 이름 |
 | `slot_count` | int | 칸 수 (기본 3) |
-| `slot_weight_limit` | float | 칸 무게 한도 (기본 10) |
-| `max_weight` | float (계산) | `slot_count × slot_weight_limit` (FD-A1) |
+| `slot_weight_limit` | int | 칸 무게 한도 (12, 고정) |
+| `max_weight` | int (계산) | `slot_count × slot_weight_limit` = 3 × 12 = 36 (FD-A1) |
 | `allowed_categories` | Array[String] | 허용 카테고리 |
 
 ### StorageFacility (씬 노드 상태, 런타임)
