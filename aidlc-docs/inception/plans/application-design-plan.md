@@ -2,7 +2,7 @@
 
 **기준 문서**: `aidlc-docs/inception/requirements/requirements.md` (FR-01~31, NFR-01~09, D-01~18), `aidlc-docs/inception/plans/execution-plan.md`
 
-이 계획은 설계 산출물을 만들기 전에 결정해야 할 항목을 정리한 것입니다. 각 질문의 `[Answer]:` 뒤에 선택지 문자를 적어 주세요. 맞는 선택지가 없으면 `X) Other`를 고르고 내용을 함께 적어 주세요. 모든 답변이 끝나면 알려 주세요.
+**답변 상태**: AD-1 ~ AD-6 확정. AD-7 · AD-8 은 "웹에서 해킹할 수 없게" 조건이 있어 AD-9 로 후속 확인합니다.
 
 **설계 산출물 (생성 예정)**
 - `aidlc-docs/inception/application-design/components.md`: 컴포넌트 이름, 목적, 책임
@@ -24,7 +24,7 @@ C) 최소 구성: 오토로드는 GameManager 1개만 두고, 나머지는 씬 �
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 추천
+[Answer]: B (사용자 "추천" 응답 → 추천안 B 채택)
 
 ---
 
@@ -54,7 +54,7 @@ C) A 와 B 를 섞음 (계산은 A, 씬 연결은 B)
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 추천
+[Answer]: A (사용자 "추천" 응답 → 추천안 A 채택)
 
 ---
 
@@ -69,7 +69,7 @@ C) 중앙 이벤트 버스 autoload 하나를 두고 모든 이벤트를 거기�
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 추천
+[Answer]: A (사용자 "추천" 응답 → 추천안 A 채택)
 
 ---
 
@@ -114,7 +114,7 @@ C) A 와 B 를 섞음 (아이템은 .tres, 던전 난이도 표는 JSON)
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 추천. 다만 웹상에서 해킹할수없게 하는방법으로
+[Answer]: C (사용자 "추천" 응답 → 추천안 C 채택). 웹 보호 방식은 AD-9 에서 확인
 
 ---
 
@@ -129,13 +129,42 @@ C) JSON 을 base64 로 감싼 파일 (내보내기 파일이 짧고 손대기 �
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 추천. 다만 웹상에서 해킹할수없게 하는방법으로
+[Answer]: A (사용자 "추천" 응답 → 추천안 A 채택). 웹 보호 방식은 AD-9 에서 확인
+
+---
+
+## Question AD-9 (후속 질문): 웹에서 데이터와 세이브를 어느 수준으로 보호할까요?
+
+AD-7, AD-8 답변에 "웹상에서 해킹할 수 없게"라는 조건이 있었습니다. 다만 웹 빌드는 플레이어 브라우저에서 실행되므로, 데이터와 세이브를 **완전히 막을 수는 없습니다**. 다음 중 보호 수준을 골라 주세요.
+
+**세이브 (AD-8 관련)**
+
+A) 평문 JSON (보호 없음, 가장 단순하고 디버깅이 쉬움)
+
+B) JSON + 서명(HMAC) 검사: 값을 고치면 불러올 때 거부. 서명 키가 클라이언트에 있어 숙련자는 우회 가능
+
+C) JSON 을 암호화 + 서명: 쉽게 읽거나 고치기 어렵게 함. 구현이 가장 복잡하고, 키는 여전히 클라이언트에 있음
+
+X) Other (please describe after [Answer]: tag below)
+
+[Answer]: 
+
+**데이터 파일 (AD-7 관련)**
+
+A) 평문 유지 (밸런스 데이터는 공개되어도 문제없음)
+
+B) 데이터 파일 암호화 (Godot 내보내기 암호화 사용. 웹 빌드에서 지원되는지는 설계 단계에서 확인 필요)
+
+X) Other (please describe after [Answer]: tag below)
+
+[Answer]: 
 
 ---
 
 ## 확인 완료 (질문 없음)
 
-- 오토로드 · 씬 구조: 기획서 12장과 12.1 (Main, StorageRoom, Player, Item, StorageFacility) 을 기준으로 함
+- 오토로드 · 씬 구조: 기획서 12장과 12.1 (Main, StorageRoom, Player, Item, StorageFacility) 을 기준으로 함. AD-1 에서 오토로드는 4개로 통합 (B)
 - 상점 흐름: 던전 완료 → 30초 수면 → 판매(출력공간) · 구매(입력공간 무작위 입고), D-18 기준
+- 입력 · 출력공간: 맵 위 실제 시설 (AD-2 A)
 - 웹 빌드: Compatibility 렌더러, 스레드 미사용 (D-02, NFR-07, NFR-08)
 - 해상도: 1280x720 고정 (D-10)

@@ -96,3 +96,10 @@
 **Context**: Application Design Step 2~5 (계획 및 질문 작성)
 
 ---
+## Application Design 답변 (AD-1 ~ AD-8)
+**Timestamp**: 2026-11-23T21:37:33+09:00
+**User Input**: "AD-1부터 AD-8까지 답변할게" (답변은 application-design-plan.md 의 [Answer]: 태그에 기록됨)
+**AI Response**: 답변 분석. AD-1 "추천" → B, AD-2 A, AD-3 "추천" → A, AD-4 "추천" → A, AD-5 A, AD-6 A, AD-7 "추천" → C, AD-8 "추천" → A. AD-7 · AD-8 의 "웹상에서 해킹할 수 없게" 는 완전 차단이 불가능하므로 보호 수준 후속 질문 AD-9 로 분리 (세이브, 데이터 각각). AD-9 답변 전까지 설계 산출물 생성 보류.
+**Context**: Application Design Step 7~9 (답변 수집, 모호함 분석, 후속 질문)
+
+---
