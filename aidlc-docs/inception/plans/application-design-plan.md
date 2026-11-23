@@ -24,7 +24,7 @@ C) 최소 구성: 오토로드는 GameManager 1개만 두고, 나머지는 씬 �
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: 추천
 
 ---
 
@@ -39,7 +39,7 @@ C) 맵 위 시설과 UI 패널 둘 다 사용 (걸어가서 옮기거나, 패널
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A
 
 ---
 
@@ -54,7 +54,7 @@ C) A 와 B 를 섞음 (계산은 A, 씬 연결은 B)
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: 추천
 
 ---
 
@@ -69,7 +69,7 @@ C) 중앙 이벤트 버스 autoload 하나를 두고 모든 이벤트를 거기�
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: 추천
 
 ---
 
@@ -84,7 +84,7 @@ C) 상태 머신과 코루틴 혼합 (상태는 상태 머신, 연출 대기는 
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A
 
 ---
 
@@ -99,7 +99,7 @@ C) 전투 상태 머신의 틱에 맞춰 셈 (DungeonManager 가 관리)
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A
 
 ---
 
@@ -114,7 +114,7 @@ C) A 와 B 를 섞음 (아이템은 .tres, 던전 난이도 표는 JSON)
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: 추천. 다만 웹상에서 해킹할수없게 하는방법으로
 
 ---
 
@@ -129,7 +129,7 @@ C) JSON 을 base64 로 감싼 파일 (내보내기 파일이 짧고 손대기 �
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: 추천. 다만 웹상에서 해킹할수없게 하는방법으로
 
 ---
 

@@ -6,3 +6,6 @@ credentials.json
 # Godot 생성물
 .godot/
 *.import.bak
+
+# codex 생성물
+assets
