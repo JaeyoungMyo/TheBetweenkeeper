@@ -31,7 +31,7 @@
 - **Total Stages**: 20 (표 기준)
 - **Stages to Execute**: Application Design, Units Generation, Functional Design (복잡 unit), Code Generation, Build and Test, Deployment Execution, Performance Validation
 - **Stages to Skip**: Reverse Engineering (Greenfield), User Stories (페르소나 없음), NFR Requirements · NFR Design (요구사항에 정의됨), Infrastructure Design (서버 없음), Deployment Pipeline · Environment Provisioning (CI · 서버 없음), Observability · Incident Response (운영 서비스 없음), Feedback & Optimization (운영 데이터 없음)
-- **Open Items**: P-01 대량 입고 주기 (FR-17 3던전 vs A-01 1던전) 확인 필요
+- **Open Items**: P-02 구매품 공간의 형태와 무게 한도 (Application Design 에서 정함). P-01 (상점 주기) 은 1던전 마다로 확정
 
 ## Extension Configuration
 | Extension | Enabled | Decided At |
