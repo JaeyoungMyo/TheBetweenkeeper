@@ -103,3 +103,10 @@
 **Context**: Application Design Step 7~9 (답변 수집, 모호함 분석, 후속 질문)
 
 ---
+## Application Design - AD-9 답변 및 설계 산출물 생성
+**Timestamp**: 2026-11-23T21:41:35+09:00
+**User Input**: "AD-9 답변"
+**AI Response**: AD-9 답변 확인: 세이브 보호 B (JSON + 서명), 데이터 파일 보호 B (암호화, 웹 지원 여부는 설계 검증 V-1). 설계 산출물 5개 생성: components.md, component-methods.md, services.md, component-dependency.md, application-design.md. 설계 중 확인 사항 V-1 (웹 데이터 암호화), V-2 (웹 세이브 다운로드), V-3 (입력공간 가득 참, A-07), V-4 (HMAC 키 보관) 기록. AD-6 의 RequestManager 는 AD-1 (B) 에 따라 DungeonManager 하위 RequestController 로 조정.
+**Context**: Application Design Step 10 (산출물 생성), Step 11 (승인 요청 준비)
+
+---

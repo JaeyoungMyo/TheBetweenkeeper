@@ -147,7 +147,7 @@ C) JSON 을 암호화 + 서명: 쉽게 읽거나 고치기 어렵게 함. 구현
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: B
 
 **데이터 파일 (AD-7 관련)**
 
@@ -157,7 +157,7 @@ B) 데이터 파일 암호화 (Godot 내보내기 암호화 사용. 웹 빌드�
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: B
 
 ---
 
