@@ -138,3 +138,17 @@
 **Context**: User Stories Part 1 Step 13~14 (승인 응답 기록)
 
 ---
+## Units Generation - Part 1 답변 확정
+**Timestamp**: 2026-11-23T23:51:53+09:00
+**User Input**: "모두 추천대로 진행해줘"
+**AI Response**: UG-1 A (폴더 모듈), UG-2 A (unit 5개), UG-3 B (튜토리얼 수직 슬라이스 → 던전 1 → 상점 → 저장), UG-4 A (U1, U3, U4 Functional Design), UG-5 A (구매 전 입력공간 여유 확인, 부족 시 구매 차단 = V-3 해소), UG-6 B (스토리 기준). unit-of-work-plan.md 의 답변 기록.
+**Context**: Units Generation Part 1 Step 6~7 (답변 수집, 분석)
+
+---
+## Units Generation - Part 2 (Generation) 산출물
+**Timestamp**: 2026-11-23T23:52:28+09:00
+**User Input**: "모두 추천대로 진행해줘"
+**AI Response**: unit-of-work.md (unit 5개 정의, 폴더 구조, 슬라이스 순서, 테스트 배치), unit-of-work-dependency.md (의존성 매트릭스, 순환 없음, 공유 자원, 리스크), unit-of-work-story-map.md (스토리 26개 → unit 배정, FR-01~31 커버리지 점검, NFR 연결) 생성. FR-09 는 직접 스토리가 없고 US-02~06 의 인수 조건으로 검증한다고 기록 (승인 단계에서 확인).
+**Context**: Units Generation Part 2 Step 13~14 (산출물 생성)
+
+---

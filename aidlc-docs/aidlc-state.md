@@ -20,7 +20,7 @@
 - [x] INCEPTION - Requirements Analysis
 - [x] INCEPTION - Workflow Planning
 - [x] INCEPTION - Application Design [EXECUTE] (승인 대기)
-- [ ] INCEPTION - Units Generation [EXECUTE] (Part 1 계획 질문 UG-1~UG-6 답변 대기)
+- [x] INCEPTION - Units Generation [EXECUTE] (unit 5개 생성, 승인 대기)
 - [x] INCEPTION - User Stories [EXECUTE: 사용자 요청으로 추가] (승인 완료, 스토리 26개)
 - [ ] INCEPTION - Reverse Engineering [SKIP: Greenfield]
 - [ ] CONSTRUCTION - Functional Design [EXECUTE, 복잡 unit] / NFR Requirements [SKIP] / NFR Design [SKIP] / Infrastructure Design [SKIP]
