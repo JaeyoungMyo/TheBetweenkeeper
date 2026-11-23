@@ -124,3 +124,10 @@
 **Context**: User Stories Part 1 Step 1~7 (평가, 계획, 질문 생성)
 
 ---
+## User Stories - 계획 답변 확인 및 스토리 생성
+**Timestamp**: 2026-11-23T23:50:18+09:00
+**User Input**: "답변 완료" (story-generation-plan.md 의 [Answer]: 태그)
+**AI Response**: US-1 답변 "2명: 아공간 정리 플레이어 / 신규 플레이어 (튜토리얼 중심)" → persona 2명 (P-01, P-02). US-2~US-7 답변 "추천" 은 계획 문서에 추천안이 표시되지 않아 AI 가 추천 기본값으로 해석: US-2 D (혼합), US-3 A (표준 형식), US-4 D (Given/When/Then + 체크리스트), US-5 A (전체 FR), US-6 B (중간 단위, 26개), US-7 C (저장·배포 시스템 스토리 분리). 해석 내용을 stories.md 상단에 명시하고 승인 단계에서 확인 요청. personas.md, stories.md 생성.
+**Context**: User Stories Part 1 Step 8~9 (답변 수집, 해석), Part 2 Step 16 (생성)
+
+---

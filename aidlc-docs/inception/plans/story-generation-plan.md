@@ -20,7 +20,7 @@ C) 3명 이상: 신규 플레이어 (튜토리얼 중심), 숙련 플레이어 (
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: 2명: 아공간 정리 플레이어 / 신규 플레이어(튜토리얼 중심)
 
 ---
 
@@ -36,7 +36,7 @@ D) 혼합: epic 으로 묶되 각 epic 안은 사용자 여정 순서로 배치
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: 추천
 
 ---
 
@@ -50,7 +50,7 @@ C) 문장 형식 없이 제목과 인수 조건만 씀
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: 추천
 
 ---
 
@@ -66,7 +66,7 @@ D) Given/When/Then 을 기본으로 하고, 단순 항목은 체크리스트로 
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: 추천
 
 ---
 
@@ -80,7 +80,7 @@ C) 튜토리얼 + 던전 1 까지: 아이템 10개 튜토리얼과 던전 1 흐�
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: 추천
 
 ---
 
@@ -94,7 +94,7 @@ C) 세부 단위 (약 50개 이상). 한 스토리에 하나의 조작 또는 �
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: 추천
 
 ---
 
@@ -110,7 +110,7 @@ C) 플레이어 관점 스토리를 기본으로 하고, 저장 · 배포 관련
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: 추천
 
 ---
 
