@@ -1,0 +1,21 @@
+# AI-DLC State Tracking
+
+## Project Information
+- **Project Type**: Greenfield
+- **Start Date**: 2026-11-23T20:59:03+09:00
+- **Current Stage**: INCEPTION - Workspace Detection
+
+## Workspace State
+- **Existing Code**: No
+- **Reverse Engineering Needed**: No
+- **Workspace Root**: d:\Desktop\game\아공간관리인
+
+## Code Location Rules
+- **Application Code**: Workspace root (NEVER in aidlc-docs/)
+- **Documentation**: aidlc-docs/ only
+- **Structure patterns**: See code-generation.md Critical Rules
+
+## Stage Progress
+- [x] INCEPTION - Workspace Detection (승인 대기)
+- [ ] INCEPTION - Requirements Analysis
+- [ ] INCEPTION - Workflow Planning
