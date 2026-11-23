@@ -131,3 +131,10 @@
 **Context**: User Stories Part 1 Step 8~9 (답변 수집, 해석), Part 2 Step 16 (생성)
 
 ---
+## User Stories - 승인 (Approval)
+**Timestamp**: 2026-11-23T23:51:05+09:00
+**User Input**: "승인"
+**AI Response**: User Stories 승인 기록. 승인 전 확인 사항 2건 (추천 기본값 해석, 신규 플레이어 스토리 1개) 은 사용자 승인으로 현재 값 유지 (추가 확인 답변 없음). 다음 단계는 Units Generation Part 1 재개 (UG-1~UG-5 답변 대기).
+**Context**: User Stories Part 1 Step 13~14 (승인 응답 기록)
+
+---
