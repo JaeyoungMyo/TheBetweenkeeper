@@ -15,7 +15,7 @@ C) 현재 설치된 버전 그대로 사용
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: C
 
 ---
 
@@ -30,7 +30,7 @@ C) 웹 배포는 하지 않고 데스크톱 전용으로 진행
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A
 
 ---
 
@@ -45,7 +45,7 @@ C) 파일 내보내기/불러오기만 사용
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: B
 
 ---
 
@@ -60,7 +60,7 @@ C) 예. 던전 내 간단한 조작(이동 · 전투 등)을 MVP 이후에 추�
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: X 던전 연출을 향후 상단에 보이도록 할것이지만 당장은 연출정도로만 표현. 1개의 던전에서 3~5번의 전투가 일어나고 그때마다 아이템이 쏟아져서 들어옴. 싸움도중에 회복약등의 아이템을 용사가 요청할 수 있음. 던전 연출이 끝나고나면 상점에 갔다는 연출이 보여질것임
 
 ---
 
@@ -75,7 +75,7 @@ C) 미리 정해진 고정 목록 (MVP 단계)
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A, B 모두
 
 ---
 
@@ -92,7 +92,7 @@ D) 다음 요청의 제한 시간 단축
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: X 용사의 신뢰도 감소. 회복약실패일 경우 용사의 HP에 따라서 사망하고 게임오버로 이어짐
 
 ---
 
@@ -107,7 +107,7 @@ C) 기획서 8.2 기준 던전 1 (신규 아이템 10개, 종류 3개)과 같은
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A. 해당 10개는 향후 튜토리얼로 사용될 것임. 실제 던전은 기획서 8.2 기준 던전 1부터 시작됨.
 
 ---
 
@@ -122,7 +122,7 @@ C) 집기는 좌클릭, 내려놓기는 우클릭
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: B. 선반을 클릭하면 왼쪽에는 유저의 아이템 목록. 오른쪽에서는 선반 3칸이 표시됨. 마우스 드래그엔 드롭으로 아이템을 선반에 적재가능.
 
 ---
 
@@ -137,7 +137,7 @@ C) A와 함께 다른 시설 추천 표시
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: X. 무게 초과 메시지를 표시하고 해당 아이템이 바닥으로 떨어짐
 
 ---
 
@@ -152,7 +152,7 @@ C) 반응형 (화면 크기에 따라 가변)
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A
 
 ---
 
@@ -167,7 +167,7 @@ C) 한국어 · 영어 처음부터 동시 지원
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: B
 
 ---
 
@@ -182,7 +182,7 @@ C) 수동 저장만 허용
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: B
 
 ---
 
@@ -201,7 +201,7 @@ B) 아니오 — 복원력 기준 생략 (신뢰성보다 빠른 반복이 중�
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: B
 
 ---
 
@@ -214,7 +214,7 @@ B) 아니요 — 모든 SECURITY 규칙 건너뜀 (PoC, 프로토타입, 실험 
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: B
 
 ---
 
@@ -229,4 +229,4 @@ C) 아니요 — 모든 PBT 규칙 건너뜀 (단순 CRUD 애플리케이션, UI
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A
