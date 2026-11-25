@@ -1,6 +1,6 @@
 # U1 코드 요약
 
-- 검증: Godot 4.7.2 헤드리스 테스트 21개 통과 (예시 · 통합 + PBT, 속성당 200회), 메인 씬 60프레임 실행 오류 없음
+- 검증: Godot 4.7.2 헤드리스 테스트 24개 통과 (예시 · 통합 + PBT, 속성당 200회), 메인 씬 60프레임 실행 오류 없음
 - 실행: `godot --headless --path . --import` 후 `godot --headless --path . -s res://tests/run_tests.gd`
 
 | 스토리 | 파일 |

@@ -37,4 +37,7 @@ func test_tutorial_scene_completes() -> void:
 	expect(mgr.carried_ids.size() == 1 and not room.shelf_panel.visible, "X picks up first")
 	room.interact()
 	expect(room.shelf_panel.visible, "hands full: X opens shelf")
+	var c = room.tutorial_items[5]
+	room.drop_to_floor(c.instance_id)
+	expect(c.state == ItemInstance.State.INCOMING and room.shelf_panel.visible, "shelf item dropped to floor, panel stays")
 	room.free()

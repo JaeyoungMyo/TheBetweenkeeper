@@ -16,6 +16,8 @@ var _map: Control
 
 func _ready() -> void:
 	_build_room()
+	ItemManager.floor_bounds = ROOM
+	ItemManager.floor_blocked = [shelf.bounds()]
 	_build_ui()
 	ItemManager.item_state_changed.connect(_on_state_changed)
 	ItemManager.weight_rejected.connect(_on_weight_rejected)
@@ -67,8 +69,8 @@ func _build_ui() -> void:
 	add_child(layer)
 	_map = preload("res://scripts/ui/drop_target.gd").new()
 	_map.set_anchors_preset(Control.PRESET_FULL_RECT)
-	_map.accept_check = func(_s: int, id: int) -> bool: return not shelf_panel.visible and id in ItemManager.carried_ids
-	_map.dropped.connect(func(_s: int, id: int) -> void: ItemManager.drop_carried_at(id, player.feet_position()))
+	_map.accept_check = func(_s: int, id: int) -> bool: return id in ItemManager.items
+	_map.dropped.connect(func(_s: int, id: int) -> void: drop_to_floor(id))
 	_map.gui_input.connect(_on_map_input)
 	layer.add_child(_map)
 	list_panel = preload("res://scenes/ui_storage/item_list_panel.tscn").instantiate()
@@ -95,9 +97,15 @@ func _build_ui() -> void:
 	layer.add_child(message)
 
 
+## 들고 있거나 선반에 있는 아이템을 플레이어 발 아래 바닥에 떨어뜨린다
+func drop_to_floor(id: int) -> void:
+	if not ItemManager.drop_carried_at(id, player.feet_position()):
+		ItemManager.drop_stored(ItemManager.items[id], shelf.state, player.feet_position())
+
+
 func add_item(data: ItemData, pos: Vector2) -> ItemInstance:
 	var item: ItemInstance = ItemManager.create_item(data, 0)
-	item.world_position = pos
+	item.world_position = ItemManager.floor_position(pos)
 	var view: ItemView = preload("res://scenes/storage/item.tscn").instantiate()
 	add_child(view)
 	view.setup(item)
@@ -142,11 +150,15 @@ func toggle_shelf() -> void:
 		shelf_panel.show_for(shelf.state, ItemManager.items)
 
 
-## 마우스 아래 겹쳐 있는 바닥 아이템 전체
+## 마우스 아래 아이템과 같은 바닥 칸에 있는 아이템 전체
 func items_under(point: Vector2) -> Array:
-	var found := []
+	var cells := {}
 	for v: ItemView in views.values():
 		if v.hit(point) and StorageService.can_hover(v.item, player.position):
+			cells[FloorRules.cell_of(v.item.world_position)] = true
+	var found := []
+	for v: ItemView in views.values():
+		if v.item.state == ItemInstance.State.INCOMING and cells.has(FloorRules.cell_of(v.item.world_position)):
 			found.append(v.item)
 	return found
 

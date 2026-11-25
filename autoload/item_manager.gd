@@ -13,6 +13,8 @@ var carried_ids: Array[int] = []
 var bag_size: int = 1
 var carry_multiplier: int = 1
 var _next_id: int = 1
+var floor_bounds := Rect2()
+var floor_blocked: Array = []
 
 
 func create_item(data: ItemData, stage_id: int) -> ItemInstance:
@@ -44,6 +46,16 @@ func upgrade_multiplier() -> bool:
 	return true
 
 
+## 바닥 칸 한도 (10개) 를 지키는 낙하 위치
+func floor_position(pos: Vector2) -> Vector2:
+	var counts := {}
+	for it: ItemInstance in items.values():
+		if it.state == ItemInstance.State.INCOMING:
+			var cell := FloorRules.cell_of(it.world_position)
+			counts[cell] = counts.get(cell, 0) + 1
+	return FloorRules.resolve(pos, counts, floor_bounds, floor_blocked)
+
+
 func has_room() -> bool:
 	return carried_ids.size() < capacity()
 
@@ -64,6 +76,7 @@ func drop_carried_at(item_id: int, feet_pos: Vector2) -> bool:
 	if item_id not in carried_ids:
 		return false
 	var item: ItemInstance = items[item_id]
+	feet_pos = floor_position(feet_pos)
 	StorageService.drop_at_feet(item, feet_pos)
 	carried_ids.erase(item_id)
 	item_dropped.emit(item_id, feet_pos)
@@ -75,6 +88,7 @@ func place_carried(item_id: int, facility: FacilityState, slot: int, feet_pos: V
 	if item_id not in carried_ids:
 		return {"ok": false, "reason": "not_carried"}
 	var item: ItemInstance = items[item_id]
+	feet_pos = floor_position(feet_pos)
 	var result := StorageService.place_into_facility(item, facility, slot, feet_pos)
 	carried_ids.erase(item_id)
 	if not result["ok"]:
@@ -88,5 +102,16 @@ func take_out(item: ItemInstance, facility: FacilityState) -> bool:
 	if not has_room() or not StorageService.take_out(item, facility):
 		return false
 	carried_ids.append(item.instance_id)
+	item_state_changed.emit(item.instance_id, item.state)
+	return true
+
+
+## 선반에서 바닥으로 바로 떨어뜨리기 (운반 여유 불필요)
+func drop_stored(item: ItemInstance, facility: FacilityState, feet_pos: Vector2) -> bool:
+	if not StorageService.take_out(item, facility):
+		return false
+	var pos := floor_position(feet_pos)
+	StorageService.drop_at_feet(item, pos)
+	item_dropped.emit(item.instance_id, pos)
 	item_state_changed.emit(item.instance_id, item.state)
 	return true
