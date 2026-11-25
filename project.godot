@@ -1,0 +1,26 @@
+; Engine configuration file.
+; 아공간 관리인 (U1 창고 · 조작)
+
+config_version=5
+
+[application]
+
+config/name="아공간 관리인"
+run/main_scene="res://scenes/storage/tutorial_storage.tscn"
+config/features=PackedStringArray("4.7", "Compatibility")
+
+[autoload]
+
+ItemManager="*res://autoload/item_manager.gd"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/stretch/mode="canvas_items"
+window/stretch/aspect="keep"
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"

@@ -45,3 +45,17 @@
 
 - 이 규칙은 **선반 (`StorageFacility`)** 에 적용한다. 서랍장, 보석함 등 다른 시설의 칸 한도는 기획서 10장 값과 함께 U2 (시설 구매 · 확장) 또는 후속 설계에서 정한다
 - 기획서 4.2 의 무게 예시 (0.1 ~ 30) 는 정정된 정수 무게로 대체한다. 기획서 문서 갱신 여부는 승인 단계에서 확인
+
+## 테스트 가능한 속성 (Testable Properties, PBT-01)
+
+Code Generation 중 누락을 발견해 추가함.
+
+| 구성요소 | 속성 | 분류 |
+| --- | --- | --- |
+| WeightRules.total | 합 = 참조 합, 순서 무관 | 오라클, 교환 법칙 |
+| FacilityState | 칸 합 ≤ 12, 선반 합 ≤ 최대, 적재 후 꺼내면 원상태 | 불변 조건, 왕복 |
+| ItemManager | 손 ≤ 1, STORED 와 선반 목록 일치, 무작위 명령이 모델과 일치 | 불변 조건, 상태 기반 |
+| PlacementRules | PBT 속성 없음 (엔진 함수 위임) | - |
+| WeightRules.carry_speed | PBT 속성 없음 (허용 무게 5개 전수 검사) | - |
+
+프레임워크 (PBT-09): GDScript 용 자체 도구 `tests/support/pbt.gd` (생성기, seed, 축소)

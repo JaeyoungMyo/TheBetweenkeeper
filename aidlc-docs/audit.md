@@ -180,3 +180,18 @@
 **Context**: Functional Design 정정 반영, Code Generation Part 1 Step 2~6 (계획 작성, 승인 요청 준비)
 
 ---
+## U1 Code Generation 계획 승인
+**Timestamp**: 2026-11-24T05:53:42+09:00
+**User Input**: "승인"
+**AI Response**: U1 코드 생성 계획 승인 기록. Part 2 (Generation) 시작. Step 1 (Godot 프로젝트 생성, Godot 4.7.2 사용) 부터 순서대로 진행, 단계마다 체크박스 갱신.
+**Context**: Code Generation Part 1 Step 7 (승인), Part 2 Step 12~13
+
+---
+## U1 Code Generation 완료
+**Timestamp**: 2026-11-26T00:15:12+09:00
+**User Input**: (계획 승인 입력에 이어서 진행)
+**AI Response**: Step 1~11 실행, 테스트 19개 통과. PBT 확장 규칙을 이전 단계에서 로드하지 않은 누락을 발견해 로드하고 PBT-01 속성 절과 PBT 를 보완. 계획과 다른 점은 code-summary.md 에 기록. 승인 대기.
+**AI 점검**: 화면 조작 미검증
+**Context**: Code Generation Part 2 Step 14
+
+---
