@@ -32,5 +32,9 @@ func _ready() -> void:
 	add_child(label)
 
 
+func bounds() -> Rect2:
+	return Rect2(global_position - SIZE / 2, SIZE)
+
+
 func hit(point: Vector2) -> bool:
-	return Rect2(global_position - SIZE / 2, SIZE).has_point(point)
+	return bounds().has_point(point)

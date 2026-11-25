@@ -37,6 +37,8 @@ func _make_slot(state: FacilityState, items: Dictionary, i: int) -> Control:
 	slot.dropped.connect(func(s: int, id: int) -> void: slot_dropped.emit(s, id))
 	# 이미 선반에 있는 아이템은 먼저 목록으로 꺼내야 한다
 	slot.accept_check = func(_s: int, id: int) -> bool: return id in ItemManager.carried_ids
+	var slot_items: Array = state.slot_items[i].map(func(id: int) -> ItemInstance: return items[id])
+	slot.tooltip_text = ItemListPanel.describe(slot_items)
 	var bg := ColorRect.new()
 	bg.color = Color(0.2, 0.16, 0.12)
 	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -51,5 +53,7 @@ func _make_slot(state: FacilityState, items: Dictionary, i: int) -> Control:
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	flow.add_child(label)
 	for id in state.slot_items[i]:
-		flow.add_child(ItemListPanel.make_entry(items[id]))
+		var entry := ItemListPanel.make_entry(items[id])
+		entry.tooltip_text = slot.tooltip_text
+		flow.add_child(entry)
 	return slot

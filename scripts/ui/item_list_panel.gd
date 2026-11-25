@@ -25,6 +25,14 @@ func refresh(items: Array, capacity: int) -> void:
 		_box.add_child(make_entry(item))
 
 
+static func describe(items: Array) -> String:
+	var lines := []
+	for it: ItemInstance in items:
+		lines.append("%s (무게 %d)" % [it.data.display_name, it.weight()])
+	return "
+".join(lines)
+
+
 static func make_entry(item: ItemInstance) -> Button:
 	var b: Button = preload("res://scripts/ui/item_list_entry.gd").new()
 	b.name = "item-entry-%d" % item.instance_id

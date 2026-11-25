@@ -17,6 +17,24 @@ func test_tutorial_scene_completes() -> void:
 		expect(mgr.place_carried(item.instance_id, room.shelf.state, slots[item.weight()], Vector2.ZERO)["ok"], "place %s" % item.data.item_id)
 	expect(room.shelf.state.total_weight() == 36, "shelf exactly full")
 	expect(room.completed, "tutorial completed")
-	room.shelf_panel.show_for(room.shelf.state, mgr.items)
-	expect(room.shelf_panel.visible, "panel opens")
+	room.toggle_shelf()
+	expect(not room.shelf_panel.visible, "far from shelf: stays closed")
+	room.player.position = room.shelf.position + Vector2(0, 60)
+	room.interact()
+	expect(room.shelf_panel.visible, "X in front of shelf opens")
+	room.interact()
+	expect(not room.shelf_panel.visible, "X closes")
+	# 바닥에 겹친 아이템: X 로 줍기가 선반 열기보다 우선, 호버 목록은 전부 표시
+	var a = room.tutorial_items[0]
+	var b = room.tutorial_items[1]
+	for it in [a, b]:
+		expect(mgr.take_out(it, room.shelf.state), "take out")
+		mgr.drop_carried_at(it.instance_id, room.player.feet_position())
+	expect(room.items_under(a.world_position).size() == 2, "hover lists both stacked items")
+	expect(ItemListPanel.describe([a, b]).split("
+").size() == 2, "two lines")
+	room.interact()
+	expect(mgr.carried_ids.size() == 1 and not room.shelf_panel.visible, "X picks up first")
+	room.interact()
+	expect(room.shelf_panel.visible, "hands full: X opens shelf")
 	room.free()

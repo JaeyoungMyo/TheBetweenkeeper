@@ -3,7 +3,6 @@ class_name ItemView
 extends Node2D
 
 var item: ItemInstance
-var _label: Label
 var _box: ColorRect
 
 const SIZE := Vector2(14, 14)
@@ -18,23 +17,12 @@ func setup(instance: ItemInstance) -> void:
 	_box.color = COLORS.get(item.data.weight_class(), Color.WHITE)
 	_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_box)
-	_label = Label.new()
-	_label.text = "%s (%d)" % [item.data.display_name, item.data.weight]
-	_label.position = Vector2(-30, -28)
-	_label.visible = false
-	_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(_label)
 	sync()
 
 
 func sync() -> void:
 	position = item.world_position
 	visible = item.state != ItemInstance.State.STORED
-
-
-func set_hover(on: bool) -> void:
-	if _label:
-		_label.visible = on
 
 
 func hit(point: Vector2) -> bool:

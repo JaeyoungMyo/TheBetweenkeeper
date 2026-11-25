@@ -4,6 +4,7 @@ extends RefCounted
 
 const PICKUP_RANGE := 48.0
 const HOVER_RANGE := 64.0
+const SHELF_RANGE := 48.0
 
 
 static func can_pick_up(item: ItemInstance, player_pos: Vector2, has_room: bool) -> bool:
@@ -12,6 +13,11 @@ static func can_pick_up(item: ItemInstance, player_pos: Vector2, has_room: bool)
 	if item.state != ItemInstance.State.INCOMING:
 		return false
 	return item.world_position.distance_to(player_pos) <= PICKUP_RANGE
+
+
+## 선반 테두리까지의 거리로 "선반 앞" 을 판정
+static func near_rect(pos: Vector2, rect: Rect2) -> bool:
+	return pos.distance_to(pos.clamp(rect.position, rect.end)) <= SHELF_RANGE
 
 
 static func can_hover(item: ItemInstance, player_pos: Vector2) -> bool:
