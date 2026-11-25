@@ -41,5 +41,11 @@ func _run() -> void:
 			if obj.failures.size() > 0:
 				failed += 1
 				print("FAIL %s::%s -> %s" % [path, method_name, ", ".join(obj.failures)])
+	var move = load("res://tests/integration/test_click_move.gd").new()
+	total += 1
+	await move.run(self)
+	if move.failures.size() > 0:
+		failed += 1
+		print("FAIL click_move -> %s" % ", ".join(move.failures))
 	print("PBT seed=%d tests=%d failed=%d" % [load("res://tests/support/pbt.gd").base_seed(), total, failed])
 	quit(1 if failed > 0 else 0)

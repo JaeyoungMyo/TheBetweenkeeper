@@ -237,3 +237,10 @@
 **Context**: U1 Code Generation 변경 요청
 
 ---
+## U1 변경 요청: 마우스 클릭 이동
+**Timestamp**: 2026-11-25T15:29:12.763Z
+**User Input**: "마우스 클릭으로도 이동이 가능하게 만들어줘"
+**AI Response**: BR-U1-25 구현. 승인 대기.
+**Context**: U1 Code Generation 변경 요청
+
+---

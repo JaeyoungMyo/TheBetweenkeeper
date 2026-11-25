@@ -207,13 +207,23 @@ func _on_map_input(event: InputEvent) -> void:
 		return
 	for v: ItemView in views.values():
 		if v.item.state == ItemInstance.State.INCOMING and v.hit(event.position):
-			if not ItemManager.try_pick_up(v.item, player.position):
-				show_message("주울 수 없습니다")
+			if not ItemManager.has_room():
+				show_message("더 들 수 없습니다")
+			elif not ItemManager.try_pick_up(v.item, player.position):
+				player.move_to(_walkable(event.position))
 			return
 	if shelf.hit(event.position):
-		if not near_shelf():
-			show_message("선반 앞으로 가까이 가세요")
-		toggle_shelf()
+		if near_shelf():
+			toggle_shelf()
+		else:
+			player.move_to(_walkable(event.position))
+		return
+	if ROOM.has_point(event.position):
+		player.move_to(_walkable(event.position))
+
+
+func _walkable(point: Vector2) -> Vector2:
+	return point.clamp(ROOM.position + Vector2(10, 10), ROOM.end - Vector2(10, 10))
 
 
 func _on_take_out(id: int) -> void:
