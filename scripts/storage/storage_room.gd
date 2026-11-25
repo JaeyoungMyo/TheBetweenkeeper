@@ -6,7 +6,8 @@ const ITEM_IDS := ["potion_hp", "scroll", "sword", "dagger", "axe", "helmet", "s
 const ROOM := Rect2(320, 110, 640, 460)
 const START_SHELVES := 3
 ## 선반 최대 6개 (economy.json 의 선반 가격 5단계 + 기본 1개)
-const SHELF_POSITIONS := [Vector2(640, 171), Vector2(435, 171), Vector2(845, 171), Vector2(435, 324), Vector2(640, 324), Vector2(845, 324)]
+## 선반 그림은 최대 96 x 85 (6칸). 위치는 선반 바닥선 중심보다 42 위. 줄 사이에 서서 지나갈 공간을 둔다
+const SHELF_POSITIONS := [Vector2(640, 175), Vector2(435, 175), Vector2(845, 175), Vector2(435, 365), Vector2(640, 365), Vector2(845, 365)]
 
 var player: PlayerController
 ## 마지막으로 다가간 선반
@@ -446,9 +447,11 @@ func _on_state_changed(id: int, _state: int) -> void:
 
 
 func _refresh() -> void:
+	ItemManager.floor_blocked = []
 	for i in shelves.size():
 		shelves[i].shelf_index = i
 		shelves[i].refresh_look()
+		ItemManager.floor_blocked.append(shelves[i].bounds())
 	list_panel.refresh(ItemManager.carried_items(), ItemManager.capacity())
 	if shelf_panel.visible:
 		open_panel()
