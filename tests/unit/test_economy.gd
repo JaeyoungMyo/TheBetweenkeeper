@@ -49,13 +49,15 @@ func test_purchases_and_gold_shortage() -> void:
 	expect(e.buy_bag(m) and m.bag_size == 2 and e.gold() == 0, "bag 100")
 	e.add_gold(5000)
 	for i in 3:
-		expect(e.buy_slot(fs), "slot")
-	expect(fs.slot_count == 6 and fs.max_weight() == 72 and not e.buy_slot(fs), "6 slots max")
-	expect(e.gold() == 4400, "100+200+300")
+		expect(e.buy_slot(fs, 0), "slot")
+	expect(fs.slot_count == 6 and fs.max_weight() == 72 and not e.buy_slot(fs, 0), "6 slots max")
+	expect(e.gold() == 4700, "50+100+150")
 	for i in 3:
 		expect(e.buy_bag(m), "bag")
-	expect(m.bag_size == 5 and not e.buy_bag(m) and e.gold() == 3000, "bag max 5")
-	expect(not e.buy_shelf(4) and e.buy_shelf(3), "max 4 shelves")
+	expect(m.bag_size == 5 and not e.buy_bag(m) and e.gold() == 3300, "bag max 5")
+	expect(not e.buy_shelf(4) and e.buy_shelf(3) and e.gold() == 2800, "4th shelf 500, max 4")
+	var other := FacilityState.new("s2", 3)
+	expect(e.slot_price(other, 1) == 75 and other.slot_count == 3, "each shelf is separate")
 	e.free()
 	m.free()
 

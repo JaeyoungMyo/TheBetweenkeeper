@@ -2,6 +2,7 @@
 class_name StorageRoom
 extends Node2D
 
+const ITEM_IDS := ["potion_hp", "scroll", "sword", "dagger", "axe", "helmet", "shield", "boots", "armor", "ore_box"]
 const ROOM := Rect2(220, 60, 780, 600)
 const SHELF_POSITIONS := [Vector2(610, 140), Vector2(360, 140), Vector2(860, 140), Vector2(360, 340)]
 
@@ -75,6 +76,16 @@ func buy_shelf() -> bool:
 	return true
 
 
+func open_panel() -> void:
+	var i := shelves.find(shelf)
+	shelf_panel.show_for(shelf.state, ItemManager.items, "선반 %d" % (i + 1), EconomyManager.slot_price(shelf.state, i))
+
+
+func buy_current_slot() -> void:
+	EconomyManager.buy_slot(shelf.state, shelves.find(shelf))
+	_refresh()
+
+
 func refresh() -> void:
 	_refresh()
 
@@ -120,6 +131,7 @@ func _build_ui() -> void:
 	shelf_panel.position = Vector2(1015, 60)
 	layer.add_child(shelf_panel)
 	shelf_panel.closed.connect(shelf_panel.hide)
+	shelf_panel.slot_purchase_requested.connect(buy_current_slot)
 	shelf_panel.slot_dropped.connect(func(s: int, id: int) -> void: ItemManager.place_carried(id, shelf.state, s))
 	hover_list = Label.new()
 	hover_list.name = "hover-item-list"
@@ -138,6 +150,12 @@ func _build_ui() -> void:
 	growth.name = "GrowthUi"
 	growth.room = self
 	add_child(growth)
+	EconomyManager.gold_changed.connect(_on_gold_changed)
+	if OS.is_debug_build():
+		var debug := DebugMenu.new()
+		debug.name = "DebugMenu"
+		debug.room = self
+		add_child(debug)
 
 
 ## 들고 있거나 선반에 있는 아이템을 플레이어 발 아래 바닥에 떨어뜨린다
@@ -217,7 +235,7 @@ func toggle_shelf() -> void:
 	if shelf_panel.visible:
 		shelf_panel.hide()
 	elif near_shelf():
-		shelf_panel.show_for(shelf.state, ItemManager.items)
+		open_panel()
 
 
 ## 마우스 아래 아이템과 같은 바닥 칸에 있는 아이템 전체
@@ -268,7 +286,7 @@ func _on_map_input(event: InputEvent) -> void:
 			shelf_panel.hide()
 		elif StorageService.near_rect(player.global_position, s.bounds()):
 			shelf = s
-			shelf_panel.show_for(s.state, ItemManager.items)
+			open_panel()
 		else:
 			player.move_to(_walkable(event.position))
 		return
@@ -298,8 +316,12 @@ func _on_state_changed(id: int, _state: int) -> void:
 func _refresh() -> void:
 	list_panel.refresh(ItemManager.carried_items(), ItemManager.capacity())
 	if shelf_panel.visible:
-		shelf_panel.show_for(shelf.state, ItemManager.items)
+		open_panel()
 
 
 func _on_capacity_changed(_capacity: int) -> void:
+	_refresh()
+
+
+func _on_gold_changed(_amount: int) -> void:
 	_refresh()

@@ -4,6 +4,7 @@ extends PanelContainer
 
 signal slot_dropped(slot_index: int, item_id: int)
 signal closed
+signal slot_purchase_requested
 
 var _box := VBoxContainer.new()
 
@@ -14,7 +15,7 @@ func _ready() -> void:
 	hide()
 
 
-func show_for(state: FacilityState, items: Dictionary) -> void:
+func show_for(state: FacilityState, items: Dictionary, title := "", price := -2) -> void:
 	for c in _box.get_children():
 		_box.remove_child(c)
 		c.queue_free()
@@ -24,6 +25,14 @@ func show_for(state: FacilityState, items: Dictionary) -> void:
 	x.focus_mode = Control.FOCUS_NONE
 	x.pressed.connect(func() -> void: closed.emit())
 	_box.add_child(x)
+	if title != "":
+		var buy := Button.new()
+		buy.name = "shelf-buy-slot-button"
+		buy.text = "%s 칸 추가 - %s" % [title, "최대" if price < 0 else "%d 골드" % price]
+		buy.disabled = price < 0 or price > EconomyManager.gold()
+		buy.focus_mode = Control.FOCUS_NONE
+		buy.pressed.connect(func() -> void: slot_purchase_requested.emit())
+		_box.add_child(buy)
 	for i in state.slot_count:
 		_box.add_child(_make_slot(state, items, i))
 	show()
@@ -33,7 +42,7 @@ func _make_slot(state: FacilityState, items: Dictionary, i: int) -> Control:
 	var slot := preload("res://scripts/ui/drop_target.gd").new()
 	slot.name = "shelf-slot-%d" % i
 	slot.slot_index = i
-	slot.custom_minimum_size = Vector2(250, 500.0 / state.slot_count - 10)
+	slot.custom_minimum_size = Vector2(250, 470.0 / state.slot_count - 10)
 	slot.dropped.connect(func(s: int, id: int) -> void: slot_dropped.emit(s, id))
 	# 이미 선반에 있는 아이템은 먼저 목록으로 꺼내야 한다
 	slot.accept_check = func(_s: int, id: int) -> bool: return id in ItemManager.carried_ids

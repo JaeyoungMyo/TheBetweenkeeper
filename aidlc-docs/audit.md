@@ -272,3 +272,10 @@
 **Context**: U2 Code Generation 변경 요청
 
 ---
+## U2 변경 요청: 선반별 확장과 디버그 메뉴
+**Timestamp**: 2026-11-25T15:40:33.596Z
+**User Input**: "선반 추가는 개별 선반별로 적용되게 만들고 싶어. 그거에 맞춰서 가격도 조절해줘. / 그리고 F1을 debug menu로 해서 gold증가, 레벨업등 debug를 위한 기능을 넣어줘"
+**AI Response**: 선반별 칸 추가와 가격표, 선반 패널 구매 버튼, F1 메뉴 구현. 승인 대기.
+**Context**: U2 Code Generation 변경 요청
+
+---

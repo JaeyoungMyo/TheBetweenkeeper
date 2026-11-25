@@ -59,14 +59,18 @@ func grant_exp(item: ItemInstance) -> bool:
 		return false
 	item.is_exp_claimed = true
 	var base: int = item.data.exp_value if item.data.exp_value > 0 else item.weight() * int(config["exp_per_weight"])
-	var r := ExpCalculator.apply(level, exp_points, roundi(base * (1.0 + augment_bonus("exp"))), int(config["level_base"]), int(config["level_step"]))
+	add_exp(roundi(base * (1.0 + augment_bonus("exp"))))
+	return true
+
+
+func add_exp(amount: int) -> void:
+	var r := ExpCalculator.apply(level, exp_points, amount, int(config["level_base"]), int(config["level_step"]))
 	level = r["level"]
 	exp_points = r["exp"]
 	pending_choices += r["gained"]
 	exp_changed.emit(level, exp_points)
 	if r["gained"] > 0:
 		level_up.emit(level)
-	return true
 
 
 func draw_choices() -> Array:
@@ -105,12 +109,14 @@ func bag_price(items: Node) -> int:
 
 
 func shelf_price(shelf_count: int) -> int:
-	return int(config["shelf_price"]) if shelf_count < int(config["max_shelves"]) else -1
+	return int(config["shelf_prices"][shelf_count - 1]) if shelf_count <= config["shelf_prices"].size() else -1
 
 
-func slot_price(facility: FacilityState) -> int:
+## 선반마다 따로 확장한다. shelf_index 는 0 부터 (나중에 산 선반일수록 비쌈)
+func slot_price(facility: FacilityState, shelf_index: int) -> int:
 	var i := facility.slot_count - 3
-	return int(config["slot_prices"][i]) if i < config["slot_prices"].size() else -1
+	var prices: Array = config["slot_prices"][shelf_index]
+	return int(prices[i]) if i < prices.size() else -1
 
 
 func buy_bag(items: Node) -> bool:
@@ -123,8 +129,8 @@ func buy_shelf(shelf_count: int) -> bool:
 	return price >= 0 and spend_gold(price)
 
 
-func buy_slot(facility: FacilityState) -> bool:
-	var price := slot_price(facility)
+func buy_slot(facility: FacilityState, shelf_index: int) -> bool:
+	var price := slot_price(facility, shelf_index)
 	if price < 0 or not spend_gold(price):
 		return false
 	facility.add_slot()

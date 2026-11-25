@@ -53,7 +53,7 @@ func _fill_menu() -> void:
 	_buy_button("선반 추가 (현재 %d)" % room.shelves.size(), EconomyManager.shelf_price(room.shelves.size()), func() -> void: room.buy_shelf())
 	for i in room.shelves.size():
 		var state: FacilityState = room.shelves[i].state
-		_buy_button("선반 %d 칸 추가 (현재 %d)" % [i + 1, state.slot_count], EconomyManager.slot_price(state), func() -> void: EconomyManager.buy_slot(state))
+		_buy_button("선반 %d 칸 추가 (현재 %d)" % [i + 1, state.slot_count], EconomyManager.slot_price(state, i), func() -> void: EconomyManager.buy_slot(state, i))
 	var close := Button.new()
 	close.name = "menu-close-button"
 	close.text = "닫기 (C)"

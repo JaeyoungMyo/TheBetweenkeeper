@@ -5,7 +5,6 @@
   "level_base": 50,
   "level_step": 25,
   "bag_prices": [100, 200, 400, 800],
-  "shelf_price": 150,
-  "max_shelves": 4,
-  "slot_prices": [100, 200, 300]
+  "shelf_prices": [150, 300, 500],
+  "slot_prices": [[50, 100, 150], [75, 150, 225], [100, 200, 300], [125, 250, 375]]
 }
