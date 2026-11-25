@@ -33,6 +33,22 @@ func _ready() -> void:
 	resume.position = Vector2(560, 400)
 	resume.pressed.connect(toggle)
 	_overlay.add_child(resume)
+	# 튜토리얼 · 게임 중 초기 화면으로. 마지막 자동 저장 이후 진행은 남지 않는다
+	var to_menu := Button.new()
+	to_menu.text = "메인 메뉴로"
+	to_menu.position = Vector2(560, 450)
+	to_menu.pressed.connect(go_to_menu)
+	_overlay.add_child(to_menu)
+	var note := Label.new()
+	note.text = "(마지막 자동 저장 이후 진행은 저장되지 않습니다)"
+	note.position = Vector2(470, 495)
+	_overlay.add_child(note)
+
+
+func go_to_menu() -> void:
+	_user_paused = false
+	get_tree().paused = false
+	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
 
 
 func _process(_delta: float) -> void:

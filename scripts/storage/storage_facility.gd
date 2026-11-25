@@ -27,6 +27,8 @@ const TIER_PAD := 6.0
 const ICON_SIZE := 10.0
 ## 선반 바닥선은 position.y + FOOT 에 맞춘다 (칸 수가 바뀌어도 바닥은 그대로)
 const FOOT := 42.0
+## 그림 배율 (원본 책장의 2/3)
+const SCALE := 2.0 / 3.0
 
 var _shape: RectangleShape2D
 var _icons: Array = []
@@ -65,8 +67,13 @@ func size() -> Vector2:
 	return Vector2(PIECE_W * combo().size(), h)
 
 
+## 화면에 보이는 크기 (배율 적용)
+func world_size() -> Vector2:
+	return size() * SCALE
+
+
 func bounds() -> Rect2:
-	var sz := size()
+	var sz := world_size()
 	return Rect2(global_position + Vector2(-sz.x / 2, FOOT - sz.y), sz)
 
 
@@ -95,11 +102,13 @@ func refresh_look() -> void:
 		return
 	for c in body.get_children():
 		c.queue_free()
-	var sz := size()
+	var sz := world_size()
 	_shape.size = sz
+	body.scale = Vector2.ONE * SCALE
+	body.position = Vector2(0, FOOT * (1.0 - SCALE))
 	(get_child(0) as CollisionShape2D).position = Vector2(0, FOOT - sz.y / 2)
 	body.modulate = TINTS[shelf_index % TINTS.size()]
-	var x := -sz.x / 2
+	var x := -size().x / 2
 	for tiers in combo():
 		var piece := Sprite2D.new()
 		var atlas := AtlasTexture.new()
