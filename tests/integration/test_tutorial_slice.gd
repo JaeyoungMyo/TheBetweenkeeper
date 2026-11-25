@@ -21,7 +21,6 @@ func test_tutorial_scene_completes() -> void:
 	var ui = room.get_node("GrowthUi")
 	expect(eco.level == 3 and eco.exp_points == 55, "36 x 5 = 180 EXP")
 	expect(tree.paused and ui.choice_panel.visible, "level up pauses for a choice")
-	expect(ui.describe({"id": "carry"}) == "운반 개수 2배", "first carry pick is x2")
 	ui.pick("speed")
 	expect(tree.paused and eco.pending_choices == 1, "second choice follows")
 	ui.pick("speed")
@@ -76,4 +75,20 @@ func test_tutorial_scene_completes() -> void:
 	room.drop_first()
 	expect(held.state == ItemInstance.State.INCOMING and held.world_position == room.player.feet_position(), "Z drops at feet")
 	expect(InputMap.has_action("drop_item"), "Z bound")
+	# 운반배수: 2배만 → 보유 후 3배만 → 이후 나오지 않음
+	for step in ["운반배수 2배", "운반배수 3배", ""]:
+		var seen := {}
+		for i in 60:
+			eco.pending_choices = 1
+			ui.show_choices()
+			for btn in ui._choice_box.get_children():
+				if btn.text.begins_with("운반배수"):
+					seen[btn.text] = true
+		expect(seen.keys() == ([step] if step != "" else []), "expected '%s' got %s" % [step, seen.keys()])
+		if step != "":
+			ui.pick("carry")
+	eco.pending_choices = 0
+	ui.show_choices()
+	mgr.carry_multiplier = 1
+	eco.augments.clear()
 	room.free()
