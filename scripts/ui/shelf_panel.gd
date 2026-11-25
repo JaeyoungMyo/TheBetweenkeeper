@@ -13,7 +13,7 @@ var _box := VBoxContainer.new()
 var _order: Array[int] = []
 var _buttons := {}
 var _selected_id := -1
-## 아이템 id → 칸 번호 (←→ 는 같은 칸 안에서만 움직인다)
+## 아이템 id → 칸 번호
 var _slot_of := {}
 
 
@@ -57,7 +57,7 @@ func move_selection(delta: int) -> void:
 	if _order.is_empty() or _selected_id < 0:
 		return
 	var idx := _order.find(_selected_id)
-	_selected_id = _order[clampi(idx + delta, 0, _order.size() - 1)]
+	_selected_id = _order[posmod(idx + delta, _order.size())]  # 선반 전체 아이템을 순환
 	_highlight()
 
 

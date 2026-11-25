@@ -134,11 +134,11 @@ func open_panel() -> void:
 	shelf_panel.show_for(shelf.state, ItemManager.items, "선반 %d" % (i + 1), EconomyManager.slot_price(shelf.state, i))
 
 
-## ↑↓: 패널이 열린 채로 앞/뒤 선반으로 포커스를 옮긴다 (끝에서는 멈춘다). 선반 바꾸면 첫 칸 첫 아이템을 고른다
+## ↑↓: 패널이 열린 채로 앞/뒤 선반으로 포커스를 옮긴다 (마지막 ↔ 첫 선반 순환). 선반 바꾸면 첫 아이템을 고른다
 func _focus_shelf(step: int) -> void:
-	var i := shelves.find(shelf) + step
-	if i < 0 or i >= shelves.size():
+	if shelves.size() < 2:
 		return
+	var i := posmod(shelves.find(shelf) + step, shelves.size())
 	shelf = shelves[i]
 	open_panel()
 	shelf_panel.reset_selection()

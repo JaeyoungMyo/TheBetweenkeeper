@@ -180,7 +180,7 @@ func test_only_e_closes_shelf() -> void:
 
 
 func test_arrows_move_items_in_slot_and_switch_shelves() -> void:
-	# ←→ 는 같은 칸 안에서 아이템을 고르고, ↑↓ 는 앞뒤 선반으로 포커스를 옮긴다
+	# ←→ 는 선반 전체 아이템을 순환하고, ↑↓ 는 선반 사이를 순환한다
 	var room = _room()
 	await _frames(3)
 	room.add_shelf()
@@ -203,10 +203,12 @@ func test_arrows_move_items_in_slot_and_switch_shelves() -> void:
 	expect(room.shelf_panel.selected_id() != first, "RIGHT moves to the next item in the slot")
 	await _key(KEY_RIGHT)
 	await _frames(1)
-	expect(room.shelf_panel.selected_id() != first, "RIGHT keeps moving through the shelf")
+	expect(room.shelf_panel.selected_id() == first, "RIGHT past the last item wraps to the first")
 	await _key(KEY_LEFT)
 	await _frames(1)
-	expect(room.shelf_panel.selected_id() == first, "LEFT moves back")
+	expect(room.shelf_panel.selected_id() != first, "LEFT from the first item wraps to the last")
+	await _key(KEY_RIGHT)
+	await _frames(1)
 	await _key(KEY_DOWN)
 	await _frames(1)
 	expect(room.shelf == room.shelves[1], "DOWN focuses the next shelf")
@@ -214,5 +216,8 @@ func test_arrows_move_items_in_slot_and_switch_shelves() -> void:
 	await _key(KEY_UP)
 	await _frames(1)
 	expect(room.shelf == shelf0, "UP focuses the previous shelf")
+	await _key(KEY_UP)
+	await _frames(1)
+	expect(room.shelf == room.shelves[-1], "UP on the first shelf wraps to the last")
 	room.free()
 
