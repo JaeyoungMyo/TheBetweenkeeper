@@ -3,7 +3,7 @@
 ## Project Information
 - **Project Type**: Greenfield
 - **Start Date**: 2026-11-23T20:59:03+09:00
-- **Current Stage**: INCEPTION - Requirements Analysis
+- **Current Stage**: CONSTRUCTION - Code Generation (U2)
 
 ## Workspace State
 - **Existing Code**: No
@@ -19,10 +19,11 @@
 - [x] INCEPTION - Workspace Detection
 - [x] INCEPTION - Requirements Analysis
 - [x] INCEPTION - Workflow Planning
-- [x] INCEPTION - Application Design [EXECUTE] (승인 대기)
+- [x] INCEPTION - Application Design [EXECUTE] (승인 완료)
 - [x] INCEPTION - Units Generation [EXECUTE] (unit 5개, 승인 완료)
 - [x] CONSTRUCTION - U1 창고·조작: Functional Design [EXECUTE] (승인 완료, 속도 무관·칸 12 정정 반영)
-- [ ] CONSTRUCTION - U1 창고·조작: Code Generation [EXECUTE] (코드 생성, 테스트 25개 통과, 승인 대기)
+- [x] CONSTRUCTION - U1 창고·조작: Code Generation [EXECUTE] (승인 완료)
+- [ ] CONSTRUCTION - U2 성장·경제: Code Generation [EXECUTE] (계획 승인 대기)
   - 정정: 선반 3칸, 칸 한도 12 고정, 아이템 무게 1·2·3·4·6, 선반 최대 36 (FD-A1 확정)
 - [x] INCEPTION - User Stories [EXECUTE: 사용자 요청으로 추가] (승인 완료, 스토리 26개)
 - [ ] INCEPTION - Reverse Engineering [SKIP: Greenfield]
