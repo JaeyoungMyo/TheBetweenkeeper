@@ -29,7 +29,8 @@ func test_augments_apply() -> void:
 	var m = load("res://autoload/item_manager.gd").new()
 	expect(not e.choose_augment("carry", m), "needs a pending choice")
 	e.pending_choices = 20
-	expect(e.choose_augment("carry", m) and e.choose_augment("carry", m), "carry x2")
+	expect(e.choose_augment("carry", m) and m.carry_multiplier == 2, "first x2")
+	expect(e.choose_augment("carry", m) and m.carry_multiplier == 3, "then x3")
 	expect(m.capacity() == 3 and not e.choose_augment("carry", m), "x3 max")
 	e.choose_augment("exp", m)
 	e.choose_augment("sell", m)

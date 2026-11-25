@@ -21,6 +21,7 @@ func test_tutorial_scene_completes() -> void:
 	var ui = room.get_node("GrowthUi")
 	expect(eco.level == 3 and eco.exp_points == 55, "36 x 5 = 180 EXP")
 	expect(tree.paused and ui.choice_panel.visible, "level up pauses for a choice")
+	expect(ui.describe({"id": "carry"}) == "운반 개수 2배", "first carry pick is x2")
 	ui.pick("speed")
 	expect(tree.paused and eco.pending_choices == 1, "second choice follows")
 	ui.pick("speed")

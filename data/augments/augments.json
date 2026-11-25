@@ -1,5 +1,5 @@
 [
-  {"id": "carry", "name": "운반 배수", "desc": "운반 개수 2배 → 3배", "max": 2, "value": 1},
+  {"id": "carry", "name": "운반 배수", "desc": "운반 개수 2배, 다음은 3배", "max": 2, "value": 1},
   {"id": "speed", "name": "이동 속도", "desc": "이동 속도 +10%", "max": 5, "value": 0.1},
   {"id": "exp", "name": "EXP 보너스", "desc": "획득 EXP +20%", "max": 5, "value": 0.2},
   {"id": "sell", "name": "판매가 보너스", "desc": "판매가 +10%", "max": 5, "value": 0.1}

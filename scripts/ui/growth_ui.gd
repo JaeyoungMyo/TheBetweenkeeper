@@ -89,13 +89,20 @@ func show_choices() -> void:
 	for a: Dictionary in choices:
 		var b := Button.new()
 		b.name = "augment-%s-button" % a["id"]
-		b.text = "%s: %s" % [a["name"], a["desc"]]
+		b.text = "%s: %s" % [a["name"], describe(a)]
 		b.focus_mode = Control.FOCUS_NONE
 		b.pressed.connect(pick.bind(a["id"]))
 		_choice_box.add_child(b)
 	menu.hide()
 	choice_panel.show()
 	get_tree().paused = true
+
+
+## 운반 배수는 다음 단계 (2배, 그다음 3배) 를 보여 준다
+func describe(a: Dictionary) -> String:
+	if a["id"] == "carry":
+		return "운반 개수 %d배" % (ItemManager.carry_multiplier + 1)
+	return a["desc"]
 
 
 func pick(id: String) -> void:
