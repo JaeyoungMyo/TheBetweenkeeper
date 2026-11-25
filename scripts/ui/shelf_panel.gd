@@ -33,7 +33,7 @@ func _make_slot(state: FacilityState, items: Dictionary, i: int) -> Control:
 	var slot := preload("res://scripts/ui/drop_target.gd").new()
 	slot.name = "shelf-slot-%d" % i
 	slot.slot_index = i
-	slot.custom_minimum_size = Vector2(250, 140)
+	slot.custom_minimum_size = Vector2(250, 500.0 / state.slot_count - 10)
 	slot.dropped.connect(func(s: int, id: int) -> void: slot_dropped.emit(s, id))
 	# 이미 선반에 있는 아이템은 먼저 목록으로 꺼내야 한다
 	slot.accept_check = func(_s: int, id: int) -> bool: return id in ItemManager.carried_ids

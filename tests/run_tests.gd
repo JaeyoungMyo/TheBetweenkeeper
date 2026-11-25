@@ -9,6 +9,8 @@ const TEST_FILES := [
 	"res://tests/unit/test_placement_rules.gd",
 	"res://tests/unit/test_movement_speed.gd",
 	"res://tests/unit/test_floor_stack.gd",
+	"res://tests/unit/test_economy.gd",
+	"res://tests/unit/test_economy_properties.gd",
 	"res://tests/unit/test_carry_capacity.gd",
 	"res://tests/unit/test_storage_properties.gd",
 	"res://tests/integration/test_tutorial_slice.gd",

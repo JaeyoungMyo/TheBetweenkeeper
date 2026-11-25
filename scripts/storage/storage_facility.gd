@@ -4,6 +4,7 @@ extends StaticBody2D
 
 @export var data: FacilityData
 var state: FacilityState
+var facility_id := ""
 
 const SIZE := Vector2(96, 40)
 
@@ -13,7 +14,7 @@ func _ready() -> void:
 		data = FacilityData.new()
 		data.facility_id = "shelf_basic"
 		data.display_name = "선반"
-	state = FacilityState.new(data.facility_id, data.slot_count, data.slot_weight_limit)
+	state = FacilityState.new(facility_id if facility_id != "" else data.facility_id, data.slot_count, data.slot_weight_limit)
 	var shape := CollisionShape2D.new()
 	var rect := RectangleShape2D.new()
 	rect.size = SIZE

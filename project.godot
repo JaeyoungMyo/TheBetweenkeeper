@@ -12,6 +12,7 @@ config/features=PackedStringArray("4.7", "Compatibility")
 [autoload]
 
 ItemManager="*res://autoload/item_manager.gd"
+EconomyManager="*res://autoload/economy_manager.gd"
 
 [display]
 

@@ -4,6 +4,7 @@ extends Node
 signal item_state_changed(item_id: int, state: int)
 signal item_dropped(item_id: int, position: Vector2)
 signal weight_rejected(facility_id: String, message: String)
+signal item_stored(item: ItemInstance)
 signal capacity_changed(capacity: int)
 
 const REJECT_MESSAGE := "무게 초과"
@@ -95,6 +96,7 @@ func place_carried(item_id: int, facility: FacilityState, slot: int) -> Dictiona
 		return result
 	carried_ids.erase(item_id)
 	item_state_changed.emit(item_id, item.state)
+	item_stored.emit(item)
 	return result
 
 
@@ -113,5 +115,19 @@ func drop_stored(item: ItemInstance, facility: FacilityState, feet_pos: Vector2)
 	var pos := floor_position(feet_pos)
 	StorageService.drop_at_feet(item, pos)
 	item_dropped.emit(item.instance_id, pos)
+	item_state_changed.emit(item.instance_id, item.state)
+	return true
+
+
+## 판매 처리 (들고 있거나 선반 · 바닥에 있는 아이템)
+func mark_sold(item: ItemInstance, facility: FacilityState = null) -> bool:
+	if item.state == ItemInstance.State.SOLD:
+		return false
+	if item.state == ItemInstance.State.STORED and (facility == null or not facility.remove(item)):
+		return false
+	carried_ids.erase(item.instance_id)
+	item.state = ItemInstance.State.SOLD
+	item.facility_id = ""
+	item.slot_index = -1
 	item_state_changed.emit(item.instance_id, item.state)
 	return true

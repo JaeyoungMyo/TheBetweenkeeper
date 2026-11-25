@@ -22,7 +22,7 @@ func setup(instance: ItemInstance) -> void:
 
 func sync() -> void:
 	position = item.world_position
-	visible = item.state != ItemInstance.State.STORED
+	visible = item.state in [ItemInstance.State.INCOMING, ItemInstance.State.CARRIED]
 
 
 func hit(point: Vector2) -> bool:

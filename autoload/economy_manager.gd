@@ -1,0 +1,131 @@
+# EconomyManager (오토로드, U2). 골드 · EXP · 증강 · 판매 · 구매의 단일 창구
+extends Node
+
+signal gold_changed(amount: int)
+signal exp_changed(level: int, exp: int)
+signal level_up(level: int)
+
+var config: Dictionary
+var augment_table: Array
+var level := 1
+var exp_points := 0
+var pending_choices := 0
+var augments: Dictionary = {}
+var rng := RandomNumberGenerator.new()
+var _ledger := GoldLedger.new()
+
+
+func _init() -> void:
+	config = JSON.parse_string(FileAccess.get_file_as_string("res://data/economy/economy.json"))
+	augment_table = JSON.parse_string(FileAccess.get_file_as_string("res://data/augments/augments.json"))
+	_ledger.add(int(config["start_gold"]))
+	rng.randomize()
+
+
+func _ready() -> void:
+	ItemManager.item_stored.connect(func(item: ItemInstance) -> void: grant_exp(item))
+
+
+func gold() -> int:
+	return _ledger.amount()
+
+
+func add_gold(value: int) -> void:
+	if _ledger.add(value):
+		gold_changed.emit(gold())
+
+
+func spend_gold(cost: int) -> bool:
+	if not _ledger.try_spend(cost):
+		return false
+	gold_changed.emit(gold())
+	return true
+
+
+func augment_bonus(id: String) -> float:
+	for a: Dictionary in augment_table:
+		if a["id"] == id:
+			return float(a["value"]) * augments.get(id, 0)
+	return 0.0
+
+
+func exp_to_next() -> int:
+	return ExpCalculator.to_next(level, int(config["level_base"]), int(config["level_step"]))
+
+
+## 아이템마다 최초 1회만 지급 (FR-10)
+func grant_exp(item: ItemInstance) -> bool:
+	if item.is_exp_claimed:
+		return false
+	item.is_exp_claimed = true
+	var base: int = item.data.exp_value if item.data.exp_value > 0 else item.weight() * int(config["exp_per_weight"])
+	var r := ExpCalculator.apply(level, exp_points, roundi(base * (1.0 + augment_bonus("exp"))), int(config["level_base"]), int(config["level_step"]))
+	level = r["level"]
+	exp_points = r["exp"]
+	pending_choices += r["gained"]
+	exp_changed.emit(level, exp_points)
+	if r["gained"] > 0:
+		level_up.emit(level)
+	return true
+
+
+func draw_choices() -> Array:
+	return AugmentPool.draw(augment_table, augments, 3, rng)
+
+
+func choose_augment(id: String, items: Node) -> bool:
+	if pending_choices <= 0:
+		return false
+	for a: Dictionary in augment_table:
+		if a["id"] == id and augments.get(id, 0) < int(a["max"]):
+			augments[id] = augments.get(id, 0) + 1
+			pending_choices -= 1
+			if id == "carry":
+				items.upgrade_multiplier()
+			return true
+	return false
+
+
+func sell_price(data: ItemData) -> int:
+	var base: int = data.base_price if data.base_price > 0 else data.weight * int(config["price_per_weight"])
+	return roundi(base * (1.0 + augment_bonus("sell")))
+
+
+## 판매 화면은 U4 에서 연결한다
+func sell(item: ItemInstance, items: Node, facility: FacilityState = null) -> bool:
+	if not items.mark_sold(item, facility):
+		return false
+	add_gold(sell_price(item.data))
+	return true
+
+
+## 가격이 -1 이면 더 살 수 없음
+func bag_price(items: Node) -> int:
+	return int(config["bag_prices"][items.bag_size - 1]) if items.bag_size < CarryRules.MAX_BAG else -1
+
+
+func shelf_price(shelf_count: int) -> int:
+	return int(config["shelf_price"]) if shelf_count < int(config["max_shelves"]) else -1
+
+
+func slot_price(facility: FacilityState) -> int:
+	var i := facility.slot_count - 3
+	return int(config["slot_prices"][i]) if i < config["slot_prices"].size() else -1
+
+
+func buy_bag(items: Node) -> bool:
+	var price := bag_price(items)
+	return price >= 0 and spend_gold(price) and items.upgrade_bag()
+
+
+func buy_shelf(shelf_count: int) -> bool:
+	var price := shelf_price(shelf_count)
+	return price >= 0 and spend_gold(price)
+
+
+func buy_slot(facility: FacilityState) -> bool:
+	var price := slot_price(facility)
+	if price < 0 or not spend_gold(price):
+		return false
+	facility.add_slot()
+	return true

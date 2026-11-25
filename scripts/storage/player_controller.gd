@@ -34,7 +34,7 @@ func _physics_process(delta: float) -> void:
 	elif has_target():
 		dir = global_position.direction_to(move_target)
 	# BR-U1-09: 손에 든 아이템 무게와 무관하게 속도는 일정
-	velocity = dir * WeightRules.carry_speed(move_speed, 0)
+	velocity = dir * current_speed()
 	var before := global_position
 	move_and_slide()
 	if has_target():
@@ -56,7 +56,7 @@ func stop_moving() -> void:
 
 
 func _check_arrival(before: Vector2, delta: float) -> void:
-	var step := move_speed * delta
+	var step := current_speed() * delta
 	if global_position.distance_to(move_target) <= maxf(ARRIVE_DISTANCE, step):
 		stop_moving()
 		return
@@ -64,6 +64,11 @@ func _check_arrival(before: Vector2, delta: float) -> void:
 	_stuck_time = _stuck_time + delta if progress < step * 0.1 else 0.0
 	if _stuck_time > STUCK_SECONDS:
 		stop_moving()
+
+
+## 무게와 무관 (BR-U1-09). 이동 속도 증강만 반영
+func current_speed() -> float:
+	return WeightRules.carry_speed(move_speed * (1.0 + EconomyManager.augment_bonus("speed")), 0)
 
 
 func feet_position() -> Vector2:
@@ -79,9 +84,13 @@ static func _ensure_actions() -> void:
 		"move_down": [KEY_S, KEY_DOWN],
 		"interact": [KEY_X, KEY_E],
 		"drop_item": [KEY_Z],
+		"shop_menu": [KEY_C],
 		"slot_1": [KEY_1, KEY_KP_1],
 		"slot_2": [KEY_2, KEY_KP_2],
 		"slot_3": [KEY_3, KEY_KP_3],
+		"slot_4": [KEY_4, KEY_KP_4],
+		"slot_5": [KEY_5, KEY_KP_5],
+		"slot_6": [KEY_6, KEY_KP_6],
 	}
 	for action in binds:
 		if InputMap.has_action(action):

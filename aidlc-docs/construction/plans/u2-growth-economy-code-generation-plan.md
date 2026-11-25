@@ -38,7 +38,7 @@ B) 상점 방문 (U4) 때만 구매
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A
 
 ### Question U2-2
 선반 확장 방식은 무엇으로 할까요?
@@ -51,17 +51,17 @@ C) 칸 추가만
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A
 
 ## 단계
 
-- [ ] Step 1: 순수 규칙 `scripts/economy/gold_ledger.gd`, `scripts/growth/exp_calculator.gd`, `scripts/growth/augment_pool.gd` (FR-10, 11, 19, NFR-04)
-- [ ] Step 2: 데이터 `data/augments/augments.json`, `data/economy/economy.json`
-- [ ] Step 3: `autoload/economy_manager.gd`. 골드 증감, EXP, 레벨업, 판매, 구매, 증강 적용 (US-09, US-10, US-22)
-- [ ] Step 4: U1 연결. 수납 시 EXP 지급, `SOLD` 상태 추가, 선반 여러 개와 칸 추가 지원 (FR-23, 24)
-- [ ] Step 5: UI. 골드 · 레벨 · EXP 표시, 증강 선택 (게임 일시정지), 시설 구매 메뉴. 숫자 키는 4~6칸까지 확장
-- [ ] Step 6: 예시 테스트 (US-09, US-10, US-22 인수 조건) 와 PBT
-- [ ] Step 7: 튜토리얼 통합 테스트, code-summary.md, 상태 · 감사 기록
+- [x] Step 1: 순수 규칙 `scripts/economy/gold_ledger.gd`, `scripts/growth/exp_calculator.gd`, `scripts/growth/augment_pool.gd` (FR-10, 11, 19, NFR-04)
+- [x] Step 2: 데이터 `data/augments/augments.json`, `data/economy/economy.json`
+- [x] Step 3: `autoload/economy_manager.gd`. 골드 증감, EXP, 레벨업, 판매, 구매, 증강 적용 (US-09, US-10, US-22)
+- [x] Step 4: U1 연결. 수납 시 EXP 지급, `SOLD` 상태 추가, 선반 여러 개와 칸 추가 지원 (FR-23, 24)
+- [x] Step 5: UI. 골드 · 레벨 · EXP 표시, 증강 선택 (게임 일시정지), 시설 구매 메뉴. 숫자 키는 4~6칸까지 확장
+- [x] Step 6: 예시 테스트 (US-09, US-10, US-22 인수 조건) 와 PBT
+- [x] Step 7: 튜토리얼 통합 테스트, code-summary.md, 상태 · 감사 기록
 
 ## 테스트 가능한 속성 (PBT-01)
 

@@ -1,0 +1,11 @@
+{
+  "start_gold": 100,
+  "exp_per_weight": 5,
+  "price_per_weight": 10,
+  "level_base": 50,
+  "level_step": 25,
+  "bag_prices": [100, 200, 400, 800],
+  "shelf_price": 150,
+  "max_shelves": 4,
+  "slot_prices": [100, 200, 300]
+}

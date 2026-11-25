@@ -2,7 +2,7 @@
 class_name ItemInstance
 extends RefCounted
 
-enum State { INCOMING, CARRIED, STORED }
+enum State { INCOMING, CARRIED, STORED, SOLD }
 
 var instance_id: int
 var data: ItemData
@@ -11,6 +11,7 @@ var state: State = State.INCOMING
 var world_position: Vector2 = Vector2.ZERO
 var facility_id: String = ""
 var slot_index: int = -1
+var is_exp_claimed := false
 
 
 func _init(id: int, item_data: ItemData, stage: int) -> void:

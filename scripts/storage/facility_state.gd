@@ -19,6 +19,12 @@ func _init(id: String, count: int, limit: int = WeightRules.SLOT_WEIGHT_LIMIT) -
 		slot_weights.append([])
 
 
+func add_slot() -> void:
+	slot_count += 1
+	slot_items.append([])
+	slot_weights.append([])
+
+
 func total_weight() -> int:
 	var sum := 0
 	for w in slot_weights:

@@ -3,9 +3,12 @@ class_name StorageRoom
 extends Node2D
 
 const ROOM := Rect2(220, 60, 780, 600)
+const SHELF_POSITIONS := [Vector2(610, 140), Vector2(360, 140), Vector2(860, 140), Vector2(360, 340)]
 
 var player: PlayerController
+## 마지막으로 다가간 선반
 var shelf: StorageFacility
+var shelves: Array[StorageFacility] = []
 var views: Dictionary = {}
 var list_panel: ItemListPanel
 var shelf_panel: ShelfPanel
@@ -15,9 +18,9 @@ var _map: Control
 
 
 func _ready() -> void:
+	ItemManager.floor_blocked = []
 	_build_room()
 	ItemManager.floor_bounds = ROOM
-	ItemManager.floor_blocked = [shelf.bounds()]
 	_build_ui()
 	ItemManager.item_state_changed.connect(_on_state_changed)
 	ItemManager.weight_rejected.connect(_on_weight_rejected)
@@ -37,14 +40,50 @@ func _build_room() -> void:
 	_wall(Rect2(ROOM.position.x - t, ROOM.end.y, ROOM.size.x + t * 2, t))
 	_wall(Rect2(ROOM.position.x - t, ROOM.position.y, t, ROOM.size.y))
 	_wall(Rect2(ROOM.end.x, ROOM.position.y, t, ROOM.size.y))
-	shelf = preload("res://scenes/storage/storage_facility.tscn").instantiate()
-	shelf.data = load("res://data/facilities/shelf_basic.tres")
-	shelf.position = Vector2(610, 140)
-	add_child(shelf)
+	add_shelf()
+	shelf = shelves[0]
 	player = preload("res://scenes/storage/player.tscn").instantiate()
 	player.position = ROOM.get_center()
 	player.z_index = 1
 	add_child(player)
+
+
+func add_shelf() -> void:
+	var s: StorageFacility = preload("res://scenes/storage/storage_facility.tscn").instantiate()
+	s.data = load("res://data/facilities/shelf_basic.tres")
+	s.facility_id = "shelf_%d" % (shelves.size() + 1)
+	s.position = SHELF_POSITIONS[shelves.size()]
+	add_child(s)
+	shelves.append(s)
+	ItemManager.floor_blocked.append(s.bounds())
+
+
+## 새 선반 자리에 있던 아이템과 플레이어는 선반 앞으로 옮긴다
+func buy_shelf() -> bool:
+	if not EconomyManager.buy_shelf(shelves.size()):
+		return false
+	add_shelf()
+	var area := shelves[-1].bounds().grow(12)
+	var front := Vector2(area.get_center().x, area.end.y + 14)
+	for v: ItemView in views.values():
+		if v.item.state == ItemInstance.State.INCOMING and area.has_point(v.item.world_position):
+			v.item.world_position = ItemManager.floor_position(front)
+			v.sync()
+	if area.has_point(player.position):
+		player.position = front
+		player.stop_moving()
+	return true
+
+
+func refresh() -> void:
+	_refresh()
+
+
+func shelf_of(item: ItemInstance) -> FacilityState:
+	for s in shelves:
+		if s.state.facility_id == item.facility_id:
+			return s.state
+	return shelf.state
 
 
 func _wall(r: Rect2) -> void:
@@ -95,12 +134,16 @@ func _build_ui() -> void:
 	message.position = Vector2(560, 20)
 	message.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	layer.add_child(message)
+	var growth := GrowthUi.new()
+	growth.name = "GrowthUi"
+	growth.room = self
+	add_child(growth)
 
 
 ## 들고 있거나 선반에 있는 아이템을 플레이어 발 아래 바닥에 떨어뜨린다
 func drop_to_floor(id: int) -> void:
 	if not ItemManager.drop_carried_at(id, player.feet_position()):
-		ItemManager.drop_stored(ItemManager.items[id], shelf.state, player.feet_position())
+		ItemManager.drop_stored(ItemManager.items[id], shelf_of(ItemManager.items[id]), player.feet_position())
 
 
 func add_item(data: ItemData, pos: Vector2) -> ItemInstance:
@@ -131,7 +174,7 @@ func _process(_d: float) -> void:
 		interact()
 	if Input.is_action_just_pressed("drop_item"):
 		drop_first()
-	for i in 3:
+	for i in 6:
 		if Input.is_action_just_pressed("slot_%d" % (i + 1)):
 			store_in_slot(i)
 
@@ -142,7 +185,7 @@ func drop_first() -> void:
 		drop_to_floor(ItemManager.carried_ids[0])
 
 
-## 숫자 키 1~3: 패널이 열려 있으면 목록 맨 위 아이템을 해당 칸에 적재
+## 숫자 키 1~6: 패널이 열려 있으면 목록 맨 위 아이템을 해당 칸에 적재
 func store_in_slot(slot: int) -> void:
 	if not shelf_panel.visible or slot >= shelf.state.slot_count:
 		return
@@ -152,7 +195,13 @@ func store_in_slot(slot: int) -> void:
 	ItemManager.place_carried(ItemManager.carried_ids[0], shelf.state, slot)
 
 
+## 앞에 있는 선반을 현재 선반으로 고른다 (패널이 열려 있으면 유지)
 func near_shelf() -> bool:
+	if not shelf_panel.visible:
+		for s in shelves:
+			if StorageService.near_rect(player.global_position, s.bounds()):
+				shelf = s
+				return true
 	return StorageService.near_rect(player.global_position, shelf.bounds())
 
 
@@ -212,9 +261,14 @@ func _on_map_input(event: InputEvent) -> void:
 			elif not ItemManager.try_pick_up(v.item, player.position):
 				player.move_to(_walkable(event.position))
 			return
-	if shelf.hit(event.position):
-		if near_shelf():
-			toggle_shelf()
+	for s in shelves:
+		if not s.hit(event.position):
+			continue
+		if shelf_panel.visible and s == shelf:
+			shelf_panel.hide()
+		elif StorageService.near_rect(player.global_position, s.bounds()):
+			shelf = s
+			shelf_panel.show_for(s.state, ItemManager.items)
 		else:
 			player.move_to(_walkable(event.position))
 		return
@@ -227,7 +281,7 @@ func _walkable(point: Vector2) -> Vector2:
 
 
 func _on_take_out(id: int) -> void:
-	if not ItemManager.take_out(ItemManager.items[id], shelf.state):
+	if not ItemManager.take_out(ItemManager.items[id], shelf_of(ItemManager.items[id])):
 		show_message("더 들 수 없습니다")
 
 
