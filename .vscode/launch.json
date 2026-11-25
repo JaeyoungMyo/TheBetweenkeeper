@@ -1,0 +1,7 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    { "name": "게임 실행", "type": "node-terminal", "request": "launch", "command": ".\\tools\\run_game.cmd", "cwd": "${workspaceFolder}" },
+    { "name": "테스트 실행", "type": "node-terminal", "request": "launch", "command": ".\\tools\\run_tests.cmd", "cwd": "${workspaceFolder}" }
+  ]
+}

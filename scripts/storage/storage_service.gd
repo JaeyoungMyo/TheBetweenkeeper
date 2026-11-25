@@ -6,8 +6,8 @@ const PICKUP_RANGE := 48.0
 const HOVER_RANGE := 64.0
 
 
-static func can_pick_up(item: ItemInstance, player_pos: Vector2, hand_empty: bool) -> bool:
-	if not hand_empty:
+static func can_pick_up(item: ItemInstance, player_pos: Vector2, has_room: bool) -> bool:
+	if not has_room:
 		return false
 	if item.state != ItemInstance.State.INCOMING:
 		return false
@@ -18,8 +18,8 @@ static func can_hover(item: ItemInstance, player_pos: Vector2) -> bool:
 	return item.state == ItemInstance.State.INCOMING and item.world_position.distance_to(player_pos) <= HOVER_RANGE
 
 
-static func pick_up(item: ItemInstance, player_pos: Vector2, hand_empty: bool) -> bool:
-	if not can_pick_up(item, player_pos, hand_empty):
+static func pick_up(item: ItemInstance, player_pos: Vector2, has_room: bool) -> bool:
+	if not can_pick_up(item, player_pos, has_room):
 		return false
 	item.state = ItemInstance.State.CARRIED
 	return true

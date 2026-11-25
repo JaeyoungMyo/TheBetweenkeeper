@@ -48,7 +48,7 @@ func _drive(mgr, cmds: Array) -> String:
 						return "pickup failed"
 				var fits: bool = WeightRules.total(model[slot]) + hand.weight() <= 12
 				var feet := Vector2(7, 9)
-				if mgr.place_carried(fs, slot, feet)["ok"] != fits:
+				if mgr.place_carried(hand.instance_id, fs, slot, feet)["ok"] != fits:
 					return "place mismatch"
 				if fits:
 					model[slot].append(hand.weight())
@@ -64,7 +64,7 @@ func _drive(mgr, cmds: Array) -> String:
 						hand = it
 						model[slot].pop_back()
 			2:
-				if mgr.drop_carried_at(Vector2.ZERO) != (hand != null):
+				if mgr.drop_carried_at(hand.instance_id if hand else -1, Vector2.ZERO) != (hand != null):
 					return "drop mismatch"
 				hand = null
 		var bad := _invariants(mgr, fs, model, hand)
@@ -81,7 +81,7 @@ func _invariants(mgr, fs: FacilityState, model: Array, hand: ItemInstance) -> St
 			return "slot over 12"
 	if fs.total_weight() > fs.max_weight():
 		return "shelf over max"
-	if mgr.hand_empty() != (hand == null):
+	if mgr.carried_ids.is_empty() != (hand == null):
 		return "hand differs from model"
 	for it: ItemInstance in mgr.items.values():
 		var in_shelf: bool = fs.slot_items.any(func(s): return it.instance_id in s)

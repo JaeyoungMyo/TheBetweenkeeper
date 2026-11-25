@@ -195,3 +195,10 @@
 **Context**: Code Generation Part 2 Step 14
 
 ---
+## U1 변경 요청: 운반 개수, 실행 설정
+**Timestamp**: 2026-11-26T00:18:52+09:00
+**User Input**: "assets 추적 해제하고 / Debug & Run 에서 실행가능하게 만들어주고 / 결정이 필요한 것: 손에 1개만 들 수 있어서 \"아이템 목록\"에도 최대 1개만 보입니다. 여러 개를 담는 가방을 생각하셨다면 최대 개수를 알려 주세요. / 상점에서 구매로 늘릴 수 있는것 : 최대 5개 / 증강으로 가능한것 : 2배, 3배로 최대 3배"
+**AI Response**: assets 추적 해제, .vscode/launch.json 과 tools/ 추가, 운반 개수 D-20 구현. 테스트 21개 통과. 구매 · 증강 UI 는 U2 · U4. 승인 대기.
+**Context**: U1 Code Generation 변경 요청
+
+---

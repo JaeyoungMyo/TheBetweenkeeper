@@ -13,12 +13,12 @@ func _ready() -> void:
 	add_child(_box)
 
 
-func refresh(items: Array) -> void:
+func refresh(items: Array, capacity: int) -> void:
 	for c in _box.get_children():
 		_box.remove_child(c)
 		c.queue_free()
 	var title := Label.new()
-	title.text = "아이템 목록"
+	title.text = "아이템 목록 (%d / %d)" % [items.size(), capacity]
 	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_box.add_child(title)
 	for item in items:
@@ -36,7 +36,7 @@ static func make_entry(item: ItemInstance) -> Button:
 
 
 func _can_drop_data(_p: Vector2, data: Variant) -> bool:
-	return data is Dictionary and data.has("item_id") and data["item_id"] != ItemManager.carried_id
+	return data is Dictionary and data.has("item_id") and data["item_id"] not in ItemManager.carried_ids
 
 
 func _drop_data(_p: Vector2, data: Variant) -> void:

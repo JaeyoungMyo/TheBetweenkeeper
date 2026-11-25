@@ -57,7 +57,7 @@
 ### PlayerCarry (런타임, Player 소유)
 | 필드 | 타입 | 설명 |
 | --- | --- | --- |
-| `held_item_id` | int (nullable) | 손에 든 아이템 (최대 1, BR-U1-06) |
+| `carried_ids` | Array[int] | 운반 아이템 (최대 15, BR-U1-06) |
 | `move_speed` | float | 기본 이동 속도 (무게와 무관, BR-U1-09). 배율 필드 없음 |
 
 ## 2. 관계

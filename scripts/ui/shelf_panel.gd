@@ -36,7 +36,7 @@ func _make_slot(state: FacilityState, items: Dictionary, i: int) -> Control:
 	slot.custom_minimum_size = Vector2(250, 140)
 	slot.dropped.connect(func(s: int, id: int) -> void: slot_dropped.emit(s, id))
 	# 이미 선반에 있는 아이템은 먼저 목록으로 꺼내야 한다
-	slot.accept_check = func(_s: int, id: int) -> bool: return id == ItemManager.carried_id
+	slot.accept_check = func(_s: int, id: int) -> bool: return id in ItemManager.carried_ids
 	var bg := ColorRect.new()
 	bg.color = Color(0.2, 0.16, 0.12)
 	bg.set_anchors_preset(Control.PRESET_FULL_RECT)

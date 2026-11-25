@@ -18,6 +18,7 @@ func _ready() -> void:
 	_build_ui()
 	ItemManager.item_state_changed.connect(_on_state_changed)
 	ItemManager.weight_rejected.connect(_on_weight_rejected)
+	ItemManager.capacity_changed.connect(_on_capacity_changed)
 	_refresh()
 
 
@@ -65,8 +66,8 @@ func _build_ui() -> void:
 	add_child(layer)
 	_map = preload("res://scripts/ui/drop_target.gd").new()
 	_map.set_anchors_preset(Control.PRESET_FULL_RECT)
-	_map.accept_check = func(_s: int, id: int) -> bool: return not shelf_panel.visible and id == ItemManager.carried_id
-	_map.dropped.connect(func(_s: int, _id: int) -> void: ItemManager.drop_carried_at(player.feet_position()))
+	_map.accept_check = func(_s: int, id: int) -> bool: return not shelf_panel.visible and id in ItemManager.carried_ids
+	_map.dropped.connect(func(_s: int, id: int) -> void: ItemManager.drop_carried_at(id, player.feet_position()))
 	_map.gui_input.connect(_on_map_input)
 	layer.add_child(_map)
 	list_panel = preload("res://scenes/ui_storage/item_list_panel.tscn").instantiate()
@@ -77,7 +78,7 @@ func _build_ui() -> void:
 	shelf_panel.position = Vector2(1015, 60)
 	layer.add_child(shelf_panel)
 	shelf_panel.closed.connect(shelf_panel.hide)
-	shelf_panel.slot_dropped.connect(func(s: int, _id: int) -> void: ItemManager.place_carried(shelf.state, s, player.feet_position()))
+	shelf_panel.slot_dropped.connect(func(s: int, id: int) -> void: ItemManager.place_carried(id, shelf.state, s, player.feet_position()))
 	message = Label.new()
 	message.position = Vector2(560, 20)
 	message.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -105,7 +106,7 @@ func _process(_d: float) -> void:
 	var mouse := get_global_mouse_position()
 	for v: ItemView in views.values():
 		if v.item.state == ItemInstance.State.CARRIED:
-			v.position = player.position + Vector2(0, -18)
+			v.position = player.position + Vector2(0, -18 - 8 * ItemManager.carried_ids.find(v.item.instance_id))
 		v.set_hover(v.hit(mouse) and StorageService.can_hover(v.item, player.position))
 	if Input.is_action_just_pressed("interact"):
 		_pick_nearest()
@@ -114,7 +115,7 @@ func _process(_d: float) -> void:
 func _pick_nearest() -> void:
 	var best: ItemInstance = null
 	for v: ItemView in views.values():
-		if StorageService.can_pick_up(v.item, player.position, ItemManager.hand_empty()):
+		if StorageService.can_pick_up(v.item, player.position, ItemManager.has_room()):
 			if best == null or v.item.world_position.distance_to(player.position) < best.world_position.distance_to(player.position):
 				best = v.item
 	if best:
@@ -138,7 +139,7 @@ func _on_map_input(event: InputEvent) -> void:
 
 func _on_take_out(id: int) -> void:
 	if not ItemManager.take_out(ItemManager.items[id], shelf.state):
-		show_message("손이 비어 있지 않습니다")
+		show_message("더 들 수 없습니다")
 
 
 func _on_weight_rejected(_facility_id: String, text: String) -> void:
@@ -152,6 +153,10 @@ func _on_state_changed(id: int, _state: int) -> void:
 
 
 func _refresh() -> void:
-	list_panel.refresh([] if ItemManager.hand_empty() else [ItemManager.items[ItemManager.carried_id]])
+	list_panel.refresh(ItemManager.carried_items(), ItemManager.capacity())
 	if shelf_panel.visible:
 		shelf_panel.show_for(shelf.state, ItemManager.items)
+
+
+func _on_capacity_changed(_capacity: int) -> void:
+	_refresh()

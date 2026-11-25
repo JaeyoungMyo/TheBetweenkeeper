@@ -14,7 +14,7 @@ func test_tutorial_scene_completes() -> void:
 		expect(not room.completed, "not complete early")
 		expect(mgr.try_pick_up(item, item.world_position), "pick")
 		expect(room.list_panel.find_child("item-entry-%d" % item.instance_id, true, false) != null, "shown in list")
-		expect(mgr.place_carried(room.shelf.state, slots[item.weight()], Vector2.ZERO)["ok"], "place %s" % item.data.item_id)
+		expect(mgr.place_carried(item.instance_id, room.shelf.state, slots[item.weight()], Vector2.ZERO)["ok"], "place %s" % item.data.item_id)
 	expect(room.shelf.state.total_weight() == 36, "shelf exactly full")
 	expect(room.completed, "tutorial completed")
 	room.shelf_panel.show_for(room.shelf.state, mgr.items)
