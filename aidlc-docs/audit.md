@@ -216,3 +216,10 @@
 **Context**: U1 Code Generation 변경 요청
 
 ---
+## U1 변경 요청: 숫자 키 적재
+**Timestamp**: 2026-11-25T15:25:56.793Z
+**User Input**: "키보드 1, 2, 3으로 선반에서 어디로 적재할지 선택할 수 있게 해줘."
+**AI Response**: BR-U1-23 구현. 승인 대기.
+**Context**: U1 Code Generation 변경 요청
+
+---

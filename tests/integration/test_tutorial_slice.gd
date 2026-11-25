@@ -40,4 +40,15 @@ func test_tutorial_scene_completes() -> void:
 	var c = room.tutorial_items[5]
 	room.drop_to_floor(c.instance_id)
 	expect(c.state == ItemInstance.State.INCOMING and room.shelf_panel.visible, "shelf item dropped to floor, panel stays")
+	var held = mgr.items[mgr.carried_ids[0]]
+	room.shelf_panel.hide()
+	room.store_in_slot(0)
+	expect(held.state == ItemInstance.State.CARRIED, "number key ignored while closed")
+	room.toggle_shelf()
+	room.store_in_slot(0)
+	expect(held.state == ItemInstance.State.STORED and held.slot_index == 0, "key 1 stores in slot 1")
+	room.store_in_slot(1)
+	expect(mgr.carried_ids.is_empty(), "empty hand is safe")
+	for n in [1, 2, 3]:
+		expect(InputMap.has_action("slot_%d" % n), "key %d bound" % n)
 	room.free()

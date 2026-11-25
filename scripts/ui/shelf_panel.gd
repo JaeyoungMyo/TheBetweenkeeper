@@ -49,7 +49,7 @@ func _make_slot(state: FacilityState, items: Dictionary, i: int) -> Control:
 	flow.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	slot.add_child(flow)
 	var label := Label.new()
-	label.text = "칸 %d: %d / %d" % [i + 1, WeightRules.total(state.slot_weights[i]), state.slot_limit]
+	label.text = "[%d] 칸 %d: %d / %d" % [i + 1, i + 1, WeightRules.total(state.slot_weights[i]), state.slot_limit]
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	flow.add_child(label)
 	for id in state.slot_items[i]:

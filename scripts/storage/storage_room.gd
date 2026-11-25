@@ -129,6 +129,19 @@ func _process(_d: float) -> void:
 		shelf_panel.hide()
 	if Input.is_action_just_pressed("interact"):
 		interact()
+	for i in 3:
+		if Input.is_action_just_pressed("slot_%d" % (i + 1)):
+			store_in_slot(i)
+
+
+## 숫자 키 1~3: 패널이 열려 있으면 목록 맨 위 아이템을 해당 칸에 적재
+func store_in_slot(slot: int) -> void:
+	if not shelf_panel.visible or slot >= shelf.state.slot_count:
+		return
+	if ItemManager.carried_ids.is_empty():
+		show_message("들고 있는 아이템이 없습니다")
+		return
+	ItemManager.place_carried(ItemManager.carried_ids[0], shelf.state, slot, player.feet_position())
 
 
 func near_shelf() -> bool:

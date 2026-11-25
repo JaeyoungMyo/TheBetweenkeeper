@@ -41,6 +41,9 @@ static func _ensure_actions() -> void:
 		"move_up": [KEY_W, KEY_UP],
 		"move_down": [KEY_S, KEY_DOWN],
 		"interact": [KEY_X, KEY_E],
+		"slot_1": [KEY_1, KEY_KP_1],
+		"slot_2": [KEY_2, KEY_KP_2],
+		"slot_3": [KEY_3, KEY_KP_3],
 	}
 	for action in binds:
 		if InputMap.has_action(action):
