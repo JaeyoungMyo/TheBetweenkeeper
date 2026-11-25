@@ -8,7 +8,7 @@ func test_pick_up_then_store_sets_stored() -> void:
 	expect(mgr.try_pick_up(item, Vector2.ZERO), "pick up at distance 0 must succeed")
 	expect(item.state == ItemInstance.State.CARRIED, "picked item must be carried")
 	var fs := FacilityState.new("shelf_basic", 3)
-	var r: Dictionary = mgr.place_carried(item.instance_id, fs, 0, Vector2(100, 100))
+	var r: Dictionary = mgr.place_carried(item.instance_id, fs, 0)
 	expect(r["ok"], "store 2 into empty slot must succeed")
 	expect(item.state == ItemInstance.State.STORED, "stored item must be STORED")
 	expect(fs.total_weight() == 2, "shelf total should be 2")
@@ -29,22 +29,21 @@ func test_pickup_range_48() -> void:
 	expect(not StorageService.can_pick_up(far, Vector2.ZERO, true), "distance 49 must not be pickable")
 
 
-func test_overweight_drops_at_feet_as_incoming() -> void:
+func test_overweight_stays_in_hand() -> void:
 	var mgr = load("res://autoload/item_manager.gd").new()
 	var fs := FacilityState.new("shelf_basic", 3)
 	var a = mgr.create_item(_data(6), 1)
 	var b = mgr.create_item(_data(6), 1)
 	var c = mgr.create_item(_data(1), 1)
 	mgr.try_pick_up(a, Vector2.ZERO)
-	mgr.place_carried(a.instance_id, fs, 0, Vector2.ZERO)
+	mgr.place_carried(a.instance_id, fs, 0)
 	mgr.try_pick_up(b, Vector2.ZERO)
-	mgr.place_carried(b.instance_id, fs, 0, Vector2.ZERO)
+	mgr.place_carried(b.instance_id, fs, 0)
 	mgr.try_pick_up(c, Vector2.ZERO)
-	var feet := Vector2(10, 20)
-	var r: Dictionary = mgr.place_carried(c.instance_id, fs, 0, feet)
+	var r: Dictionary = mgr.place_carried(c.instance_id, fs, 0)
 	expect(not r["ok"], "1 into a full-12 slot must be rejected")
-	expect(c.state == ItemInstance.State.INCOMING, "rejected item must be INCOMING")
-	expect(c.world_position == feet, "rejected item must land at player's feet")
+	expect(c.state == ItemInstance.State.CARRIED, "rejected item must stay carried")
+	expect(mgr.carried_ids == [c.instance_id], "rejected item must stay in hand")
 
 
 func test_drop_on_map_goes_to_feet() -> void:
@@ -70,7 +69,7 @@ func test_take_out_removes_from_total() -> void:
 	var fs := FacilityState.new("shelf_basic", 3)
 	var item = mgr.create_item(_data(4), 1)
 	mgr.try_pick_up(item, Vector2.ZERO)
-	mgr.place_carried(item.instance_id, fs, 1, Vector2.ZERO)
+	mgr.place_carried(item.instance_id, fs, 1)
 	expect(fs.total_weight() == 4, "total should be 4 after store")
 	expect(mgr.take_out(item, fs), "take out must succeed")
 	expect(fs.total_weight() == 0, "total should be 0 after take out")

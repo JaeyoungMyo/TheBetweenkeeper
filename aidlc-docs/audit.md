@@ -223,3 +223,10 @@
 **Context**: U1 Code Generation 변경 요청
 
 ---
+## U1 변경 요청: 무게 초과 시 손에 유지
+**Timestamp**: 2026-11-25T15:27:51.072Z
+**User Input**: "무게 초과가 되면 그냥 아이템이 옮겨 지지 않고 그대로 손에 들고 있도록 해줘"
+**AI Response**: 낙하 규칙 (Q9) 을 대체. 코드 · 테스트 · 문서 반영. 승인 대기.
+**Context**: U1 Code Generation 변경 요청
+
+---

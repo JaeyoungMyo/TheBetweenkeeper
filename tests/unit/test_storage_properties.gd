@@ -47,14 +47,11 @@ func _drive(mgr, cmds: Array) -> String:
 					if not mgr.try_pick_up(hand, Vector2.ZERO):
 						return "pickup failed"
 				var fits: bool = WeightRules.total(model[slot]) + hand.weight() <= 12
-				var feet := Vector2(7, 9)
-				if mgr.place_carried(hand.instance_id, fs, slot, feet)["ok"] != fits:
+				if mgr.place_carried(hand.instance_id, fs, slot)["ok"] != fits:
 					return "place mismatch"
 				if fits:
 					model[slot].append(hand.weight())
-				elif hand.state != ItemInstance.State.INCOMING or hand.world_position != feet:
-					return "rejected item not at feet"
-				hand = null
+					hand = null
 			1:
 				if fs.slot_items[slot].size() > 0:
 					var it: ItemInstance = mgr.items[fs.slot_items[slot].back()]

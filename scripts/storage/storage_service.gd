@@ -31,7 +31,7 @@ static func pick_up(item: ItemInstance, player_pos: Vector2, has_room: bool) -> 
 	return true
 
 
-## 맵 드롭 · 무게 초과 낙하 모두 플레이어 발 아래에 놓는다 (FD-U1-6 X, BR-U1-05). 상태는 incoming.
+## 맵 드롭은 플레이어 발 아래에 놓는다 (FD-U1-6 X, BR-U1-05). 상태는 incoming.
 static func drop_at_feet(item: ItemInstance, feet_pos: Vector2) -> void:
 	item.state = ItemInstance.State.INCOMING
 	item.world_position = feet_pos
@@ -39,13 +39,12 @@ static func drop_at_feet(item: ItemInstance, feet_pos: Vector2) -> void:
 	item.slot_index = -1
 
 
-## 적재 성공 시 {"ok": true}. 실패 시 낙하하고 {"ok": false, "reason": ...} 반환.
-static func place_into_facility(item: ItemInstance, facility: FacilityState, slot: int, feet_pos: Vector2) -> Dictionary:
+## 적재 성공 시 {"ok": true}. 실패 시 들고 있는 상태를 유지하고 {"ok": false, "reason": ...} 반환.
+static func place_into_facility(item: ItemInstance, facility: FacilityState, slot: int) -> Dictionary:
 	if item.state != ItemInstance.State.CARRIED:
 		return {"ok": false, "reason": "not_carried"}
 	var result := facility.store(slot, item)
 	if not result["ok"]:
-		drop_at_feet(item, feet_pos)
 		return result
 	item.state = ItemInstance.State.STORED
 	item.facility_id = facility.facility_id

@@ -84,16 +84,16 @@ func drop_carried_at(item_id: int, feet_pos: Vector2) -> bool:
 	return true
 
 
-func place_carried(item_id: int, facility: FacilityState, slot: int, feet_pos: Vector2) -> Dictionary:
+func place_carried(item_id: int, facility: FacilityState, slot: int) -> Dictionary:
 	if item_id not in carried_ids:
 		return {"ok": false, "reason": "not_carried"}
 	var item: ItemInstance = items[item_id]
-	feet_pos = floor_position(feet_pos)
-	var result := StorageService.place_into_facility(item, facility, slot, feet_pos)
-	carried_ids.erase(item_id)
+	var result := StorageService.place_into_facility(item, facility, slot)
 	if not result["ok"]:
-		weight_rejected.emit(facility.facility_id, REJECT_MESSAGE)
-		item_dropped.emit(item_id, feet_pos)
+		if result["reason"] == "slot_overweight":
+			weight_rejected.emit(facility.facility_id, REJECT_MESSAGE)
+		return result
+	carried_ids.erase(item_id)
 	item_state_changed.emit(item_id, item.state)
 	return result
 

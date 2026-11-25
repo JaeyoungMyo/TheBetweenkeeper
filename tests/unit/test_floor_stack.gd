@@ -26,7 +26,7 @@ func test_drop_stored_works_with_full_hands() -> void:
 	var fs := FacilityState.new("s", 3)
 	var a = _mgr_item(mgr, 4)
 	mgr.try_pick_up(a, Vector2.ZERO)
-	mgr.place_carried(a.instance_id, fs, 0, Vector2.ZERO)
+	mgr.place_carried(a.instance_id, fs, 0)
 	var b = _mgr_item(mgr)
 	mgr.try_pick_up(b, Vector2.ZERO)
 	expect(mgr.drop_stored(a, fs, Vector2(9, 9)), "drop from shelf")

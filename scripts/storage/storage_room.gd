@@ -81,7 +81,7 @@ func _build_ui() -> void:
 	shelf_panel.position = Vector2(1015, 60)
 	layer.add_child(shelf_panel)
 	shelf_panel.closed.connect(shelf_panel.hide)
-	shelf_panel.slot_dropped.connect(func(s: int, id: int) -> void: ItemManager.place_carried(id, shelf.state, s, player.feet_position()))
+	shelf_panel.slot_dropped.connect(func(s: int, id: int) -> void: ItemManager.place_carried(id, shelf.state, s))
 	hover_list = Label.new()
 	hover_list.name = "hover-item-list"
 	hover_list.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -141,7 +141,7 @@ func store_in_slot(slot: int) -> void:
 	if ItemManager.carried_ids.is_empty():
 		show_message("들고 있는 아이템이 없습니다")
 		return
-	ItemManager.place_carried(ItemManager.carried_ids[0], shelf.state, slot, player.feet_position())
+	ItemManager.place_carried(ItemManager.carried_ids[0], shelf.state, slot)
 
 
 func near_shelf() -> bool:
