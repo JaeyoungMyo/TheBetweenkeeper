@@ -129,9 +129,17 @@ func _process(_d: float) -> void:
 		shelf_panel.hide()
 	if Input.is_action_just_pressed("interact"):
 		interact()
+	if Input.is_action_just_pressed("drop_item"):
+		drop_first()
 	for i in 3:
 		if Input.is_action_just_pressed("slot_%d" % (i + 1)):
 			store_in_slot(i)
+
+
+## Z: 목록 맨 위 아이템을 발 아래에 내려놓는다
+func drop_first() -> void:
+	if not ItemManager.carried_ids.is_empty():
+		drop_to_floor(ItemManager.carried_ids[0])
 
 
 ## 숫자 키 1~3: 패널이 열려 있으면 목록 맨 위 아이템을 해당 칸에 적재

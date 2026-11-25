@@ -51,4 +51,9 @@ func test_tutorial_scene_completes() -> void:
 	expect(mgr.carried_ids.is_empty(), "empty hand is safe")
 	for n in [1, 2, 3]:
 		expect(InputMap.has_action("slot_%d" % n), "key %d bound" % n)
+	room.drop_first()
+	expect(mgr.take_out(held, room.shelf.state), "take out again")
+	room.drop_first()
+	expect(held.state == ItemInstance.State.INCOMING and held.world_position == room.player.feet_position(), "Z drops at feet")
+	expect(InputMap.has_action("drop_item"), "Z bound")
 	room.free()

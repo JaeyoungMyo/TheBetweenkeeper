@@ -230,3 +230,10 @@
 **Context**: U1 Code Generation 변경 요청
 
 ---
+## U1 변경 요청: Z 키 드롭
+**Timestamp**: 2026-11-25T15:28:16.223Z
+**User Input**: "아이템을 제자리 드랍하는키를 z에 매칭시켜줘"
+**AI Response**: BR-U1-24 구현. 승인 대기.
+**Context**: U1 Code Generation 변경 요청
+
+---

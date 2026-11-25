@@ -28,7 +28,7 @@
 | DungeonManager | `shop_opened` / `shop_closed` | ShopView, Main | 상점 화면 전환 |
 | DungeonManager | `request_started` / `request_result` | RequestPanel, HUD | 요청 표시, 결과 표시 |
 | GameManager | `game_over` | GameOverScreen, Main | 누적 실패 3회 (FR-21) |
-| ItemManager | `item_dropped` | StorageRoom (아이템 표시) | 무게 초과 낙하 (FR-07) |
+| ItemManager | `item_dropped` | StorageRoom (아이템 표시) | 맵 드롭 (FR-04) |
 | ItemManager | `weight_rejected` | HUD (메시지) | "무게 초과" 메시지 (D-09) |
 | ItemManager | `item_state_changed` | ItemListPanel, DungeonManager | 상태 변화 반영 |
 | EconomyManager | `gold_changed` | HUD | 공유 골드 표시 (FR-19) |

@@ -47,7 +47,7 @@ res://
 - **소유 컴포넌트**: `ItemManager` (오토로드), `WeightRules`, `PlacementRules`, `StorageService`, `Player`, `Item`, `StorageFacility`, `InputSpace`, `OutputSpace`, `ItemListPanel`, `ShelfPanel`, `ItemData`, `FacilityData`
 - **관련 스토리**: US-01 (조작 부분), US-02, US-03, US-04, US-05, US-06, US-07, US-08
 - **관련 FR**: FR-01 ~ FR-09, FR-29 (조작 부분), FR-31 (배치 위치 계산), FR-30 (출력공간 이동)
-- **Functional Design**: 적용 (UG-4 A) — 무게 적재 규칙, 줍기 상태 전환, 낙하 처리
+- **Functional Design**: 적용 (UG-4 A) — 무게 적재 규칙, 줍기 상태 전환, 적재 거부 처리
 - **완료 기준**: US-02 ~ US-08 의 인수 조건을 통과하고, WeightRules · PlacementRules 의 PBT 가 통과
 - **구현 순서**: 튜토리얼 슬라이스의 첫 단계 (조작 → 적재)
 

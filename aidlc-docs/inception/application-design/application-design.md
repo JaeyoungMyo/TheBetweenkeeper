@@ -24,7 +24,7 @@
 | FR-04 맵 드롭 (버리기) | ItemManager, Player | StorageService |
 | FR-05 바닥 줍기 (호버 후 클릭, 키보드) | Item, Player, ItemManager | StorageService |
 | FR-06 시설 최대 무게 | WeightRules, StorageFacility | StorageService |
-| FR-07 무게 초과 낙하 · 메시지 | ItemManager, HUD | StorageService |
+| FR-07 무게 초과 거부 · 메시지 | ItemManager, HUD | StorageService |
 | FR-08 무게에 따른 이동 속도 | WeightRules, Player | - |
 | FR-09 아이템 상태 | ItemManager | - |
 | FR-10 수납 EXP (중복 방지) | EconomyManager (ExpCalculator) | ProgressionService |
