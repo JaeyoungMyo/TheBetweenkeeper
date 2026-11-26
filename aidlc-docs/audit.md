@@ -286,3 +286,18 @@
 **Context**: U2 Code Generation 완료 승인
 
 ---
+## stage 스킬 이동 (Stage Jump)
+**Timestamp**: 2026-11-26T16:47:47+09:00
+**User Input**: "/aidlc-construction-functional-design U3 던전·요청"
+**AI Response**: 앞으로 U2 Code Generation 완료 → U3 던전·요청 Functional Design. SKIP 표기: 없음, 재오픈: 없음.
+**Context**: /aidlc-construction-functional-design 이동
+
+---
+
+## U3 Functional Design 계획 작성 (질문 생성)
+**Timestamp**: 2026-11-26T16:47:47+09:00
+**User Input**: (위 이동 입력과 동일 턴)
+**AI Response**: `construction/plans/u3-dungeon-requests-functional-design-plan.md` 생성. 질문 14개 (FD-U3-1 ~ FD-U3-14: 전투 횟수, 입고 배분, 수치 위치, 요청 발생, 창고 부재 요청, 제한 시간, 예약 해제, 동시 요청, 실패 판정, 보상, 수면 중 발생, 완료 시 미완료 요청, 게임오버 후 흐름, 상태 전이 범위). 답변 전까지 산출물 생성 보류.
+**Context**: Functional Design Step 2~4 (계획 · 질문 파일 생성, 답변 대기)
+
+---
