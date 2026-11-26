@@ -4,6 +4,7 @@ extends Node2D
 
 const ITEM_IDS := ["potion_hp", "scroll", "sword", "dagger", "axe", "helmet", "shield", "boots", "armor", "ore_box"]
 const ROOM := Rect2(220, 60, 780, 600)
+const START_SHELVES := 3
 const SHELF_POSITIONS := [Vector2(610, 140), Vector2(360, 140), Vector2(860, 140), Vector2(360, 340)]
 
 var player: PlayerController
@@ -43,7 +44,9 @@ func _build_room() -> void:
 	_wall(Rect2(ROOM.position.x - t, ROOM.end.y, ROOM.size.x + t * 2, t))
 	_wall(Rect2(ROOM.position.x - t, ROOM.position.y, t, ROOM.size.y))
 	_wall(Rect2(ROOM.end.x, ROOM.position.y, t, ROOM.size.y))
-	add_shelf()
+	# 초기 선반 3개: 한 던전의 신규 입고 (전투 3~5회 x 5~10개, 약 108 무게) 를 한 번에 담는 양 (선반 1개 = 36)
+	for i in START_SHELVES:
+		add_shelf()
 	shelf = shelves[0]
 	player = preload("res://scenes/storage/player.tscn").instantiate()
 	player.position = ROOM.get_center()

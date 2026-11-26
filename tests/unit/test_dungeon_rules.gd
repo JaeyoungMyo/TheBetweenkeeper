@@ -10,9 +10,12 @@ func test_battle_count_in_range() -> void:
 		expect(n >= 3 and n <= 5, "battle count %d" % n)
 
 
-func test_intake_split_last_battle_gets_remainder() -> void:
-	var parts := DungeonRules.split_intake(10, 3)
-	expect(parts == [3, 3, 4], "10 over 3 battles = [3,3,4], got %s" % str(parts))
+func test_intake_per_battle_in_range() -> void:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 7
+	for i in 200:
+		var n := DungeonRules.roll_intake(rng, 5, 10)
+		expect(n >= 5 and n <= 10, "intake %d in 5..10" % n)
 
 
 func test_completion_depends_only_on_battles_left() -> void:
@@ -24,5 +27,5 @@ func test_dungeon_table_values_valid() -> void:
 	var all := DungeonTable.load_all()
 	expect(all.size() == 10, "10 dungeons in table")
 	expect(DungeonTable.is_valid(all), "Q in 2..10, non-decreasing, lines 1..3")
-	expect(int(DungeonTable.get_config(1)["new_item_total"]) == 10, "dungeon 1 = 10 items (기획서 8.2)")
+	expect(int(DungeonTable.get_config(1)["intake_min"]) == 5 and int(DungeonTable.get_config(1)["intake_max"]) == 10, "intake 5..10 per battle")
 	expect(int(DungeonTable.get_config(1)["quest_count"]) == 1, "dungeon 1 = 1 quest")

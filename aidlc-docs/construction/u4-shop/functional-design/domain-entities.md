@@ -1,42 +1,17 @@
-# U4 상점 도메인 엔티티 (Domain Entities)
-
-**unit**: U4 상점
-**기준**: `business-rules.md` (BR-U4-01 ~ 14)
+# U4 상점 도메인 엔티티 (Domain Entities) — 변경 반영본
 
 ## 엔티티
+- **Shop**: visit_no, state (CLOSED, SELL_QUEST, BUY, DONE)
+- **SellQuest**: 줄 (품목 × 필요 개수) 목록, 총 수량 (던전 1 = 12), 제한 시간 (120초), 보상 EXP (80) — U3 Quest 구조 재사용
+- **OutputSpace**: 판매 대상으로 올린 아이템 목록 (용량 제한 없음)
+- **PurchaseItem**: item_id, price, weight (추첨 가중치)
 
-### Shop (상점 1회 방문)
-| 속성 | 설명 |
+## 데이터 (ShopTable · sell 설정, JSON)
+| 필드 | 던전 1 초기값 |
 | --- | --- |
-| visit_no | 방문 번호 (던전 완료 수와 같음) |
-| state | CLOSED, SELL, BUY, DONE |
-| sell_requests | 판매 요청 아이템 목록 (던전 1 = 2) |
-| buy_count | 구매 추첨 개수 (던전 1 = 4) |
-
-### SellRequest (판매 요청)
-| 속성 | 설명 |
-| --- | --- |
-| item_instance_id | 요청된 아이템 |
-| status | PENDING, SOLD |
-
-### OutputSpace (출력공간)
-| 속성 | 설명 |
-| --- | --- |
-| items | 올린 아이템 목록 (용량 제한 없음, BR-U4-12) |
-
-### PurchaseItem (구매 품목)
-| 속성 | 설명 |
-| --- | --- |
-| item_id | 상점 품목 종류 |
-| price | 구매 비용 (데이터) |
-| weight | 추첨 가중치 (데이터) |
-
-## 데이터 테이블 (ShopTable, JSON)
-| 필드 | 값 |
-| --- | --- |
-| sell_requests (던전 1) | 2 |
-| buy_count (던전 1) | 4 |
-| 품목 목록 | 무기 · 방어구 제외 (BR-U4-14), 회복약 · 주문서 · 광석 상자 등 기획서 9.2 후보 |
-| 판매 보너스 | U2 증강 `sell` |
-
-던전 2 이후 수치는 기획서 8.2 와 같은 방식으로 데이터만 추가합니다.
+| sell_quantity | 12 |
+| sell_time_limit_sec | 120 |
+| sell_reward_exp | 80 |
+| buy_count | 4 |
+| sell_excluded_categories | 물약 |
+| 품목 목록 | 무기 · 방어구 제외 (BR-U4-15) |

@@ -28,10 +28,9 @@ func test_tutorial_scene_completes() -> void:
 	eco.add_gold(1000)
 	room.player.position = room.SHELF_POSITIONS[1]
 	ui.toggle_menu()
-	expect(room.buy_shelf() and room.shelves.size() == 2, "second shelf")
-	expect(not room.shelves[1].bounds().has_point(room.player.position), "player moved out")
-	room.interact()
-	expect(room.shelf == room.shelves[1] and room.shelf_panel.visible, "new shelf opens")
+	expect(room.shelves.size() == 3, "starts with 3 shelves")
+	expect(room.buy_shelf() and room.shelves.size() == 4, "fourth shelf bought")
+	expect(not room.shelves[3].bounds().has_point(room.player.position), "player moved out")
 	room.interact()
 	room.shelf = room.shelves[0]
 	ui.toggle_menu()

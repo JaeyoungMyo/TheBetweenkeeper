@@ -7,16 +7,9 @@ static func roll_battle_count(rng: RandomNumberGenerator, min_n: int, max_n: int
 	return rng.randi_range(min_n, max_n)
 
 
-## 신규 아이템 총량을 전투마다 균등 분배. 나머지는 마지막 전투에 더한다 (합 = total)
-static func split_intake(total: int, battles: int) -> Array[int]:
-	var out: Array[int] = []
-	if battles <= 0:
-		return out
-	var base := total / battles
-	var rem := total % battles
-	for i in battles:
-		out.append(base + (rem if i == battles - 1 else 0))
-	return out
+## 전투 한 번에 들어오는 신규 아이템 수 (사용자 확정: 전투마다 5~10개)
+static func roll_intake(rng: RandomNumberGenerator, min_n: int, max_n: int) -> int:
+	return rng.randi_range(min_n, max_n)
 
 
 ## 퀘스트가 발생할 전투 번호 (1부터, 오름차순, 서로 다름)

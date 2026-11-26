@@ -9,7 +9,7 @@ var dungeon_no := 0
 var config: Dictionary = {}
 var battle_total := 0
 var battle_index := 0
-var intake_schedule: Array[int] = []
+var rng: RandomNumberGenerator
 var quest_battles: Array[int] = []
 var sleep_left := 0.0
 var shop_handoffs := 0
@@ -19,7 +19,7 @@ func start(no: int, rng: RandomNumberGenerator) -> void:
 	dungeon_no = no
 	config = DungeonTable.get_config(no)
 	battle_total = DungeonRules.roll_battle_count(rng, int(config["battle_min"]), int(config["battle_max"]))
-	intake_schedule = DungeonRules.split_intake(int(config["new_item_total"]), battle_total)
+	self.rng = rng
 	quest_battles = DungeonRules.spawn_battles(battle_total, int(config["quest_count"]), rng)
 	battle_index = 0
 	shop_handoffs = 0
@@ -36,7 +36,7 @@ func begin_battle() -> int:
 
 
 func finish_battle() -> Dictionary:
-	var intake: int = intake_schedule[battle_index - 1]
+	var intake := DungeonRules.roll_intake(rng, int(config["intake_min"]), int(config["intake_max"]))
 	if DungeonRules.is_complete(battle_total - battle_index):
 		state = State.DUNGEON_COMPLETE
 		return {"intake": intake, "completed": true}

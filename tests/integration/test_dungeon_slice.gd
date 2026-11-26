@@ -40,7 +40,7 @@ func test_dungeon_one_full_flow_without_scene() -> void:
 		completed = bool(fin["completed"])
 
 	expect(flow.battle_index == flow.battle_total, "all battles fought")
-	expect(intake_total == 10, "intake sums to 10 for dungeon 1")
+	expect(intake_total >= 5 * flow.battle_total and intake_total <= 10 * flow.battle_total, "intake 5..10 per battle")
 	expect(quests_seen == 1, "dungeon 1 has 1 quest")
 	expect(flow.state == DungeonFlow.State.DUNGEON_COMPLETE, "dungeon complete")
 	expect(not quests.is_active(), "no active quest after completion")

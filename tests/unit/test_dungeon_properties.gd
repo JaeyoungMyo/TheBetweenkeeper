@@ -8,17 +8,10 @@ func _rng(i: int) -> RandomNumberGenerator:
 	return rng
 
 
-func test_split_intake_sums_to_total() -> void:
+func test_intake_always_in_range() -> void:
 	for i in Pbt.RUNS:
-		var rng := _rng(i)
-		var total := rng.randi_range(0, 100)
-		var battles := rng.randi_range(3, 5)
-		var parts := DungeonRules.split_intake(total, battles)
-		var s := 0
-		for p in parts:
-			s += p
-		expect(s == total, "sum = total (%d)" % total)
-		expect(parts.back() >= parts.front(), "last battle takes remainder")
+		var n := DungeonRules.roll_intake(_rng(i), 5, 10)
+		expect(n >= 5 and n <= 10, "intake in 5..10")
 
 
 func test_battle_count_always_in_range() -> void:
