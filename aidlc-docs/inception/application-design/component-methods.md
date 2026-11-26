@@ -36,8 +36,8 @@ signal request_result(success: bool, request_id: int)
 func start_dungeon(dungeon_no: int) -> void         # DungeonFlow 시작
 func tick(delta: float) -> void                     # DungeonFlow 와 RequestController 구동 (_process 에서 호출)
 func current_state() -> StringName                  # IDLE, BATTLE, DUNGEON_CLEAR, SLEEP, SHOP, NEXT_DUNGEON
-func request_sell_item(item_id: int) -> bool        # 판매 요청 (플레이어에게 출력공간 이동 안내)
-func confirm_sale() -> int                          # 출력공간 아이템 판매, 획득 골드 반환
+func start_sell_quest() -> void                     # 판매 퀘스트 발생 (긴 시간, 많은 수량, EXP 보상)
+func confirm_sale() -> int                          # 판매 퀘스트 성공 시 줄 수량만큼 판매, 획득 골드 반환
 func request_purchase(order: Array) -> void         # 구매 확정 → EconomyManager 차감 → ItemManager 입력공간 입고
 func fulfill_request(item_id: int) -> bool          # 요청 아이템 전달 (성공 시 보상)
 func fail_request(request_id: int) -> void          # 시간 초과 또는 실패 처리 → RequestRules 누적
@@ -79,7 +79,7 @@ func spawn_into_input_space(item_ids: Array, rng: RandomNumberGenerator) -> void
 func pick_up(item_id: int, carrier_id: StringName) -> bool        # 줍기 (호버 후 클릭, 키보드 병행)
 func drop_on_map(item_id: int, position: Vector2) -> void         # 패널 닫힘 상태에서 맵 드롭 (D-14)
 func place_into_facility(item_id: int, facility_id: StringName) -> bool  # 무게 검사 후 적재
-func move_to_output(item_id: int) -> bool                          # 판매 요청 아이템을 출력공간으로
+func move_to_output(item_id: int) -> bool                          # 판매 퀘스트 줄 아이템을 출력공간으로
 func get_untidied_items(stage_id_max: int) -> Array                # 미정리 누적 목록 (FR-15)
 func get_facility(facility_id: StringName) -> StorageFacility
 ```

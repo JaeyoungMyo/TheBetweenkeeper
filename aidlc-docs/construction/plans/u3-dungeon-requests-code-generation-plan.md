@@ -167,3 +167,9 @@ X) Other (please describe after [Answer]: tag below)
 
 ## 승인 요청
 질문 2개 답변: U3-CG-1 = A, U3-CG-2 = A (모두 추천). 이 계획으로 U3 Code Generation (Part 2) 을 진행할지 승인해 주세요.
+
+---
+
+## 변경 기록 (2026-11-27)
+- 입고 방식이 **전투마다 5~10개 무작위** 로 바뀌었습니다. 총량 T 분배 (Step 1 · 2 의 T 문구) 는 폐지되었습니다 (BR-U3-03 변경).
+- 초기 선반 3개 (`START_SHELVES`) 가 추가되었고, 선반 가격표는 5단계로 늘었습니다.

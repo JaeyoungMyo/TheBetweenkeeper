@@ -13,10 +13,10 @@ godot --headless --path . -s res://tests/run_tests.gd
 
 | 스토리 | 파일 | 테스트 |
 | --- | --- | --- |
-| US-11 던전 전투 진행 | scripts/dungeon/dungeon_rules.gd, dungeon_flow.gd, dungeon_table.gd, data/dungeons/dungeons.json | test_dungeon_rules, test_dungeon_properties, test_dungeon_slice |
+| US-11 던전 전투 진행 | scripts/dungeon/dungeon_rules.gd (roll_intake), dungeon_flow.gd, dungeon_table.gd, data/dungeons/dungeons.json (intake_min/max 5~10) | test_dungeon_rules, test_dungeon_properties, test_dungeon_slice |
 | US-12 던전 완료 판정 | dungeon_rules.gd (is_complete), dungeon_flow.gd (finish_battle) | test_dungeon_rules, test_dungeon_slice |
 | US-13 30초 수면 | dungeon_flow.gd (begin_sleep, tick_sleep) | test_dungeon_slice |
-| US-14 미정리 누적 | dungeon_flow.gd (입고는 incoming 유지, 상태 불변) | test_dungeon_slice (입고 합 = 10) |
+| US-14 미정리 누적 | dungeon_flow.gd (입고는 incoming 유지, 상태 불변) | test_dungeon_slice (입고 수 범위 5~10 × 전투 수) |
 | US-15 긴급 요청 | quest.gd, quest_rules.gd, quest_controller.gd, delivery_space.gd | test_quest_rules, test_quest_progress, test_dungeon_properties |
 | US-16 실패 누적 · 게임오버 | failure_counter.gd, dungeon_manager.gd (_handle) | test_failure_counter |
 | US-17 아이템 보호 | scripts/storage/item_instance.gd (DELIVERED), autoload/economy_manager.gd (sell 차단) | test_quest_progress |
@@ -64,3 +64,10 @@ godot --headless --path . -s res://tests/run_tests.gd
 - 퀘스트 패널은 왼쪽 위 (8, 8), 반투명 배경 (검정 45%). 아이템 목록 (y 60) 과 겹칠 수 있어 화면에서 확인 필요.
 - 바닥은 Kenney Tiny Dungeon 타일 `tile_0049` (모래색, CC0) 을 `art/floor/floor_tile.png` 로 두고 타일 반복으로 깐다. 라이선스 파일 `art/floor/License.txt`.
 - 원본 자산 폴더 `assets/` 는 저장소에서 `.gitignore` 로 제외되어 있어, Kenney 원본 zip 은 과거 커밋 (21e9b12) 에서 가져왔다.
+
+---
+
+## 변경 기록 (2026-11-27)
+- 전투 입고: 총량 분배 (T = 10) 를 폐지하고 **전투마다 5~10개 무작위** 로 바꿨습니다 (`DungeonRules.roll_intake`).
+- 초기 선반: 튜토리얼 이후 던전을 시작할 때 선반 **3개** 로 시작합니다 (`StorageRoom.START_SHELVES = 3`, 한 던전 입고 약 108 무게 ≈ 선반 3 × 36).
+- 선반 가격표 (`economy.json` shelf_prices): 다음 선반 가격은 현재 선반 수 기준. 3개일 때 다음 선반 500, 그 다음 800, 1200. 6번째 이후는 구매 불가.

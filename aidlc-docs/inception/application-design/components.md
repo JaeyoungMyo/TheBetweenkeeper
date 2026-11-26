@@ -35,7 +35,7 @@
   - 던전 완료 판정 (정리 여부와 무관, FR-13)
   - 30초 수면 이벤트 시간 관리 (FR-14)
   - 미정리 아이템 누적 (FR-15, 상태는 그대로 두고 다음 던전 목록에 포함)
-  - 상점 방문 흐름 시작 (판매 요청 → 출력공간, 구매 → 입력공간, FR-16, FR-30, FR-31)
+  - 상점 방문 흐름 시작 (판매 퀘스트 → 출력공간, 구매 → 맵 무작위 입고, FR-16, FR-30, FR-31)
   - 긴급 요청 (생성, 제한 시간, 성공 · 실패, FR-20~22)
 - **소유 하위 컴포넌트**: `DungeonFlow` (상태 머신), `RequestController` (요청 시간), `ShopFlow` (상점 단계)
 
@@ -43,7 +43,7 @@
 - **목적**: 아이템 인스턴스 · 공간 · 무게 규칙을 소유
 - **책임**
   - `ItemInstance` 생성 · 상태 전환 (FR-09)
-  - 입력공간 무작위 입고 (FR-31)
+  - 구매품 맵 무작위 입고 (FR-31, 입력공간 없음)
   - 출력공간 적재 · 판매 대상 관리 (FR-30)
   - 플레이어의 줍기, 내려놓기, 적재 요청 처리 (FR-03~05)
   - 무게 한도 검사 결과로 적재 거부 · 손에 유지 처리 (FR-06, FR-07)
@@ -86,14 +86,14 @@
 | `Item` | Node2D | 아이템 시각 표현, 호버 이름 표시, 클릭 · 드래그 감지 | FR-05 |
 | `StorageFacility` | StaticBody2D | 선반. 적재 패널 열기, 최대 무게 표시, 칸 목록 | FR-03, FR-06 |
 | `InputSpace` | StorageFacility 파생 | 구매품이 무작위로 쌓이는 입력공간 (AD-2 맵 시설) | FR-31, A-07 |
-| `OutputSpace` | StorageFacility 파생 | 판매 요청 아이템을 모으는 출력공간 (AD-2 맵 시설) | FR-30, A-07 |
+| `OutputSpace` | StorageFacility 파생 | 판매 퀘스트 아이템을 모으는 출력공간 (AD-2 맵 시설) | FR-30, A-07 |
 | `ItemListPanel` | UI (Control) | 들고 있는 아이템 목록 상시 표시, 드래그 원본 | FR-02 |
 | `ShelfPanel` | UI (Control) | 선반 열림 상태, 칸 목록, X 버튼 닫기 | FR-03 |
 | `RequestPanel` | UI (Control) | 요청 아이템, 제한 시간, 누적 실패 표시 | FR-20, FR-21 |
 | `HUD` | UI (Control) | 1280x720 기준 던전 번호, 골드, 레벨 · EXP, 운반 아이템 | FR-27, FR-28 |
 | `BattleView` | 연출 (Control) | 전투 연출, 전투 번호, 아이템 쏟아짐 연출 | FR-12 |
 | `SleepOverlay` | 연출 (Control) | 30초 수면 연출, 남은 시간 | FR-14 |
-| `ShopView` | 연출 (Control) | 판매 요청 표시, 구매 목록, 구매 결과 | FR-16 |
+| `ShopView` | 연출 (Control) | 판매 퀘스트 패널 (줄 · 남은 시간 · 보상), 구매 목록, 구매 결과 | FR-16 |
 | `AugmentSelection` | UI (Control) | 레벨업 증강 3택 등 선택 화면 | FR-11 |
 | `GameOverScreen` | UI (Control) | 누적 실패 3회 게임오버 화면 | FR-21 |
 | `SaveTransferPanel` | UI (Control) | 세이브 내보내기 · 불러오기 버튼 (웹) | FR-26 |

@@ -49,10 +49,11 @@ NEXT_DUNGEON
 **목적**: 상점 방문 한 번의 판매와 구매를 처리 (FR-16, FR-30, FR-31, D-18)
 
 **판매 흐름**
-1. 용사가 판매할 아이템 ID 를 요청한다 (`request_sell_item`). 화면에 요청이 표시된다.
-2. 플레이어가 해당 아이템을 `OutputSpace` 에 옮긴다 (`ItemManager.move_to_output`).
-3. 판매 확정 (`confirm_sale`) 시 `OutputSpace.collect_for_sale()` 로 수집하고, `EconomyManager.sell_price` 합계를 골드로 지급한다. 판매된 아이템은 `sold` 상태가 된다 (FR-23).
-4. 예약 아이템 (`reserved`, 요청 중) 은 판매 요청 목록에서 제외한다.
+1. 상점이 열리면 판매 퀘스트가 발생한다 (`start_sell_quest`). 줄 (품목 × 필요 개수) 은 창고의 판매 가능 품목에서 고른다. 제한 시간은 길다.
+2. 플레이어가 줄에 해당하는 아이템을 `OutputSpace` 에 옮긴다 (`ItemManager.move_to_output`).
+3. 줄을 모두 채우면 퀘스트 성공. `OutputSpace` 에서 줄 필요 개수만큼만 판매하고 (`confirm_sale`), `EconomyManager.sell_price` 합계를 골드로 지급하고, EXP 보상을 준다. 판매된 아이템은 `sold` 상태가 된다 (FR-23).
+4. 시간 초과 시 실패. 출력공간 아이템은 판매하지 않고, 상점 종료 시 맵 어딘가로 이동한다.
+5. 예약 아이템 (`reserved`) 과 물약 (소모품) 은 판매 퀘스트 후보에서 제외한다.
 
 **구매 흐름**
 1. `ShopFlow.build_offer` 가 `EconomyManager.roll_purchase` 로 품목과 수량을 만든다 (FR-18).

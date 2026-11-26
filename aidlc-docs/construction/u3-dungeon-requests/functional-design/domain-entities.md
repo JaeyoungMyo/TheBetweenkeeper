@@ -11,7 +11,6 @@
 | dungeon_no | 정수 | 던전 번호 (1부터) |
 | battle_total | 정수 | 전투 횟수 N (3~5, 시작 시 확정) |
 | battle_index | 정수 | 현재 전투 번호 (0 = 시작 전) |
-| new_item_total | 정수 | 신규 아이템 총량 T (데이터) |
 | quest_total | 정수 | 퀘스트 수 R (데이터, 던전 1 = 1) |
 | quests_spawned | 정수 | 발생시킨 퀘스트 수 |
 | state | 열거 | READY, IN_BATTLE, DUNGEON_COMPLETE, SLEEP, SHOP_HANDOFF, GAME_OVER |
@@ -20,7 +19,7 @@
 | 속성 | 설명 |
 | --- | --- |
 | index | 1 ~ N |
-| intake_count | 이 전투의 입고 수 (균등 배분, 마지막 전투는 나머지 포함) |
+| intake_count | 이 전투의 입고 수 (5~10, 무작위). 전투마다 따로 정함 |
 
 ### Quest (긴급 요청, 퀘스트)
 | 속성 | 설명 |
@@ -62,7 +61,7 @@
 ## 데이터 테이블 (DungeonTable, JSON)
 | 필드 | 던전 1 초기값 (기획서 8.2 + 가정) |
 | --- | --- |
-| new_item_total (T) | 10 |
+| intake_min / intake_max | 5 / 10 (전투마다) |
 | battle_range | 3 ~ 5 |
 | quest_total (R) | 1 |
 | quest_total_quantity (Q) | 2 (줄 1~2 개, 가정 — 사용자 확인 필요) |
