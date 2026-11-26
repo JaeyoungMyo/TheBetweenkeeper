@@ -144,7 +144,7 @@ B) 화면 한쪽에 항상 보이는 별도 패널
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: A (추천)
 
 ### Question U3-CG-2: 던전 시작 시점
 튜토리얼 이후 던전을 어떻게 시작할까요?
@@ -155,7 +155,7 @@ B) 메뉴 버튼으로 시작 (플레이어가 준비한 뒤 시작)
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: A (추천)
 
 ---
 
@@ -166,4 +166,4 @@ X) Other (please describe after [Answer]: tag below)
 - 판매 · 보상 · 상태 추가는 U1 · U2 테스트를 깨뜨리지 않아야 한다 (Step 4 확인)
 
 ## 승인 요청
-이 계획으로 U3 Code Generation (Part 2) 을 진행할까요? 질문 2개 (U3-CG-1, U3-CG-2) 의 답을 함께 알려 주세요.
+질문 2개 답변: U3-CG-1 = A, U3-CG-2 = A (모두 추천). 이 계획으로 U3 Code Generation (Part 2) 을 진행할지 승인해 주세요.
