@@ -407,3 +407,10 @@
 **Context**: UI 조정, 바닥 에셋 적용
 
 ---
+## 퀘스트 후보에 바닥 아이템 포함
+**Timestamp**: 2026-11-27T00:08:32+09:00
+**User Input**: "선반도 바닥도 포함해 줘"
+**AI Response**: _stored_kinds 를 STORED (선반) + INCOMING (바닥) 으로 변경. BR-U3-08 과 TEST.md 갱신. 들고 있는 아이템은 후보 제외 (사용자 요청 범위 밖, 기록).
+**Context**: U3 퀘스트 후보 범위 변경
+
+---
