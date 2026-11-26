@@ -38,6 +38,7 @@ static func make_entry(item: ItemInstance) -> Button:
 	b.name = "item-entry-%d" % item.instance_id
 	b.item_id = item.instance_id
 	b.text = "%s (무게 %d)" % [item.data.display_name, item.weight()]
+	b.icon = item.data.icon()
 	b.mouse_filter = Control.MOUSE_FILTER_PASS
 	b.focus_mode = Control.FOCUS_NONE
 	return b

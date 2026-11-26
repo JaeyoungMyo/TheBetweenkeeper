@@ -51,3 +51,11 @@ godot --headless --path . -s res://tests/run_tests.gd
 
 ## 열린 항목 (검토 필요)
 - 던전 2 이후 Q, 줄 수, 보상 값은 기획서 8.2 의 "예상 요청 수" 를 퀘스트 수 R 로 해석했다. 밸런스 조정 대상
+
+## 아이템 아이콘 (추가)
+- 원본 시트: `art/items/potions_sheet.png` (29 x 9 칸), `art/items/items_sheet.png` (36 x 35 칸). 칸 크기 16px.
+- `ItemData.icon_sheet` + `icon_cell` 로 칸을 지정하고, `ItemData.icon()` 이 AtlasTexture 를 돌려준다.
+- 적용 위치: `ItemView` (맵), `ItemListPanel.make_entry` (목록 · 선반 칸).
+- 칸 선택은 시각 확인으로 골랐다. 주문서 (`scroll`, 시트 0,10) 과 광석 상자 (`ore_box`, 24,5) 는 확신이 낮다. 수동 테스트에서 확인.
+- `.gitignore` 에 `assets` 가 있어서 이미지 폴더를 `art/` 로 두었다.
+- 테스트: `tests/unit/test_item_icons.gd` (모든 아이템이 시트 안의 칸을 가짐).

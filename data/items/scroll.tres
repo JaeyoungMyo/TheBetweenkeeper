@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="ItemData" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://scripts/storage/item_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://art/items/items_sheet.png" id="2"]
 
 [resource]
 script = ExtResource("1")
@@ -8,3 +9,5 @@ item_id = "scroll"
 display_name = "주문서"
 category = "주문서"
 weight = 2
+icon_sheet = ExtResource("2")
+icon_cell = Vector2i(0, 10)
