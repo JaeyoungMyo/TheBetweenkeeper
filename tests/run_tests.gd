@@ -26,6 +26,9 @@ const TEST_FILES := [
 	"res://tests/unit/test_quest_value.gd",
 	"res://tests/unit/test_shop_properties.gd",
 	"res://tests/integration/test_shop_flow.gd",
+	"res://tests/unit/test_save_codec.gd",
+	"res://tests/unit/test_save_properties.gd",
+	"res://tests/integration/test_save_flow.gd",
 ]
 
 
@@ -34,6 +37,8 @@ func _initialize() -> void:
 
 
 func _run() -> void:
+	# 테스트마다 이전 저장을 지운다 (튜토리얼이 이어하기 화면으로 가지 않도록)
+	root.get_node("SaveService").delete_save()
 	var total := 0
 	var failed := 0
 	for path in TEST_FILES:
@@ -55,6 +60,7 @@ func _run() -> void:
 			if obj.failures.size() > 0:
 				failed += 1
 				print("FAIL %s::%s -> %s" % [path, method_name, ", ".join(obj.failures)])
+	root.get_node("SaveService").delete_save()
 	var move = load("res://tests/integration/test_click_move.gd").new()
 	total += 1
 	await move.run(self)

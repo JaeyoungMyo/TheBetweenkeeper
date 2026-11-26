@@ -54,6 +54,48 @@ func _build_room() -> void:
 	add_child(player)
 
 
+## 저장용 선반 목록 (SaveService 가 호출)
+func _capture_shelves() -> Array:
+	var out := []
+	for s in shelves:
+		out.append({
+			"facility_id": s.state.facility_id,
+			"slot_count": s.state.slot_count,
+			"slot_items": s.state.slot_items.duplicate(true),
+			"slot_weights": s.state.slot_weights.duplicate(true),
+		})
+	return out
+
+
+## 이어하기: 저장된 선반 배치와 모든 아이템 표시를 다시 만든다. JSON 숫자는 float 이므로 int 로 바꾼다
+func restore_layout(rows: Array) -> void:
+	for v in views.values():
+		v.queue_free()
+	views.clear()
+	for s in shelves:
+		s.queue_free()
+	shelves.clear()
+	ItemManager.floor_blocked = []
+	for row: Dictionary in rows:
+		add_shelf()
+		var st: FacilityState = shelves[-1].state
+		shelves[-1].facility_id = row["facility_id"]
+		st.facility_id = row["facility_id"]
+		while st.slot_count < int(row["slot_count"]):
+			st.add_slot()
+		for i in st.slot_count:
+			st.slot_items[i] = []
+			st.slot_weights[i] = []
+			for id in row["slot_items"][i]:
+				st.slot_items[i].append(int(id))
+			for w in row["slot_weights"][i]:
+				st.slot_weights[i].append(int(w))
+	for item: ItemInstance in ItemManager.items.values():
+		if item.state != ItemInstance.State.SOLD:
+			attach_item(item)
+	refresh()
+
+
 func add_shelf() -> void:
 	var s: StorageFacility = preload("res://scenes/storage/storage_facility.tscn").instantiate()
 	s.data = load("res://data/facilities/shelf_basic.tres")
@@ -155,6 +197,10 @@ func _build_ui() -> void:
 	dungeon.name = "DungeonUi"
 	dungeon.room = self
 	add_child(dungeon)
+	SaveService.shelves_provider = Callable(self, "_capture_shelves")
+	var settings := SettingsPanel.new()
+	settings.name = "SettingsPanel"
+	add_child(settings)
 	var growth := GrowthUi.new()
 	growth.name = "GrowthUi"
 	growth.room = self

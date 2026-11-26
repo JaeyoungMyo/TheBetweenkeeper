@@ -50,6 +50,7 @@ func finish_battle() -> void:
 		_handle(quests.fail_active())
 		quests.clear_pending()
 		flow.begin_sleep()
+		SaveService.save_point("dungeon_clear")
 
 
 ## 전달 공간에 아이템을 올린다 (선반 · 바닥에서 빼는 처리는 UI 단계에서 연결)

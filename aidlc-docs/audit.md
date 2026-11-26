@@ -560,3 +560,10 @@
 **Context**: U5 Functional Design 승인, Code Generation Part 1 Step 1~6
 
 ---
+## U5 Code Generation 구현
+**Timestamp**: 2026-11-27T06:40:58+09:00
+**User Input**: "응 진행해줘"
+**AI Response**: U5 계획 승인 기록 후 구현. 저장 코덱 (HMAC), 저장 데이터 캡처 · 복원, SaveService 오토로드, 던전 · 상점 저장 지점, 게임오버 삭제, 이어하기 선택, 선반 복원, 설정 패널 (F2). 테스트 74개 통과, 메인 씬 오류 없음.
+**Context**: Code Generation Part 2 (U5)
+
+---

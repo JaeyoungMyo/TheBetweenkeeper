@@ -188,6 +188,7 @@ func _on_quest_result(r: Dictionary) -> void:
 
 
 func _on_game_over(failures: int) -> void:
+	SaveService.delete_save()
 	_game_over_label.text = "요청 실패 %d / %d\n게임오버" % [failures, FailureCounter.LIMIT]
 	_game_over.visible = true
 	_running = false
@@ -226,11 +227,25 @@ func _on_sell_finished(r: Dictionary) -> void:
 
 
 func _on_buy_finished(lines: Array) -> void:
+	SaveService.shop_visits += 1
+	SaveService.save_point("shop_clear")
 	var parts := PackedStringArray()
 	for l: Dictionary in lines:
 		parts.append("%s %s" % [_name(l["item_id"]), "구매" if l["bought"] else "골드 부족"])
 	room.show_message("구매: " + ", ".join(parts))
 	_shop_close_timer = 3.0
+
+
+## 이어하기: 던전 완료 저장 시점 → 상점부터
+func resume_at_shop() -> void:
+	_on_shop_visit()
+
+
+## 이어하기: 상점 완료 저장 시점 → 다음 던전 시작
+func resume_next_dungeon() -> void:
+	DungeonManager.start_dungeon(DungeonManager.flow.dungeon_no + 1)
+	_running = true
+	_begin_battle()
 
 
 ## 상점 종료 후 다음 던전을 시작한다
