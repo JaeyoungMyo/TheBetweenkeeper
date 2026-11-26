@@ -3,7 +3,7 @@
 ## Project Information
 - **Project Type**: Greenfield
 - **Start Date**: 2026-11-23T20:59:03+09:00
-- **Current Stage**: CONSTRUCTION - Build and Test (자동 테스트 통과, 승인 대기)
+- **Current Stage**: OPERATIONS 전 (CONSTRUCTION 완료, Build and Test 승인)
 
 ## Workspace State
 - **Existing Code**: No
@@ -30,7 +30,7 @@
 - [x] CONSTRUCTION - U4 상점: Code Generation [EXECUTE] (승인 완료, 구현 · 테스트 67개 통과, 수동 테스트 보류)
 - [x] CONSTRUCTION - U5 저장·플랫폼: Functional Design [EXECUTE] (승인 완료)
 - [x] CONSTRUCTION - U5 저장·플랫폼: Code Generation [EXECUTE] (승인 완료. 구현 · 테스트 74개 통과, 수동 테스트 보류)
-- [x] CONSTRUCTION - Build and Test [EXECUTE] (자동 테스트 79/79 통과 (동작 테스트 포함). 데스크톱만 진행. 커버리지 80% 기준 미측정, 성능 보류)
+- [x] CONSTRUCTION - Build and Test [EXECUTE] (승인 완료. 자동 테스트 79/79 통과. 데스크톱만. 커버리지 80% 기준 미측정, 성능 보류)
   - 정정: 선반 3칸, 칸 한도 12 고정, 아이템 무게 1·2·3·4·6, 선반 최대 36 (FD-A1 확정)
 - [x] INCEPTION - User Stories [EXECUTE: 사용자 요청으로 추가] (승인 완료, 스토리 26개)
 - [ ] INCEPTION - Reverse Engineering [SKIP: Greenfield]
