@@ -533,3 +533,17 @@
 **Context**: U4 Code Generation 완료 승인
 
 ---
+## stage 스킬 이동 (Stage Jump)
+**Timestamp**: 2026-11-27T00:50:34+09:00
+**User Input**: "/aidlc-construction-functional-design U5 저장"
+**AI Response**: 앞으로 U4 Code Generation 완료 → U5 저장 · 플랫폼 Functional Design. SKIP 없음, 재오픈 없음.
+**Context**: /aidlc-construction-functional-design 이동
+
+---
+## U5 Functional Design 계획 작성 (질문 생성)
+**Timestamp**: 2026-11-27T00:50:34+09:00
+**User Input**: (위 이동 입력과 동일 턴)
+**AI Response**: `construction/plans/u5-save-platform-functional-design-plan.md` 생성. 질문 11개 (FD-U5-1 ~ 11): 저장 시점, 저장 위치, 파일 보호 (V-1), HMAC 키 (V-4), 웹 내보내기 (V-2), 복원 지점, 진행 중 퀘스트, 게임오버 저장, 해상도, 언어, 저장 대상. 답변 전까지 산출물 생성 보류.
+**Context**: Functional Design Step 2~4 (계획 · 질문 파일 생성, 답변 대기)
+
+---
