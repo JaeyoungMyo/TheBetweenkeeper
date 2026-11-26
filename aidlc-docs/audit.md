@@ -456,3 +456,17 @@
 **Context**: U3 Code Generation 완료 승인, U4 진행 요청
 
 ---
+## stage 스킬 이동 (Stage Jump)
+**Timestamp**: 2026-11-27T00:22:47+09:00
+**User Input**: "/aidlc-construction-functional-design U4 상점"
+**AI Response**: 앞으로 U3 Code Generation 완료 → U4 상점 Functional Design. SKIP 표기 없음, 재오픈 없음.
+**Context**: /aidlc-construction-functional-design 이동
+
+---
+## U4 Functional Design 계획 작성 (질문 생성)
+**Timestamp**: 2026-11-27T00:22:47+09:00
+**User Input**: (위 이동 입력과 동일 턴)
+**AI Response**: `construction/plans/u4-shop-functional-design-plan.md` 생성. 질문 11개 (FD-U4-1 ~ 11): 입력공간 · 출력공간 형태 (P-02, A-07), 판매 요청 목록, 판매가, 요청 외 아이템, 구매 추첨, 골드 부족, 가득 찬 입력공간 (UG-5 A), 구매품과 다음 던전 입고, 대량 상자 범위, 상점 화면 방식. 답변 전까지 산출물 생성 보류.
+**Context**: Functional Design Step 2~4 (계획 · 질문 파일 생성, 답변 대기)
+
+---
