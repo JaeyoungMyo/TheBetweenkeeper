@@ -421,3 +421,10 @@
 **Context**: 직전 변경의 오류 정정
 
 ---
+## 퀘스트 후보에 들고 있는 아이템 포함
+**Timestamp**: 2026-11-27T00:09:53+09:00
+**User Input**: "들고있는 아이템도 포함해줘"
+**AI Response**: _stored_kinds 에 CARRIED 추가 (선반, 바닥, 들고 있는 아이템). BR-U3-08 과 TEST.md 갱신.
+**Context**: U3 퀘스트 후보 범위 변경
+
+---
