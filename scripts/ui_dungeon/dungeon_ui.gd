@@ -1,10 +1,10 @@
-# 던전 · 요청 화면 (U3 Step 15~16). 코드로 구성: 퀘스트 목록, 전달 공간, 전투 진행, 수면, 게임오버
+# 던전 · 요청 화면 (U3 Step 15~16). 코드로 구성: 퀘스트 목록, 전달 선반, 전투 진행, 수면, 게임오버
 class_name DungeonUi
 extends CanvasLayer
 
-## 전달 공간: 창고 방 오른쪽 아래 고정 위치 (U3-CG-1 = A)
-const DELIVERY_ZONE := Rect2(900, 470, 90, 110)
-## 입고 아이템이 떨어지는 영역 (선반과 전달 공간을 피한 바닥)
+## 전달 선반: 창고 방 오른쪽 아래 고정 위치 (U3-CG-1 = A). 플레이어가 가까이 가서 아이템을 넣는다
+const DELIVERY_SHELF := Rect2(900, 470, 90, 110)
+## 입고 아이템이 떨어지는 영역 (선반과 전달 선반을 피한 바닥)
 const INTAKE_AREA := Rect2(260, 480, 560, 150)
 ## 전투 길이와 전투 사이 간격 (초기값, 연출 조정 대상)
 const BATTLE_SEC := 8.0
@@ -67,7 +67,7 @@ func _process(delta: float) -> void:
 	if _sleep.visible:
 		_sleep_label.text = "용사가 잠들었습니다\n정리 시간 %d초" % ceili(flow.sleep_left)
 	_battle_label.text = "던전 %d · 전투 %d / %d" % [flow.dungeon_no, flow.battle_index, flow.battle_total]
-	_zone_label.text = "전달 공간\n" + _summary()
+	_zone_label.text = "전달 선반\n" + _summary()
 	_refresh_quest()
 
 
@@ -79,9 +79,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		_deliver()
 
 
-## Enter: 플레이어가 전달 공간 안에서 들고 있는 아이템을 올린다. 바닥 아이템은 대상이 아니다
+## Enter: 플레이어가 전달 선반 가까이에서 들고 있는 아이템을 넣는다. 바닥 아이템은 대상이 아니다
 func _deliver() -> void:
-	if not DELIVERY_ZONE.has_point(room.player.position):
+	if not StorageService.near_rect(room.player.position, DELIVERY_SHELF):
 		return
 	var targets: Array[ItemInstance] = []
 	for id in ItemManager.carried_ids.duplicate():
@@ -161,13 +161,13 @@ func _on_shop_visit() -> void:
 
 func _build_zone() -> void:
 	var z := ColorRect.new()
-	z.position = DELIVERY_ZONE.position
-	z.size = DELIVERY_ZONE.size
+	z.position = DELIVERY_SHELF.position
+	z.size = DELIVERY_SHELF.size
 	z.color = Color(0.3, 0.5, 0.8, 0.25)
 	z.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	room.add_child(z)
 	_zone_label = Label.new()
-	_zone_label.position = DELIVERY_ZONE.position + Vector2(0, DELIVERY_ZONE.size.y + 4)
+	_zone_label.position = DELIVERY_SHELF.position + Vector2(0, DELIVERY_SHELF.size.y + 4)
 	_zone_label.custom_minimum_size = Vector2(200, 0)
 	_zone_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_zone_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
