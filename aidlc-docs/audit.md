@@ -498,3 +498,17 @@
 **Context**: U4 Functional Design 완료 승인
 
 ---
+## stage 스킬 이동 (Stage Jump)
+**Timestamp**: 2026-11-27T00:42:57+09:00
+**User Input**: "/aidlc-construction-code-generation U4 상점"
+**AI Response**: 앞으로 U4 Functional Design 완료 → U4 Code Generation. SKIP 없음, 재오픈 없음.
+**Context**: /aidlc-construction-code-generation 이동
+
+---
+## U4 Code Generation 계획 작성 (승인 요청)
+**Timestamp**: 2026-11-27T00:42:57+09:00
+**User Input**: (위 이동 입력과 동일 턴)
+**AI Response**: `construction/plans/u4-shop-code-generation-plan.md` 생성. Step 12개, US-18 ~ US-21 추적성 포함. U3 Quest · QuestController · DeliverySpace 재사용, 판매 골드 훅 추가. 가정 4개 (구매 가격 · 가중치, 출력공간 위치, 잔여 아이템 맵 이동, 퀘스트 1건) 확인 요청.
+**Context**: Code Generation Part 1 Step 1~6 (계획 작성, 승인 요청)
+
+---
