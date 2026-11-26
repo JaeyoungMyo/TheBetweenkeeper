@@ -25,7 +25,7 @@ C) 항상 4회 고정 (MVP 단순화)
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A (추천 전부 채택)
 
 ---
 
@@ -40,7 +40,7 @@ C) 전투마다 고정 개수 (예: 던전 1 은 항상 3 · 3 · 4)
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A (추천 전부 채택)
 
 ---
 
@@ -55,7 +55,7 @@ C) 던전 1 값만 먼저 두고, 던전 2 이후 값은 U3 범위 밖으로 둠
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A (추천 전부 채택)
 
 ---
 
@@ -70,7 +70,7 @@ C) 던전당 요청 수 고정, 전투 시작 직후 발생
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A (추천 전부 채택)
 
 ---
 
@@ -85,7 +85,7 @@ C) 요청은 만들되 보상 없이 취소 (실패 누적 없음)
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A (추천 전부 채택)
 
 ---
 
@@ -100,7 +100,7 @@ C) 전투 길이에 맞춰 전투 종료 시점까지로 설정 (제한 시간 �
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A (추천 전부 채택)
 
 ---
 
@@ -115,7 +115,7 @@ C) 요청 종료 후 던전 완료 시점까지 유지
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A (추천 전부 채택)
 
 ---
 
@@ -128,7 +128,7 @@ B) 여러 건 동시 허용 (던전당 요청 수와 별개로 관리)
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A (추천 전부 채택)
 
 ---
 
@@ -143,7 +143,7 @@ C) 요청 종류별로 누적 수를 따로 셈 (3회는 종류마다)
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A (추천 전부 채택)
 
 ---
 
@@ -158,7 +158,7 @@ C) 요청 종류에 따라 보상 종류 (골드 / EXP / 특별) 를 무작위 �
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A (추천 전부 채택)
 
 ---
 
@@ -171,7 +171,7 @@ B) 수면 중에도 요청은 발생 가능 (전투는 멈춤)
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A (추천 전부 채택)
 
 ---
 
@@ -186,7 +186,7 @@ C) 요청은 취소 (실패 누적 없음)
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A (추천 전부 채택)
 
 ---
 
@@ -201,7 +201,7 @@ C) 게임오버 화면에서 던전 1 부터 재시작 (정리 아이템은 유�
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A (추천 전부 채택)
 
 ---
 
@@ -214,4 +214,14 @@ B) 던전 시작부터 상점 종료 후 다음 던전 시작까지 전체
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A (추천 전부 채택)
+
+---
+
+## 답변 기록
+사용자가 "모두 추천으로 진행해줘" 라고 답변했습니다. FD-U3-1 ~ FD-U3-14 모두 추천안 (A) 을 채택합니다.
+
+**가정 (답변에 없는 부분, 설계에서 명시)**
+- 요청 1건은 아이템 1개를 요구합니다 (기획서 7.2 의 "수량" 은 U3 에서 1로 고정).
+- 요청 제한 시간 30초는 초기 설정값입니다 (FD-U3-6 추천의 예시값).
+- 요청 성공 시 전달한 아이템의 처리 (창고에서 제거 여부) 는 답변에 없습니다. 설계에서는 `reserved` 해제로만 정의하고, 제거 여부는 검토 시 확인 항목으로 남깁니다.

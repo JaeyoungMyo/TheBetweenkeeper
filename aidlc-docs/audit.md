@@ -301,3 +301,10 @@
 **Context**: Functional Design Step 2~4 (계획 · 질문 파일 생성, 답변 대기)
 
 ---
+## U3 Functional Design 답변 (추천 전부 채택)
+**Timestamp**: 2026-11-26T16:53:23+09:00
+**User Input**: "모두 추천으로 진행해줘"
+**AI Response**: FD-U3-1 ~ 14 전부 추천안 (A) 채택. 가정: 요청 수량 1, 제한 시간 30초 (설정값), 전달 아이템 제거 여부는 열린 항목으로 남김. 설계 산출물 4개 생성 (business-logic-model, business-rules BR-U3-01~16, domain-entities, frontend-components). 검토 대기.
+**Context**: Functional Design Step 5~6 (답변 수집, 산출물 생성)
+
+---
