@@ -352,4 +352,6 @@ func _new_game() -> void:
 	DungeonManager.reset_run()
 	ItemManager.reset_run()
 	EconomyManager.reset_run()
+	SaveService.tutorial_done = false
+	SaveService.shop_visits = 0
 	get_tree().reload_current_scene()

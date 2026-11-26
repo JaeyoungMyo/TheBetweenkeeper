@@ -26,7 +26,7 @@ func load_save() -> Dictionary:
 	if text == "":
 		return {}
 	var d := SaveCodec.decode(text)
-	if d.is_empty():
+	if d.is_empty() or not SaveData.is_valid(d):
 		return {}
 	SaveData.restore(d)
 	tutorial_done = bool(d["tutorial_done"])

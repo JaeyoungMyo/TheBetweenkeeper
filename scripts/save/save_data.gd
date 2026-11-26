@@ -3,6 +3,17 @@ class_name SaveData
 extends RefCounted
 
 const VERSION := 1
+const REQUIRED := ["version", "point", "dungeon_no", "failures", "gold", "level", "exp", "augments", "bag_size", "carry_multiplier", "tutorial_done", "shop_visits", "items", "shelves", "pending_choices"]
+
+
+## 형식 검사: 버전과 필수 키가 모두 있어야 한다 (잘못된 저장은 새 게임으로 처리)
+static func is_valid(d: Dictionary) -> bool:
+	if int(d.get("version", -1)) != VERSION:
+		return false
+	for key in REQUIRED:
+		if not d.has(key):
+			return false
+	return d["items"] is Array and d["shelves"] is Array
 
 
 ## 아이템 상태 저장값. 전달 선반 · 들고 있는 아이템은 바닥 (incoming) 으로 되돌린다 (BR-U5-06)
@@ -38,6 +49,7 @@ static func capture(shelves: Array, point: String, tutorial_done: bool, shop_vis
 		"failures": DungeonManager.failures.count,
 		"gold": EconomyManager.gold(),
 		"level": EconomyManager.level,
+		"pending_choices": EconomyManager.pending_choices,
 		"exp": EconomyManager.exp_points,
 		"augments": EconomyManager.augments.duplicate(),
 		"bag_size": ItemManager.bag_size,
@@ -77,5 +89,6 @@ static func restore(d: Dictionary) -> void:
 	EconomyManager.level = int(d["level"])
 	EconomyManager.exp_points = int(d["exp"])
 	EconomyManager.augments = d["augments"]
+	EconomyManager.pending_choices = int(d["pending_choices"])
 	DungeonManager.failures.count = int(d["failures"])
 	DungeonManager.flow.dungeon_no = int(d["dungeon_no"])

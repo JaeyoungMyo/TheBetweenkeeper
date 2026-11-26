@@ -28,9 +28,11 @@ const TEST_FILES := [
 	"res://tests/integration/test_shop_flow.gd",
 	"res://tests/unit/test_save_codec.gd",
 	"res://tests/unit/test_save_properties.gd",
+	"res://tests/unit/test_edge_cases.gd",
 	"res://tests/integration/test_save_flow.gd",
 	"res://tests/integration/test_behavior_input.gd",
 	"res://tests/integration/test_behavior_more.gd",
+	"res://tests/integration/test_continue_flow.gd",
 ]
 
 

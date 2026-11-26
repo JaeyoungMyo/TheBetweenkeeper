@@ -36,6 +36,8 @@ func begin_battle() -> int:
 
 
 func finish_battle() -> Dictionary:
+	if state != State.IN_BATTLE:
+		return {"intake": 0, "completed": false}  # 전투 중이 아니면 아무 일도 없다
 	var intake := DungeonRules.roll_intake(rng, int(config["intake_min"]), int(config["intake_max"]))
 	if DungeonRules.is_complete(battle_total - battle_index):
 		state = State.DUNGEON_COMPLETE

@@ -118,16 +118,22 @@ func sell(item: ItemInstance, items: Node, facility: FacilityState = null) -> bo
 
 ## 가격이 -1 이면 더 살 수 없음
 func bag_price(items: Node) -> int:
-	return int(config["bag_prices"][items.bag_size - 1]) if items.bag_size < CarryRules.MAX_BAG else -1
+	if items.bag_size < 1 or items.bag_size >= CarryRules.MAX_BAG:
+		return -1
+	return int(config["bag_prices"][items.bag_size - 1])
 
 
 func shelf_price(shelf_count: int) -> int:
-	return int(config["shelf_prices"][shelf_count - 1]) if shelf_count <= config["shelf_prices"].size() else -1
+	if shelf_count < 1 or shelf_count > config["shelf_prices"].size():
+		return -1
+	return int(config["shelf_prices"][shelf_count - 1])
 
 
 ## 선반마다 따로 확장한다. shelf_index 는 0 부터 (나중에 산 선반일수록 비쌈)
 func slot_price(facility: FacilityState, shelf_index: int) -> int:
 	var i := facility.slot_count - 3
+	if shelf_index < 0 or shelf_index >= config["slot_prices"].size() or i < 0:
+		return -1
 	var prices: Array = config["slot_prices"][shelf_index]
 	return int(prices[i]) if i < prices.size() else -1
 
