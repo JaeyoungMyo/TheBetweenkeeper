@@ -126,7 +126,7 @@ func _build_ui() -> void:
 	_map.gui_input.connect(_on_map_input)
 	layer.add_child(_map)
 	list_panel = preload("res://scenes/ui_storage/item_list_panel.tscn").instantiate()
-	list_panel.position = Vector2(0, 0)
+	list_panel.position = Vector2(0, 40)
 	layer.add_child(list_panel)
 	list_panel.take_out_requested.connect(_on_take_out)
 	shelf_panel = preload("res://scenes/ui_storage/shelf_panel.tscn").instantiate()
