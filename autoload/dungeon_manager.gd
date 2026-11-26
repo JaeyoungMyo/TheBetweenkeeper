@@ -88,8 +88,8 @@ func _handle(r: Dictionary) -> void:
 ## 퀘스트 후보 종류: 선반에 보관된 아이템과 바닥에 있는 아이템 (사용자 확정)
 func _stored_kinds() -> Array:
 	var kinds: Array = []
-	for item in ItemManager.items.values():
-		var on_shelf_or_floor := item.state == ItemInstance.State.STORED or item.state == ItemInstance.State.INCOMING
+	for item: ItemInstance in ItemManager.items.values():
+		var on_shelf_or_floor: bool = item.state == ItemInstance.State.STORED or item.state == ItemInstance.State.INCOMING
 		if on_shelf_or_floor and not kinds.has(item.data.item_id):
 			kinds.append(item.data.item_id)
 	return kinds
