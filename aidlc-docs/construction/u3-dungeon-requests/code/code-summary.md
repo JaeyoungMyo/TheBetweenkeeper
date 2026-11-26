@@ -2,7 +2,7 @@
 
 **계획**: `construction/plans/u3-dungeon-requests-code-generation-plan.md` (Step 1~18)
 **상태**: Step 1~14 완료 (로직 · 데이터 · 단위 · PBT · 통합 테스트 · 러너 등록). **Step 15~17 (UI) 미구현**. Step 18 (이 문서) 작성.
-**검증**: ⚠️ 미실행. 이 환경에 Godot 실행 파일이 없어 `godot --headless -s res://tests/run_tests.gd` 를 돌리지 못했다. 사람이 아래 명령으로 실행해야 한다.
+**검증**: Godot 4.7.2 (headless) 에서 실행. `PBT seed=20261124 tests=54 failed=0`, 종료 코드 0. 스크립트 파싱 오류 없음. 종료 시 리소스 누수 경고가 있으나 테스트 실패는 아님 (기존 테스트 포함 공통).
 
 ```
 godot --headless --path . --import
