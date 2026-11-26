@@ -607,3 +607,10 @@
 **Context**: 커버리지 측정 도구 검토
 
 ---
+## 커버리지 측정 도구 조사 (1번 방법)
+**Timestamp**: 2026-11-27T06:49:09+09:00
+**User Input**: "커버리지 측정 방법 1번으로 진행해줘"
+**AI Response**: GitHub 검색으로 후보 확인. (1) jamie-pate/godot-code-coverage: Godot 3.5 전용이라 4.7 에서 사용 불가. (2) IgorBayerl/nano-coverage-godot: Godot 4 지원, 알파 단계. C++ GDExtension 을 직접 빌드해야 하고 (SCons, 엔진 · 라이브러리 다운로드), 빌드 스크립트 실행이 자동 보안 정책에 막힘. 저장소에 아무것도 추가하지 않음. 사용자 결정 필요 (허용 규칙 추가 또는 직접 빌드 또는 커버리지 보류).
+**Context**: 커버리지 측정 도구 도입 시도
+
+---
