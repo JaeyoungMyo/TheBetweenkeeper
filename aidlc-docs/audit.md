@@ -628,3 +628,10 @@
 **Context**: Operations - Deployment Execution 계획
 
 ---
+## 배포 계획 승인, 나중에 할 일 기록
+**Timestamp**: 2026-11-27T06:54:21+09:00
+**User Input**: "배포계획은 확인했음. 해당 내용만 어딘가 나중에 할일로 기입해두고 다음 단계를 진행"
+**AI Response**: 배포 계획 승인 기록. 배포 빌드 · 검증을 `backlog/TODO.md` 에 이월. 다음 stage = Performance Validation (기준 PC 사양 필요, 보류 상태).
+**Context**: Deployment Execution 계획 승인
+
+---
