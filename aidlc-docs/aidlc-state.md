@@ -3,7 +3,7 @@
 ## Project Information
 - **Project Type**: Greenfield
 - **Start Date**: 2026-11-23T20:59:03+09:00
-- **Current Stage**: CONSTRUCTION - Code Generation (U3) Part 2 Generation (UI 단계 미완, 검증 미실행)
+- **Current Stage**: CONSTRUCTION - Functional Design (U4) 시작 전
 
 ## Workspace State
 - **Existing Code**: No
@@ -25,7 +25,8 @@
 - [x] CONSTRUCTION - U1 창고·조작: Code Generation [EXECUTE] (승인 완료)
 - [x] CONSTRUCTION - U2 성장·경제: Code Generation [EXECUTE] (승인 완료, 테스트 33개 통과, 운반 배수 단계별 · 선반별 확장 · F1 디버그 메뉴 반영)
 - [x] CONSTRUCTION - U3 던전·요청: Functional Design [EXECUTE] (승인 완료, 질문 14개 추천 채택 + 퀘스트 줄 구조 정정 반영)
-- [ ] CONSTRUCTION - U3 던전·요청: Code Generation [EXECUTE] (계획 승인. 로직 · 테스트 완료, UI Step 15~17 미구현, Godot 실행 검증 미실행)
+- [x] CONSTRUCTION - U3 던전·요청: Code Generation [EXECUTE] (승인 완료. 로직 · UI · 테스트 56개 통과. 수동 테스트는 TEST.md 로 보류)
+- [ ] CONSTRUCTION - U4 상점: Functional Design [EXECUTE] (다음 단계, 사용자 호출 대기)
   - 정정: 선반 3칸, 칸 한도 12 고정, 아이템 무게 1·2·3·4·6, 선반 최대 36 (FD-A1 확정)
 - [x] INCEPTION - User Stories [EXECUTE: 사용자 요청으로 추가] (승인 완료, 스토리 26개)
 - [ ] INCEPTION - Reverse Engineering [SKIP: Greenfield]
