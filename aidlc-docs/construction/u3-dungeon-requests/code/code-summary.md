@@ -59,3 +59,8 @@ godot --headless --path . -s res://tests/run_tests.gd
 - 칸 선택은 시각 확인으로 골랐다. 주문서 (`scroll`, 시트 0,10) 과 광석 상자 (`ore_box`, 24,5) 는 확신이 낮다. 수동 테스트에서 확인.
 - `.gitignore` 에 `assets` 가 있어서 이미지 폴더를 `art/` 로 두었다.
 - 테스트: `tests/unit/test_item_icons.gd` (모든 아이템이 시트 안의 칸을 가짐).
+
+## 퀘스트 패널 위치와 바닥 (추가)
+- 퀘스트 패널은 왼쪽 위 (8, 8), 반투명 배경 (검정 45%). 아이템 목록 (y 60) 과 겹칠 수 있어 화면에서 확인 필요.
+- 바닥은 Kenney Tiny Dungeon 타일 `tile_0049` (모래색, CC0) 을 `art/floor/floor_tile.png` 로 두고 타일 반복으로 깐다. 라이선스 파일 `art/floor/License.txt`.
+- 원본 자산 폴더 `assets/` 는 저장소에서 `.gitignore` 로 제외되어 있어, Kenney 원본 zip 은 과거 커밋 (21e9b12) 에서 가져왔다.

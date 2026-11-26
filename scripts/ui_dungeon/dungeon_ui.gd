@@ -211,9 +211,15 @@ func _build_zone() -> void:
 
 func _build_hud() -> void:
 	_quest_box = PanelContainer.new()
-	_quest_box.position = Vector2(1015, 400)
+	_quest_box.position = Vector2(8, 8)
 	_quest_box.custom_minimum_size = Vector2(240, 0)
 	_quest_box.visible = false
+	_quest_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var box_style := StyleBoxFlat.new()
+	box_style.bg_color = Color(0, 0, 0, 0.45)
+	box_style.set_corner_radius_all(4)
+	box_style.set_content_margin_all(8)
+	_quest_box.add_theme_stylebox_override("panel", box_style)
 	_quest_text = RichTextLabel.new()
 	_quest_text.bbcode_enabled = true
 	_quest_text.fit_content = true

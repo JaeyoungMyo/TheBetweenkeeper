@@ -30,10 +30,12 @@ func _ready() -> void:
 
 
 func _build_room() -> void:
-	var floor_rect := ColorRect.new()
+	var floor_rect := TextureRect.new()
+	floor_rect.texture = load("res://art/floor/floor_tile.png")
+	floor_rect.stretch_mode = TextureRect.STRETCH_TILE
+	floor_rect.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	floor_rect.position = ROOM.position
 	floor_rect.size = ROOM.size
-	floor_rect.color = Color(0.16, 0.14, 0.22)
 	floor_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(floor_rect)
 	var t := 20.0
