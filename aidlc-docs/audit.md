@@ -635,3 +635,10 @@
 **Context**: Deployment Execution 계획 승인
 
 ---
+## Performance Validation
+**Timestamp**: 2026-11-27T06:55:47+09:00
+**User Input**: "i5에 1060 6gi야. 성능 pc사양을 적당히 잡아서 진행해줘"
+**AI Response**: 기준 사양 i5 + GTX 1060 6GB 로 기록. 로직 · 목록 갱신 성능 측정 스크립트 (tests/perf/perf_items.gd) 실행: 평균 3.2ms, 최악 10ms (예산 16.67ms), 헤드리스와 Xvfb 모두 통과. 실제 FPS 는 PC 에서 확인 (TODO). 결과는 operations/performance/performance-validation.md.
+**Context**: Operations - Performance Validation
+
+---

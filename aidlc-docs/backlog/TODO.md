@@ -11,7 +11,7 @@
 - [ ] PC 에서 커버리지 측정 (기준 80%) — `construction/build-and-test/coverage-hold.md` 참고
 
 ## 성능
-- [ ] 기준 PC 사양 결정 후 NFR-01 (60 FPS) 측정 — `construction/build-and-test/performance-test-instructions.md` 참고
+- [ ] 집 PC (i5, GTX 1060 6GB) 에서 실제 FPS 측정 (아이템 200개) — `operations/performance/performance-validation.md` 측정 2 참고
 
 ## 기능 (후속)
 - [ ] 직업 도입 후 판매 규칙 변경 (자기 장비가 아닌 장비 전부 판매, BR-U4-08)
