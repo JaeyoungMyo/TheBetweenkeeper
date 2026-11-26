@@ -72,7 +72,8 @@ func _process(delta: float) -> void:
 	_zone_label.text = "전달 선반\n" + _summary()
 	if _shelf_open and not _near_shelf():
 		_close_shelf()
-	_shelf_hint.visible = _shelf_open
+	_shelf_hint.visible = _near_shelf()
+	_shelf_hint.text = "1 키: 1개 넣기 (열림)" if _shelf_open else "클릭: 열기 / 드래그로 넣기"
 	_refresh_quest()
 
 
@@ -191,8 +192,8 @@ func _build_zone() -> void:
 	z.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	room.add_child(z)
 	_shelf_hint = Label.new()
-	_shelf_hint.text = "1 키: 아이템 1개 넣기"
-	_shelf_hint.position = DELIVERY_SHELF.position + Vector2(-20, -24)
+	_shelf_hint.position = DELIVERY_SHELF.position + Vector2(-30, -26)
+	_shelf_hint.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_shelf_hint.visible = false
 	add_child(_shelf_hint)
 	var drop := DeliveryDropTarget.new()
