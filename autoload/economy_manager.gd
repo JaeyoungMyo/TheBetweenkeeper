@@ -97,6 +97,8 @@ func sell_price(data: ItemData) -> int:
 
 ## 판매 화면은 U4 에서 연결한다
 func sell(item: ItemInstance, items: Node, facility: FacilityState = null) -> bool:
+	if item.state == ItemInstance.State.DELIVERED:  # U3 BR-U3-23: 전달 공간 아이템은 판매 불가
+		return false
 	if not items.mark_sold(item, facility):
 		return false
 	add_gold(sell_price(item.data))

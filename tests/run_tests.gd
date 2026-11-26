@@ -14,6 +14,12 @@ const TEST_FILES := [
 	"res://tests/unit/test_carry_capacity.gd",
 	"res://tests/unit/test_storage_properties.gd",
 	"res://tests/integration/test_tutorial_slice.gd",
+	"res://tests/unit/test_dungeon_rules.gd",
+	"res://tests/unit/test_quest_rules.gd",
+	"res://tests/unit/test_quest_progress.gd",
+	"res://tests/unit/test_failure_counter.gd",
+	"res://tests/unit/test_dungeon_properties.gd",
+	"res://tests/integration/test_dungeon_slice.gd",
 ]
 
 

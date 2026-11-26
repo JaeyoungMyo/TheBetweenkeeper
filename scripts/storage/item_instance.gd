@@ -2,7 +2,7 @@
 class_name ItemInstance
 extends RefCounted
 
-enum State { INCOMING, CARRIED, STORED, SOLD }
+enum State { INCOMING, CARRIED, STORED, SOLD, DELIVERED }  # DELIVERED: U3 전달 공간 (판매 불가)
 
 var instance_id: int
 var data: ItemData

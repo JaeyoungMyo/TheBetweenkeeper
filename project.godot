@@ -13,6 +13,7 @@ config/features=PackedStringArray("4.7", "Compatibility")
 
 ItemManager="*res://autoload/item_manager.gd"
 EconomyManager="*res://autoload/economy_manager.gd"
+DungeonManager="*res://autoload/dungeon_manager.gd"
 
 [display]
 
