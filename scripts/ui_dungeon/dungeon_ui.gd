@@ -79,15 +79,13 @@ func _unhandled_input(event: InputEvent) -> void:
 		_deliver()
 
 
-## Enter: 플레이어가 전달 공간 안에 있으면 들고 있는 아이템을, 전달 공간 안 바닥 아이템은 항상 올린다
+## Enter: 플레이어가 전달 공간 안에서 들고 있는 아이템을 올린다. 바닥 아이템은 대상이 아니다
 func _deliver() -> void:
+	if not DELIVERY_ZONE.has_point(room.player.position):
+		return
 	var targets: Array[ItemInstance] = []
-	if DELIVERY_ZONE.has_point(room.player.position):
-		for id in ItemManager.carried_ids.duplicate():
-			targets.append(ItemManager.items[id])
-	for v: ItemView in room.views.values():
-		if v.item.state == ItemInstance.State.INCOMING and DELIVERY_ZONE.has_point(v.item.world_position):
-			targets.append(v.item)
+	for id in ItemManager.carried_ids.duplicate():
+		targets.append(ItemManager.items[id])
 	if targets.is_empty():
 		return
 	for item in targets:
