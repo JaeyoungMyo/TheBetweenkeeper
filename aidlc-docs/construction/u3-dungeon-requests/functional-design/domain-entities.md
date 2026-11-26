@@ -29,11 +29,13 @@
 | 속성 | 설명 |
 | --- | --- |
 | request_id | 식별자 |
-| target_item_id | 요청 대상 아이템 (수량 1) |
+| target_item_ids | 요청 대상 아이템 목록 (수량 Q, 2~10) |
+| quantity | Q (데이터, 던전 난이도에 따라 증가) |
+| delivered_count | 전달 공간에 옮겨진 개수 (0 ~ Q) |
 | time_limit_sec | 제한 시간 (기본 30) |
 | remaining_sec | 남은 시간 |
 | reward_gold / reward_exp | 성공 보상 (데이터) |
-| status | PENDING, ACTIVE, SUCCESS, FAILED, (생성 안 됨 = 후보 없음) |
+| status | PENDING, ACTIVE, SUCCESS (전달 아이템 삭제), FAILED, (생성 안 됨 = 후보 없음) |
 
 ### FailureCounter (실패 누적)
 | 속성 | 설명 |
@@ -43,8 +45,8 @@
 
 ### 아이템 상태 전이 (U3 가 쓰는 부분, 기획서 4.3)
 - `incoming` → `reserved` (요청 ACTIVE 시작)
-- `reserved` → 요청 전 상태 (`incoming` 또는 `stored`) (요청 SUCCESS · FAILED)
-- 전달 후 제거 여부: 열린 항목 (business-logic-model.md 6절)
+- `reserved` → 요청 전 상태 (`incoming` 또는 `stored`) (요청 FAILED)
+- 전달 공간에 옮긴 아이템 → 삭제 (요청 SUCCESS, BR-U3-18)
 
 ## 데이터 테이블 (DungeonTable, JSON)
 | 필드 | 던전 1 값 (기획서 8.2) |
@@ -52,6 +54,7 @@
 | new_item_total (T) | 10 |
 | kind_count | 3 |
 | request_total (R) | 1 |
+| request_quantity (Q) | 2 (범위 2~10, 던전 난이도에 따라 증가) |
 | battle_range | 3 ~ 5 |
 | sleep_sec | 30 |
 | request_time_limit_sec | 30 (설정값) |

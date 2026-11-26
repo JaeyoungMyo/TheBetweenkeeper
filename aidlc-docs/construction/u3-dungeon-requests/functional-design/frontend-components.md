@@ -5,7 +5,7 @@
 
 ## 컴포넌트 계층
 - `BattleView` (전투 화면): 전투 번호 `k / N` 표시, 입고 연출
-  - `RequestPanel` (요청 패널): 활성 요청의 대상 아이템 이름, 남은 시간 표시 (AC-15-1)
+  - `RequestPanel` (요청 패널): 요청 대상 아이템 목록, 전달 진행 `전달 수 / Q`, 남은 시간 표시 (AC-15-1)
 - `SleepOverlay` (수면 화면): 남은 초 (30 → 0) 표시, 정리 UI 는 기존 U1 화면 유지 (AC-13-1, AC-13-2)
 - `GameOverScreen` (게임오버 화면): 실패 누적 수 `F / 3` 표시, 새 게임 버튼 (US-16 체크리스트)
 
@@ -13,13 +13,13 @@
 | 컴포넌트 | props (입력) | 상태 (내부) |
 | --- | --- | --- |
 | BattleView | battle_index, battle_total, is_visible | 입고 연출 중 여부 |
-| RequestPanel | target_name, remaining_sec, status | 없음 (표시 전용) |
+| RequestPanel | target_names, delivered_count, quantity, remaining_sec, status | 없음 (표시 전용) |
 | SleepOverlay | remaining_sec | 없음 |
 | GameOverScreen | failure_count, limit | 없음 |
 
 ## 사용자 상호작용 흐름
 1. 던전 시작 → BattleView 가 `1 / N` 표시
-2. 요청 발생 → RequestPanel 이 열리고 남은 시간이 줄어듦
+2. 요청 발생 → RequestPanel 이 열리고 남은 시간이 줄어듦. 대상 Q 개를 전달 공간으로 옮기면 진행 수가 올라감
 3. 전투 종료 → 입고 아이템이 목록에 추가됨 (다음 전투 또는 완료)
 4. 던전 완료 → SleepOverlay 30초 → 상점 호출 (U4 로 넘김)
 5. 실패 3회 → GameOverScreen
