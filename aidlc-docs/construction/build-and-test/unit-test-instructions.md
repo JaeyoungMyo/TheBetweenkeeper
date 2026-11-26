@@ -7,7 +7,7 @@ godot --headless --path . -s res://tests/run_tests.gd
 러너 (`tests/run_tests.gd`) 가 단위 · 통합 · PBT 를 모두 실행한다. 실행 전에 저장 파일 (`user://save.dat`) 을 지운다.
 
 ## 기대 결과
-- 마지막 줄: `PBT seed=20261124 tests=74 failed=0`
+- 마지막 줄: `PBT seed=20261124 tests=79 failed=0` (단위 · 통합 · PBT · 동작 합계)
 - 종료 코드 0
 - 실패가 있으면 `FAIL <파일>::<함수> -> <사유>` 줄이 출력된다.
 
@@ -26,6 +26,5 @@ godot --headless --path . -s res://tests/run_tests.gd
 | 아이콘 | test_item_icons |
 
 ## 커버리지
-- **측정 도구 없음**: Godot 기본에 라인 커버리지 도구가 없다.
-- **기준 없음**: `AGENTS.md` 와 `construction/{unit}/nfr-requirements/` 에 커버리지 기준이 정의되어 있지 않다.
-- 사용자 결정 필요 (아래 요약 참고).
+- **기준**: 80% (사용자 결정)
+- **측정**: 미측정. Godot 기본에 라인 커버리지 도구가 없다. 측정하려면 커버리지 애드온 도입이 필요하다 (승인 대기).
