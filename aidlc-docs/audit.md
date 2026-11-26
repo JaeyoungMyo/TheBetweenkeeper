@@ -614,3 +614,10 @@
 **Context**: 커버리지 측정 도구 도입 시도
 
 ---
+## 커버리지 측정 보류
+**Timestamp**: 2026-11-27T06:51:43+09:00
+**User Input**: "보류해줘 다만 어딘가 기록을 남겨줘"
+**AI Response**: 커버리지 측정 보류. 경위, 재개 방법, 확인 사항을 `construction/build-and-test/coverage-hold.md` 에 기록. 요약과 상태 파일도 보류로 갱신.
+**Context**: 커버리지 보류
+
+---
