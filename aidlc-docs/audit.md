@@ -330,3 +330,17 @@
 
 ---
 
+## stage 스킬 이동 (Stage Jump)
+**Timestamp**: 2026-11-26T17:04:44+09:00
+**User Input**: "/aidlc-construction-code-generation U3 던전·요청"
+**AI Response**: 앞으로 U3 Functional Design 완료 → U3 Code Generation. SKIP 표기: 없음, 재오픈: 없음.
+**Context**: /aidlc-construction-code-generation 이동
+
+---
+## U3 Code Generation 계획 작성 (승인 요청)
+**Timestamp**: 2026-11-26T17:04:44+09:00
+**User Input**: (위 이동 입력과 동일 턴)
+**AI Response**: `construction/plans/u3-dungeon-requests-code-generation-plan.md` 생성. Step 18개, 스토리 US-11 ~ US-17 추적성 포함. 질문 2개 (U3-CG-1 전달 공간 위치, U3-CG-2 던전 시작 시점). 계획 승인 대기.
+**Context**: Code Generation Part 1 Step 1~6 (계획 작성, 승인 요청)
+
+---
