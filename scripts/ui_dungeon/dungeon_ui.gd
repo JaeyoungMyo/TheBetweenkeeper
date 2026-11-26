@@ -105,7 +105,13 @@ func _deliver_one() -> void:
 	if ItemManager.carried_ids.is_empty():
 		room.show_message("들고 있는 아이템이 없습니다")
 		return
-	var id: int = ItemManager.carried_ids[0]
+	_deliver_item(ItemManager.carried_ids[0])
+
+
+## 드래그앤드롭 또는 1 키로 아이템 1개를 넣는다
+func _deliver_item(id: int) -> void:
+	if not ItemManager.carried_ids.has(id) or not _near_shelf():
+		return
 	var item: ItemInstance = ItemManager.items[id]
 	ItemManager.carried_ids.erase(id)
 	if room.views.has(id):
@@ -189,6 +195,12 @@ func _build_zone() -> void:
 	_shelf_hint.position = DELIVERY_SHELF.position + Vector2(-20, -24)
 	_shelf_hint.visible = false
 	add_child(_shelf_hint)
+	var drop := DeliveryDropTarget.new()
+	drop.position = DELIVERY_SHELF.position
+	drop.size = DELIVERY_SHELF.size
+	drop.accept_check = func(id: int) -> bool: return ItemManager.carried_ids.has(id) and _near_shelf()
+	drop.on_drop = func(id: int) -> void: _deliver_item(id)
+	add_child(drop)
 	_zone_label = Label.new()
 	_zone_label.position = DELIVERY_SHELF.position + Vector2(0, DELIVERY_SHELF.size.y + 4)
 	_zone_label.custom_minimum_size = Vector2(200, 0)
