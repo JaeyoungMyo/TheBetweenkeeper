@@ -519,3 +519,10 @@
 **Context**: U4 Code Generation 계획 수정
 
 ---
+## U4 Code Generation 승인 및 구현
+**Timestamp**: 2026-11-27T00:47:53+09:00
+**User Input**: "승인"
+**AI Response**: U4 계획 승인 기록. Part 2 구현: 상점 데이터, ShopRules, ShopFlow, 출력공간 take/remove_all, QuestController 판매가 훅, DungeonManager 전달 신호, DungeonUi 상점 연결 (다음 던전 자동 시작). 테스트 67개 통과, 메인 씬 오류 없음. 수동 테스트 항목은 TEST.md 에 추가 예정.
+**Context**: Code Generation Part 2 Step 1~11
+
+---

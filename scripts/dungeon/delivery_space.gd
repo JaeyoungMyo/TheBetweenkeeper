@@ -21,9 +21,9 @@ func counts() -> Dictionary:
 	return c
 
 
-## plan: 종류 → 소비 개수. 종류별로 먼저 올라온 아이템부터 삭제한다. 실제 삭제 개수를 돌려준다
-func consume(plan: Dictionary) -> int:
-	var removed := 0
+## plan: 종류 → 소비 개수. 종류별로 먼저 올라온 아이템부터 꺼낸다. 꺼낸 아이템 목록을 돌려준다 (상태는 SOLD)
+func take(plan: Dictionary) -> Array[ItemInstance]:
+	var taken: Array[ItemInstance] = []
 	for kind in plan.keys():
 		var left: int = int(plan[kind])
 		for item in items.duplicate():
@@ -32,6 +32,17 @@ func consume(plan: Dictionary) -> int:
 			if item.data.item_id == kind:
 				item.state = ItemInstance.State.SOLD
 				items.erase(item)
+				taken.append(item)
 				left -= 1
-				removed += 1
-	return removed
+	return taken
+
+
+func consume(plan: Dictionary) -> int:
+	return take(plan).size()
+
+
+## 출력공간 전부 꺼낸다 (상태는 호출한 쪽에서 정한다)
+func remove_all() -> Array[ItemInstance]:
+	var all: Array[ItemInstance] = items.duplicate()
+	items.clear()
+	return all

@@ -5,6 +5,8 @@ extends RefCounted
 var quest: Quest = null
 var delivery: DeliverySpace
 var pending: Array[Dictionary] = []
+## 있으면 성공 골드 = 소비된 아이템들의 value_of(ItemData) 합계 (판매 퀘스트용). 없으면 quest.reward_gold
+var value_of: Callable
 
 
 func _init(space: DeliverySpace) -> void:
@@ -75,6 +77,11 @@ func _evaluate() -> Dictionary:
 	quest.apply_counts(delivery.counts())
 	if not quest.all_complete():
 		return {}
-	delivery.consume(quest.consume_plan())  # BR-U3-12: 필요 개수만 삭제
+	var taken := delivery.take(quest.consume_plan())  # BR-U3-12: 필요 개수만 꺼낸다
 	quest.status = Quest.Status.SUCCESS
-	return {"result": "success", "gold": quest.reward_gold, "exp": quest.reward_exp}
+	var gold := quest.reward_gold
+	if value_of.is_valid():
+		gold = 0
+		for item in taken:
+			gold += int(value_of.call(item.data))
+	return {"result": "success", "gold": gold, "exp": quest.reward_exp}

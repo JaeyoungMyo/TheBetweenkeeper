@@ -5,6 +5,7 @@ signal intake_ready(count: int)
 signal quest_result(result: Dictionary)
 signal game_over_reached(failures: int)
 signal shop_visit_ready()
+signal delivery_changed()
 
 var flow := DungeonFlow.new()
 var delivery := DeliverySpace.new()
@@ -55,6 +56,7 @@ func finish_battle() -> void:
 func put_in_delivery(item: ItemInstance) -> void:
 	delivery.put(item)
 	_handle(quests.on_delivery_changed())
+	delivery_changed.emit()
 
 
 func _process(delta: float) -> void:

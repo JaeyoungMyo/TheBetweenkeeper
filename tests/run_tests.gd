@@ -22,6 +22,10 @@ const TEST_FILES := [
 	"res://tests/integration/test_dungeon_slice.gd",
 	"res://tests/integration/test_dungeon_ui.gd",
 	"res://tests/unit/test_item_icons.gd",
+	"res://tests/unit/test_shop_rules.gd",
+	"res://tests/unit/test_quest_value.gd",
+	"res://tests/unit/test_shop_properties.gd",
+	"res://tests/integration/test_shop_flow.gd",
 ]
 
 

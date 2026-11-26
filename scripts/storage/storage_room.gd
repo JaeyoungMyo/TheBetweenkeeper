@@ -176,11 +176,16 @@ func drop_to_floor(id: int) -> void:
 func add_item(data: ItemData, pos: Vector2) -> ItemInstance:
 	var item: ItemInstance = ItemManager.create_item(data, 0)
 	item.world_position = ItemManager.floor_position(pos)
+	attach_item(item)
+	return item
+
+
+## 이미 만들어진 아이템에 맵 표시 (상점 구매품, 출력공간에서 나온 아이템)
+func attach_item(item: ItemInstance) -> void:
 	var view: ItemView = preload("res://scenes/storage/item.tscn").instantiate()
 	add_child(view)
 	view.setup(item)
 	views[item.instance_id] = view
-	return item
 
 
 func show_message(text: String) -> void:

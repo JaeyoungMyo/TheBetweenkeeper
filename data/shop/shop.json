@@ -1,0 +1,13 @@
+{
+  "sell_quantity": 12,
+  "sell_line_max": 3,
+  "sell_time_limit_sec": 120,
+  "sell_reward_exp": 80,
+  "sell_excluded_categories": ["물약"],
+  "buy_count": 4,
+  "purchase_pool": [
+    {"item_id": "potion_hp", "weight": 5, "price": 30},
+    {"item_id": "scroll", "weight": 3, "price": 50},
+    {"item_id": "ore_box", "weight": 2, "price": 120}
+  ]
+}

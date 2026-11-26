@@ -23,6 +23,9 @@ var _battle_timer := 0.0
 var _gap_timer := 0.0
 var _running := false
 var _shown_quest_text := ""
+var shop: ShopFlow = null
+var _shop_active := false
+var _shop_close_timer := 0.0
 var _shelf_open := false
 var _shelf_hint: Label
 
@@ -37,6 +40,7 @@ func _ready() -> void:
 	DungeonManager.quest_result.connect(_on_quest_result)
 	DungeonManager.game_over_reached.connect(_on_game_over)
 	DungeonManager.shop_visit_ready.connect(_on_shop_visit)
+	DungeonManager.delivery_changed.connect(_on_delivery_changed)
 
 
 ## 튜토리얼 완료 후 던전 1 을 시작한다 (U3-CG-2 = A)
@@ -52,6 +56,9 @@ func _begin_battle() -> void:
 
 
 func _process(delta: float) -> void:
+	if _shop_active:
+		_process_shop(delta)
+		return
 	if not _running:
 		return
 	var flow := DungeonManager.flow
@@ -79,7 +86,7 @@ func _process(delta: float) -> void:
 
 ## 선반처럼 가까이 가서 클릭하면 연다. 열린 상태에서 1 키를 누르면 들고 있는 아이템 1개를 넣는다
 func _input(event: InputEvent) -> void:
-	if not _running:
+	if DungeonManager.flow.state == DungeonFlow.State.GAME_OVER:
 		return
 	var mouse := event as InputEventMouseButton
 	if mouse != null and mouse.pressed and mouse.button_index == MOUSE_BUTTON_LEFT:
@@ -123,11 +130,18 @@ func _deliver_item(id: int) -> void:
 
 
 func _refresh_quest() -> void:
-	var active := DungeonManager.quests.is_active()
+	if _shop_active:
+		_show_quest(shop.quests, "판매 퀘스트")
+		return
+	_show_quest(DungeonManager.quests, "긴급 요청")
+
+
+func _show_quest(ctrl: QuestController, title: String) -> void:
+	var active := ctrl.is_active()
 	_quest_box.visible = active
 	if not active:
 		return
-	var q := DungeonManager.quests.quest
+	var q := ctrl.quest
 	var lines := PackedStringArray()
 	for l: Dictionary in q.lines:
 		var text := "%s (%d/%d)" % [_name(l["item_kind"]), l["delivered"], l["required"]]
@@ -138,7 +152,7 @@ func _refresh_quest() -> void:
 	var body := "\n".join(lines) + "\n남은 시간 %d초" % ceili(q.remaining)
 	if body != _shown_quest_text:
 		_shown_quest_text = body
-		_quest_text.text = "[b]긴급 요청[/b]\n" + body
+		_quest_text.text = "[b]%s[/b]\n" % title + body
 
 
 func _summary() -> String:
@@ -180,8 +194,65 @@ func _on_game_over(failures: int) -> void:
 
 
 func _on_shop_visit() -> void:
-	room.show_message("상점 방문 (U4 에서 연결 예정)")
 	_running = false
+	if shop == null:
+		shop = ShopFlow.new(DungeonManager.delivery, Callable(self, "_place_floor"))
+		shop.sell_finished.connect(_on_sell_finished)
+		shop.buy_finished.connect(_on_buy_finished)
+	_shop_active = true
+	_shop_close_timer = 0.0
+	shop.open()
+	room.show_message("상점 방문: 판매 퀘스트 시작")
+
+
+func _process_shop(delta: float) -> void:
+	shop.tick(delta)
+	_zone_label.text = "전달 선반\n" + _summary()
+	_refresh_quest()
+	if shop.state == ShopFlow.State.DONE:
+		_shop_close_timer -= delta
+		if _shop_close_timer <= 0.0:
+			_finish_shop()
+
+
+func _on_sell_finished(r: Dictionary) -> void:
+	match r["result"]:
+		"success":
+			room.show_message("판매 성공! 골드 +%d, EXP +%d" % [r["gold"], r["exp"]])
+		"skipped":
+			room.show_message("판매할 아이템이 없습니다")
+		_:
+			room.show_message("판매 실패 (남은 아이템은 맵으로 이동)")
+
+
+func _on_buy_finished(lines: Array) -> void:
+	var parts := PackedStringArray()
+	for l: Dictionary in lines:
+		parts.append("%s %s" % [_name(l["item_id"]), "구매" if l["bought"] else "골드 부족"])
+	room.show_message("구매: " + ", ".join(parts))
+	_shop_close_timer = 3.0
+
+
+## 상점 종료 후 다음 던전을 시작한다
+func _finish_shop() -> void:
+	shop.close()
+	_shop_active = false
+	DungeonManager.start_dungeon(DungeonManager.flow.dungeon_no + 1)
+	_running = true
+	_begin_battle()
+	room.show_message("던전 %d 시작" % DungeonManager.flow.dungeon_no)
+
+
+func _on_delivery_changed() -> void:
+	if _shop_active and shop.state == ShopFlow.State.SELL:
+		shop.on_output_changed()
+
+
+## 상점 구매품 등을 맵 무작위 위치에 놓는다 (입력공간 없음, FD-U4-8 X)
+func _place_floor(item: ItemInstance) -> void:
+	var pos := Vector2(randf_range(INTAKE_AREA.position.x, INTAKE_AREA.end.x), randf_range(INTAKE_AREA.position.y, INTAKE_AREA.end.y))
+	item.world_position = ItemManager.floor_position(pos)
+	room.attach_item(item)
 
 
 func _build_zone() -> void:
