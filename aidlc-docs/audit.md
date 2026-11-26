@@ -574,3 +574,15 @@
 **Context**: U5 Code Generation 완료 승인
 
 ---
+## Build and Test Stage
+**Timestamp**: 2026-11-27T06:43:45+09:00
+**Build Status**: Success (데스크톱 임포트, 헤드리스 실행)
+**Test Status**: Pass (74 / 74, 실패 0). 커버리지 측정 도구 · 기준 없음. 성능 · 웹 빌드 미실행.
+**Files Generated**:
+- build-instructions.md
+- unit-test-instructions.md
+- integration-test-instructions.md
+- performance-test-instructions.md
+- build-and-test-summary.md
+
+---
