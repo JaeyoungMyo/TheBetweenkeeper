@@ -211,7 +211,7 @@ func _build_zone() -> void:
 
 func _build_hud() -> void:
 	_quest_box = PanelContainer.new()
-	_quest_box.position = Vector2(8, 8)
+	_quest_box.position = Vector2(8, 560)
 	_quest_box.custom_minimum_size = Vector2(240, 0)
 	_quest_box.visible = false
 	_quest_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
