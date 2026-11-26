@@ -491,3 +491,10 @@
 **Context**: 문서 일괄 업데이트
 
 ---
+## U4 Functional Design 승인
+**Timestamp**: 2026-11-27T00:42:13+09:00
+**User Input**: "모두 확인했고 u4 승인. 코드 생성 시작"
+**AI Response**: U4 기능 설계 승인 기록 (판매 퀘스트 변경 반영본). 다음 stage = U4 Code Generation. 스킬은 사용자 직접 호출 필요.
+**Context**: U4 Functional Design 완료 승인
+
+---
