@@ -23,6 +23,8 @@ var _battle_timer := 0.0
 var _gap_timer := 0.0
 var _running := false
 var _shown_quest_text := ""
+var _shelf_open := false
+var _shelf_hint: Label
 
 
 func _ready() -> void:
@@ -68,32 +70,48 @@ func _process(delta: float) -> void:
 		_sleep_label.text = "용사가 잠들었습니다\n정리 시간 %d초" % ceili(flow.sleep_left)
 	_battle_label.text = "던전 %d · 전투 %d / %d" % [flow.dungeon_no, flow.battle_index, flow.battle_total]
 	_zone_label.text = "전달 선반\n" + _summary()
+	if _shelf_open and not _near_shelf():
+		_close_shelf()
+	_shelf_hint.visible = _shelf_open
 	_refresh_quest()
 
 
-func _unhandled_input(event: InputEvent) -> void:
+## 선반처럼 가까이 가서 클릭하면 연다. 열린 상태에서 1 키를 누르면 들고 있는 아이템 1개를 넣는다
+func _input(event: InputEvent) -> void:
+	if not _running:
+		return
+	var mouse := event as InputEventMouseButton
+	if mouse != null and mouse.pressed and mouse.button_index == MOUSE_BUTTON_LEFT:
+		if DELIVERY_SHELF.has_point(mouse.position) and _near_shelf():
+			_shelf_open = not _shelf_open
+			get_viewport().set_input_as_handled()
+		return
 	var key := event as InputEventKey
-	if not _running or key == null or not key.pressed or key.echo:
-		return
-	if key.keycode == KEY_ENTER and DungeonManager.flow.state != DungeonFlow.State.GAME_OVER:
-		_deliver()
+	if key != null and key.pressed and not key.echo and key.keycode == KEY_1 and _shelf_open:
+		_deliver_one()
+		get_viewport().set_input_as_handled()
 
 
-## Enter: 플레이어가 전달 선반 가까이에서 들고 있는 아이템을 넣는다. 바닥 아이템은 대상이 아니다
-func _deliver() -> void:
-	if not StorageService.near_rect(room.player.position, DELIVERY_SHELF):
+func _near_shelf() -> bool:
+	return StorageService.near_rect(room.player.position, DELIVERY_SHELF)
+
+
+func _close_shelf() -> void:
+	_shelf_open = false
+
+
+## 들고 있는 아이템 중 맨 위 1개만 넣는다 (한 번에 여러 개 넣지 않음)
+func _deliver_one() -> void:
+	if ItemManager.carried_ids.is_empty():
+		room.show_message("들고 있는 아이템이 없습니다")
 		return
-	var targets: Array[ItemInstance] = []
-	for id in ItemManager.carried_ids.duplicate():
-		targets.append(ItemManager.items[id])
-	if targets.is_empty():
-		return
-	for item in targets:
-		ItemManager.carried_ids.erase(item.instance_id)
-		if room.views.has(item.instance_id):
-			room.views[item.instance_id].queue_free()
-			room.views.erase(item.instance_id)
-		DungeonManager.put_in_delivery(item)
+	var id: int = ItemManager.carried_ids[0]
+	var item: ItemInstance = ItemManager.items[id]
+	ItemManager.carried_ids.erase(id)
+	if room.views.has(id):
+		room.views[id].queue_free()
+		room.views.erase(id)
+	DungeonManager.put_in_delivery(item)
 	room.refresh()
 
 
@@ -166,6 +184,11 @@ func _build_zone() -> void:
 	z.color = Color(0.3, 0.5, 0.8, 0.25)
 	z.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	room.add_child(z)
+	_shelf_hint = Label.new()
+	_shelf_hint.text = "1 키: 아이템 1개 넣기"
+	_shelf_hint.position = DELIVERY_SHELF.position + Vector2(-20, -24)
+	_shelf_hint.visible = false
+	add_child(_shelf_hint)
 	_zone_label = Label.new()
 	_zone_label.position = DELIVERY_SHELF.position + Vector2(0, DELIVERY_SHELF.size.y + 4)
 	_zone_label.custom_minimum_size = Vector2(200, 0)
