@@ -3,7 +3,7 @@
 ## Project Information
 - **Project Type**: Greenfield
 - **Start Date**: 2026-11-23T20:59:03+09:00
-- **Current Stage**: OPERATIONS 전 (CONSTRUCTION 완료, Build and Test 승인)
+- **Current Stage**: OPERATIONS - Deployment Execution (계획 작성, 빌드 대기)
 
 ## Workspace State
 - **Existing Code**: No
@@ -36,7 +36,7 @@
 - [ ] INCEPTION - Reverse Engineering [SKIP: Greenfield]
 - [ ] CONSTRUCTION - Functional Design [EXECUTE, 복잡 unit] / NFR Requirements [SKIP] / NFR Design [SKIP] / Infrastructure Design [SKIP]
 - [ ] CONSTRUCTION - Code Generation [EXECUTE, unit 별] / Build and Test [EXECUTE]
-- [ ] OPERATIONS - Deployment Execution [EXECUTE] / Performance Validation [EXECUTE] / 나머지 [SKIP]
+- [ ] OPERATIONS - Deployment Execution [EXECUTE] (계획 작성 완료: Windows zip 직접 전달, 빌드는 PC 에서 사람이) / Performance Validation [EXECUTE] (보류) / 나머지 [SKIP]
 
 ## Execution Plan Summary
 - **Total Stages**: 20 (표 기준)

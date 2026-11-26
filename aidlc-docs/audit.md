@@ -621,3 +621,10 @@
 **Context**: 커버리지 보류
 
 ---
+## 배포 방식 결정
+**Timestamp**: 2026-11-27T06:53:12+09:00
+**User Input**: "배포 방식 정하기" (질문 응답: Windows 만, zip 파일로 직접 전달)
+**AI Response**: `operations/deployment/deployment-plan.md` 작성. Windows Desktop 내보내기 절차, zip 구성, 배포 전 검증 체크리스트. 빌드는 Windows PC 에서 사람이 수행 (이 환경은 Windows 내보내기 템플릿 없음).
+**Context**: Operations - Deployment Execution 계획
+
+---
