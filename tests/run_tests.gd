@@ -20,6 +20,7 @@ const TEST_FILES := [
 	"res://tests/unit/test_failure_counter.gd",
 	"res://tests/unit/test_dungeon_properties.gd",
 	"res://tests/integration/test_dungeon_slice.gd",
+	"res://tests/integration/test_dungeon_ui.gd",
 ]
 
 

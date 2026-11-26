@@ -9,6 +9,7 @@ var completed := false
 
 func _ready() -> void:
 	super()
+	tutorial_completed.connect(_start_dungeon)
 	for i in ITEM_IDS.size():
 		var pos := Vector2(330 + (i % 5) * 140, 500 + floori(i / 5.0) * 80)
 		tutorial_items.append(add_item(load("res://data/items/%s.tres" % ITEM_IDS[i]), pos))
@@ -22,3 +23,10 @@ func _on_state_changed(id: int, state: int) -> void:
 		completed = true
 		show_message("튜토리얼 완료!")
 		tutorial_completed.emit()
+
+
+## 튜토리얼 완료 후 던전 1 시작 (U3-CG-2 = A)
+func _start_dungeon() -> void:
+	var ui := find_child("DungeonUi", true, false) as DungeonUi
+	if ui != null:
+		ui.start_run()

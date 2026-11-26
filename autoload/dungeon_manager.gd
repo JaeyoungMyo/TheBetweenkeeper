@@ -17,6 +17,20 @@ func _ready() -> void:
 	rng.randomize()
 
 
+## 새 게임: 던전 진행 값을 처음으로 되돌린다
+func reset_run() -> void:
+	quests.clear_pending()
+	quests.quest = null
+	delivery.items.clear()
+	failures.reset()
+
+
+## F1 디버그: 전투 중이면 퀘스트를 바로 발생시킨다
+func debug_spawn_quest() -> void:
+	if flow.state == DungeonFlow.State.IN_BATTLE:
+		_handle(_outcome(quests.spawn(flow.quest_spec(), _stored_kinds(), rng)))
+
+
 func start_dungeon(no: int) -> void:
 	quests.clear_pending()
 	flow.start(no, rng)

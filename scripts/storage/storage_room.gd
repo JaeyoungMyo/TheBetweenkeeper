@@ -146,6 +146,10 @@ func _build_ui() -> void:
 	message.position = Vector2(560, 20)
 	message.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	layer.add_child(message)
+	var dungeon := DungeonUi.new()
+	dungeon.name = "DungeonUi"
+	dungeon.room = self
+	add_child(dungeon)
 	var growth := GrowthUi.new()
 	growth.name = "GrowthUi"
 	growth.room = self

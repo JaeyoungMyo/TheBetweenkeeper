@@ -358,3 +358,10 @@
 **Context**: Code Generation Part 1 Step 7~8 (승인), Part 2 Step 10~13
 
 ---
+## U3 UI 구현 (Step 15~17)
+**Timestamp**: 2026-11-26T17:16:05+09:00
+**User Input**: "UI 단계 진행해줘"
+**AI Response**: DungeonUi (퀘스트 목록, 전달 공간, 전투 · 수면 · 게임오버), 튜토리얼 후 던전 1 자동 시작, Enter 전달, F1 퀘스트 발생, 새 게임 reset_run 구현. Godot 헤드리스 테스트 55개 통과 (화면 통합 테스트 1개 추가), 메인 씬 smoke 실행 오류 없음. UI 는 .tscn 대신 코드로 구성. 선반 → 전달 공간 이동과 U4 연결은 한계로 기록.
+**Context**: Code Generation Part 2 Step 15~17
+
+---

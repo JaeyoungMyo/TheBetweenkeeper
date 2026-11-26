@@ -26,6 +26,17 @@ func _ready() -> void:
 	ItemManager.item_stored.connect(func(item: ItemInstance) -> void: grant_exp(item))
 
 
+## 새 게임: 골드 · EXP · 증강을 처음으로 되돌린다
+func reset_run() -> void:
+	level = 1
+	exp_points = 0
+	pending_choices = 0
+	augments = {}
+	_ledger = GoldLedger.new()
+	_ledger.add(int(config["start_gold"]))
+	gold_changed.emit(gold())
+
+
 func gold() -> int:
 	return _ledger.amount()
 
