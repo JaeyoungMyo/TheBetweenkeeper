@@ -26,7 +26,7 @@ C) 자동 저장 + 수동 저장 버튼 (언제든)
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: B (던전 완료 자동 저장 + 상점 방문 후에도 저장)
 
 ---
 
@@ -39,7 +39,7 @@ B) 데스크톱은 게임 폴더 옆 파일, 웹은 브라우저 저장소
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: A (데스크톱 user:// 폴더, 웹 브라우저 저장소)
 
 ---
 
@@ -52,7 +52,7 @@ B) JSON 암호화 + 서명 (웹에서 암호화가 지원되지 않으면 서명
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: B (암호화 + 서명. 웹에서 암호화가 안 되면 서명만)
 
 ---
 
@@ -65,7 +65,7 @@ B) 첫 실행 때 무작위 키를 만들어 사용자 데이터 폴더에 저�
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: A (빌드 시 상수로 주입)
 
 ---
 
@@ -78,7 +78,7 @@ B) 이번 범위에서 제외. 브라우저 저장소만 사용
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: B (웹 내보내기 · 불러오기는 이번 범위에서 제외. 브라우저 저장소만 사용)
 
 ---
 
@@ -91,7 +91,7 @@ B) 마지막 저장 시점의 상태 그대로 (수면 중이었다면 수면 �
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: B (저장 지점 = 던전 완료 또는 상점 완료. 그 지점부터 복원)
 
 ---
 
@@ -104,7 +104,7 @@ B) 퀘스트 상태 (줄 진행, 남은 시간) 까지 저장
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: A (진행 중 퀘스트는 저장하지 않음)
 
 ---
 
@@ -117,7 +117,7 @@ B) 게임오버 상태를 저장하고, 새 게임 버튼을 누를 때까지 �
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: A (게임오버 시 저장 파일 삭제, 다음 실행은 새 게임)
 
 ---
 
@@ -130,7 +130,7 @@ B) 1280x720 고정 + 전체 화면 전환 버튼 추가
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: B (1280x720 고정 + 전체 화면 전환 버튼)
 
 ---
 
@@ -143,7 +143,7 @@ B) 설정 메뉴에 언어 항목을 만들고 한국어만 선택 가능
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: B (설정 메뉴에 언어 항목, 한국어만 선택 가능)
 
 ---
 
@@ -156,9 +156,11 @@ B) A 에서 튜토리얼 완료 여부와 상점 방문 횟수만 뺀다
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: A (던전 번호 · 완료 횟수, 골드, 레벨 · EXP, 증강 · 능력치, 아이템 인스턴스 위치 · 상태, 선반 종류 · 위치 · 칸 수, 실패 횟수, 튜토리얼 완료 여부, 상점 방문 횟수)
 
 ---
 
-## 승인 요청
-질문 11개 (FD-U5-1 ~ 11) 의 답을 알려 주세요. "추천 전부" 라고 쓰셔도 됩니다. 답변 후 U5 기능 설계 산출물을 만들고, 그 뒤 승인을 요청하겠습니다.
+## 답변 기록
+댓글로 받은 답변을 위와 같이 옮겼습니다.
+- Q5 (웹 내보내기) 는 제외 (B). 따라서 SYS-02 는 이번 범위 밖이고 브라우저 저장소만 씁니다.
+- Q6 은 "던전완료 or 상점완료" 로 적어 주셔서, 저장 지점을 두 곳으로 해석했습니다.

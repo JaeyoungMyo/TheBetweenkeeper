@@ -547,3 +547,9 @@
 **Context**: Functional Design Step 2~4 (계획 · 질문 파일 생성, 답변 대기)
 
 ---
+## U5 Functional Design 답변 기록 및 산출물 생성
+**User Input**: "답변완료" (댓글 11개: Q1 B, Q2 A, Q3 B, Q4 A, Q5 B, Q6 B (던전완료 or 상점완료), Q7 A, Q8 A, Q9 B, Q10 B, Q11 A)
+**AI Response**: 답변을 계획 파일에 기록. 웹 내보내기는 제외 (SYS-02 범위 밖). 저장 지점은 던전 완료와 상점 완료. 산출물 4종 생성 (business-logic-model, business-rules BR-U5-01~12, domain-entities, frontend-components). 승인 대기.
+**Context**: U5 Functional Design 완료 대기 (승인 요청)
+
+---
