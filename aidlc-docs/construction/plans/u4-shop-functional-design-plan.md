@@ -32,7 +32,7 @@ C) 입력공간 개념 없이 구매품을 바로 바닥에 무작위로 떨어�
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: C (입력공간 개념 없음, 구매품은 맵에 무작위로 떨어짐)
 
 ---
 
@@ -45,7 +45,7 @@ B) 칸 여러 개 (선반처럼), 칸마다 무게 한도 적용
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: A (출력공간 = 전달 선반과 같은 방식, 아이템을 하나씩 넣음)
 
 ---
 
@@ -60,7 +60,7 @@ C) 방문마다 판매 요청 목록을 고정 종류로 정함 (예: 회복약 
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: A (창고 아이템 중 무작위, 던전 1 = 2개)
 
 ---
 
@@ -73,7 +73,7 @@ B) 아이템마다 데이터에 판매가를 적음 (`base_price`), 없으면 �
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: A (현재 U2 판매가 규칙 사용). 향후 B (아이템별 판매가) 로 바꿀 예정
 
 ---
 
@@ -86,7 +86,7 @@ B) 판매 확정 때 요청 외 아이템을 창고로 자동 되돌린다
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: X (요청 외 아이템은 맵 어딘가로 자동 이동. 입력공간과 동일 방식)
 
 ---
 
@@ -101,7 +101,7 @@ C) 품목은 고정 목록, 플레이어 골드 한도 안에서 가능한 만�
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: A (가중치 품목 목록에서 방문마다 정해진 개수 뽑기)
 
 ---
 
@@ -114,7 +114,7 @@ B) 품목을 뽑을 때마다 차감. 부족하면 그 품목만 건너뜀
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: B (품목을 뽑을 때마다 차감, 골드가 부족하면 그 품목만 건너뜀)
 
 ---
 
@@ -127,7 +127,7 @@ B) 여유만큼만 사고, 나머지는 골드를 돌려준다
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: X (입력공간은 없음. 구매품은 맵에 무작위로 떨어짐)
 
 ---
 
@@ -140,7 +140,7 @@ B) 던전 입고는 그대로 무작위 생성, 상점 구매품은 별도 추�
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: B (던전 입고는 무작위 생성, 상점 구매품은 별도 경로. 향후 던전 스타일 · 난이도별 드롭 테이블로 변경 예정)
 
 ---
 
@@ -153,7 +153,7 @@ B) 포함. 상자 1개 (내부 품목 · 개수 요약 표시) 를 입력공간�
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: A (상자 개념 없음. 대량 상자 구매품은 만들지 않음)
 
 ---
 
@@ -166,9 +166,9 @@ B) 장면 중심: 용사가 들어오는 짧은 연출 뒤 패널 표시
 
 X) Other (please describe after [Answer]: tag below)
 
-[Answer]:
+[Answer]: A (기능 중심 패널, 연출은 후순위)
 
 ---
 
-## 승인 요청
-질문 11개 (FD-U4-1 ~ 11) 의 답을 알려 주세요. "추천 전부" 라고 쓰셔도 됩니다. 답변 후 U4 기능 설계 산출물을 만들고, 그 뒤 승인을 요청하겠습니다.
+## 답변 기록
+댓글로 받은 답변을 위와 같이 옮겼습니다. Q5 는 "맵 어딘가로 자동 이동", Q4 는 "현재 규칙 → 향후 아이템별 판매가" 로 해석했습니다.

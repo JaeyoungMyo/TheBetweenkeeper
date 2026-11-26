@@ -470,3 +470,10 @@
 **Context**: Functional Design Step 2~4 (계획 · 질문 파일 생성, 답변 대기)
 
 ---
+## U4 Functional Design 답변 기록 및 산출물 생성
+**Timestamp**: 2026-11-27T00:30:37+09:00
+**User Input**: 댓글 답변 11개 (Q1 C, Q2 A, Q3 A, Q4 A (향후 B), Q5 X (맵 자동 이동), Q6 A, Q7 B, Q8 X (입력공간 없음, 맵 드롭), Q9 B (향후 드롭 테이블), Q10 A (상자 개념 없음), Q11 A)
+**AI Response**: 답변을 계획 파일에 기록. 산출물 4종 생성 (business-logic-model, business-rules BR-U4-01~14, domain-entities, frontend-components). 승인 대기.
+**Context**: U4 Functional Design 완료 대기 (승인 요청)
+
+---
