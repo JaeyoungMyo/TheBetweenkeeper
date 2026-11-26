@@ -642,3 +642,10 @@
 **Context**: Operations - Performance Validation
 
 ---
+## 자동 동작 테스트 추가
+**Timestamp**: 2026-11-27T07:02:21+09:00
+**User Input**: "자동 테스트항목을 더 추가해줘 (같은 자리 2개, 추가 버튼 100번, 1·2·3 칸 적재 등)"
+**AI Response**: tests/integration/test_behavior_more.gd 추가: 같은 자리 아이템 2개 (호버 목록 · 줍기 1개), 디버그 생성 버튼 100회 (오류 없음, 뷰 일치), 1·2·3 키 칸 적재 순서, 칸 한도 12 초과 거부. 전체 83/83 통과.
+**Context**: 자동 테스트 확대
+
+---

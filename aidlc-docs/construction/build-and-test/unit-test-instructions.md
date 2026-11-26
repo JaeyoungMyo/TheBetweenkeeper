@@ -7,7 +7,7 @@ godot --headless --path . -s res://tests/run_tests.gd
 러너 (`tests/run_tests.gd`) 가 단위 · 통합 · PBT 를 모두 실행한다. 실행 전에 저장 파일 (`user://save.dat`) 을 지운다.
 
 ## 기대 결과
-- 마지막 줄: `PBT seed=20261124 tests=79 failed=0` (단위 · 통합 · PBT · 동작 합계)
+- 마지막 줄: `PBT seed=20261124 tests=83 failed=0` (단위 · 통합 · PBT · 동작 합계)
 - 종료 코드 0
 - 실패가 있으면 `FAIL <파일>::<함수> -> <사유>` 줄이 출력된다.
 

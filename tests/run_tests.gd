@@ -30,6 +30,7 @@ const TEST_FILES := [
 	"res://tests/unit/test_save_properties.gd",
 	"res://tests/integration/test_save_flow.gd",
 	"res://tests/integration/test_behavior_input.gd",
+	"res://tests/integration/test_behavior_more.gd",
 ]
 
 
