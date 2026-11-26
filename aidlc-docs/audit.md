@@ -322,3 +322,11 @@
 **Context**: Functional Design 정정 (산출물 검토 중 사용자 요청)
 
 ---
+## U3 Functional Design 승인
+**Timestamp**: 2026-11-26T17:02:42+09:00
+**User Input**: "다음 stage 진행"
+**AI Response**: U3 Functional Design 승인 기록. 승인 대상: business-logic-model, business-rules (BR-U3-01~24), domain-entities, frontend-components. 답변에서 제시한 가정 (삭제 시점 = 퀘스트 성공 순간, 실패 후 아이템 재사용, 던전 1 Q=2) 은 별도 반대 없이 승인으로 간주하고 설계 문서에 그대로 둠. 다음 stage = U3 Code Generation (사용자 직접 호출 스킬 필요).
+**Context**: U3 Functional Design 완료 승인
+
+---
+
