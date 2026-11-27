@@ -327,7 +327,7 @@ func _announce(text: String, color: Color) -> void:
 	banner.add_theme_color_override("font_color", color)
 	banner.add_theme_color_override("font_outline_color", Color(0, 0, 0))
 	banner.add_theme_constant_override("outline_size", 6)
-	banner.position = Vector2(400, 230)
+	banner.position = Vector2(380, 62)
 	banner.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(banner)
 	var tween := create_tween()

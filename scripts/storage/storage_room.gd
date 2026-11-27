@@ -327,7 +327,10 @@ func interact() -> void:
 	elif near_shelf() and not ItemManager.carried_ids.is_empty():
 		toggle_shelf()
 	elif not _pick_nearest():
-		toggle_shelf()
+		if not ItemManager.has_room() and _has_pickable_nearby():
+			show_message("더 들 수 없습니다 (손이 가득 찼습니다)")
+		else:
+			toggle_shelf()
 
 
 func toggle_shelf() -> void:
@@ -357,6 +360,13 @@ func _update_hover(mouse: Vector2) -> void:
 		hover_list.text = ItemListPanel.describe(found)
 		hover_list.reset_size()
 		hover_list.position = (mouse + Vector2(16, 16)).min(Vector2(1280, 720) - hover_list.size)
+
+
+func _has_pickable_nearby() -> bool:
+	for v: ItemView in views.values():
+		if v.item.state == ItemInstance.State.INCOMING and player.position.distance_to(v.item.world_position) <= StorageService.PICKUP_RANGE:
+			return true
+	return false
 
 
 func _pick_nearest() -> bool:
