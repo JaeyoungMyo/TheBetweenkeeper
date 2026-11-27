@@ -159,3 +159,21 @@ func test_enter_takes_selected_shelf_item() -> void:
 	expect(im.carried_ids.has(it.instance_id), "Enter takes the selected shelf item")
 	expect(shelf.state.slot_items[0].is_empty(), "slot empty after Enter take-out")
 	room.free()
+
+
+func test_only_e_closes_shelf() -> void:
+	# 선반 닫기는 E 로만 한다. X 는 열린 패널을 닫지 않는다
+	var room = _room()
+	await _frames(3)
+	var shelf = room.shelves[0]
+	room.player.position = shelf.position + Vector2(0, 60)
+	room.shelf = shelf
+	room.open_panel()
+	await _frames(1)
+	await _key(KEY_X)
+	await _frames(1)
+	expect(room.shelf_panel.visible, "X does not close the shelf")
+	await _key(KEY_E)
+	await _frames(1)
+	expect(not room.shelf_panel.visible, "E closes the shelf")
+	room.free()

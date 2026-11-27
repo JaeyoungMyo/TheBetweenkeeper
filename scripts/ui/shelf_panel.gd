@@ -27,7 +27,7 @@ func show_for(state: FacilityState, items: Dictionary, title := "", price := -2)
 		c.queue_free()
 	var x := Button.new()
 	x.name = "shelf-close-button"
-	x.text = "X"
+	x.text = "선반 닫기 (E)"
 	x.focus_mode = Control.FOCUS_NONE
 	x.pressed.connect(func() -> void: closed.emit())
 	_box.add_child(x)

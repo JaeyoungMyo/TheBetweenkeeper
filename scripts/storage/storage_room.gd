@@ -317,11 +317,9 @@ func near_shelf() -> bool:
 	return StorageService.near_rect(player.global_position, shelf.bounds())
 
 
-## X: 열린 패널 닫기 → 가까운 아이템 줍기 (선반은 열지 않는다)
+## X: 가까운 아이템 줍기 (선반 열고 닫기는 E 만 쓴다)
 func interact() -> void:
-	if shelf_panel.visible:
-		shelf_panel.hide()
-	elif not _pick_nearest():
+	if not _pick_nearest():
 		if not ItemManager.has_room() and _has_pickable_nearby():
 			show_message("더 들 수 없습니다 (손이 가득 찼습니다)")
 

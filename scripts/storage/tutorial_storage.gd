@@ -137,8 +137,8 @@ func _build_steps() -> Array:
 	s.append({"text": "[b]1. 아이템 적재[/b] 선반 앞에 도착했어요~ [b]E[/b] 키를 누르면 선반이 열려요!", "check": func() -> bool: return _ui != null and room_panel_visible()})
 	s.append({"text": "[b]1. 아이템 적재[/b] 선반이 열렸죠? [b]1[/b] 키를 누르면 들고 있는 아이템이 1번 칸에 쏙 들어가요!", "check": func() -> bool: return _stored_count() >= 1})
 	s.append({"text": "[b]1. 아이템 적재[/b] 나머지도 같은 방법으로 넣어 봐요~ (집고 → 선반 앞 → E → 1·2·3 키) 손에는 [b]2개[/b] 까지 들 수 있고, 칸이 가득 차면 다른 칸 번호를 눌러 보세요!", "check": func() -> bool: return _all_stored()})
-	# 1-b. 선반 닫기: 열었다가 E 나 X 로 닫아야 이동이 풀린다
-	s.append({"text": "[b]1. 아이템 적재[/b] 선반을 닫아 볼까요? 선반 앞에서 [b]E[/b] 로 열었다면, 다시 [b]E[/b] 나 [b]X[/b] 를 눌러 닫아 주세요. 선반이 열려 있는 동안에는 이동이 잠겨요.", "enter": func() -> void: _was_open = false, "check": func() -> bool:
+	# 1-b. 선반 닫기: 열었다가 E 로 닫아야 이동이 풀린다
+	s.append({"text": "[b]1. 아이템 적재[/b] 선반을 닫아 볼까요? 선반 앞에서 [b]E[/b] 로 열었다면, 다시 [b]E[/b] 를 눌러 닫아 주세요. 선반이 열려 있는 동안에는 이동이 잠겨요.", "enter": func() -> void: _was_open = false, "check": func() -> bool:
 		if room_panel_visible():
 			_was_open = true
 			return false
