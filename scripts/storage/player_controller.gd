@@ -83,13 +83,13 @@ func feet_position() -> Vector2:
 	return global_position + FEET_OFFSET
 
 
-## WASD 와 방향키, 상호작용 키 (E) 를 실행 시 등록 (project.godot 입력 맵 대신)
+## 방향키 (이동), 상호작용 키 (E) 를 실행 시 등록 (project.godot 입력 맵 대신)
 static func _ensure_actions() -> void:
 	var binds := {
-		"move_left": [KEY_A, KEY_LEFT],
-		"move_right": [KEY_D, KEY_RIGHT],
-		"move_up": [KEY_W, KEY_UP],
-		"move_down": [KEY_S, KEY_DOWN],
+		"move_left": [KEY_LEFT],
+		"move_right": [KEY_RIGHT],
+		"move_up": [KEY_UP],
+		"move_down": [KEY_DOWN],
 		"interact": [KEY_X],
 		"open_shelf": [KEY_E],
 		"shelf_up": [KEY_UP],

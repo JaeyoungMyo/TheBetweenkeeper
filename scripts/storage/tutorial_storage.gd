@@ -131,7 +131,7 @@ func _start_guide() -> void:
 func _build_steps() -> Array:
 	var s := []
 	# 1. 아이템 적재
-	s.append({"text": "[b]1. 아이템 적재[/b] 반짝이는 아이템 쪽으로 살금살금 다가가 볼까요? [b]WASD[/b] 로 움직이거나 빈 바닥을 클릭하면 돼요~", "check": func() -> bool: return _near_any_item()})
+	s.append({"text": "[b]1. 아이템 적재[/b] 반짝이는 아이템 쪽으로 살금살금 다가가 볼까요? [b]방향키[/b] 로 움직이거나 빈 바닥을 클릭하면 돼요~", "check": func() -> bool: return _near_any_item()})
 	s.append({"text": "[b]1. 아이템 적재[/b] 좋아요! [b]X[/b] 키를 눌러서 아이템을 주워 볼까요?", "check": func() -> bool: return not ItemManager.carried_ids.is_empty()})
 	s.append({"text": "[b]1. 아이템 적재[/b] 잘했어요! 이제 저기 선반 [b]앞[/b] 으로 가 볼까요?", "check": func() -> bool: return _near_shelf0()})
 	s.append({"text": "[b]1. 아이템 적재[/b] 선반 앞에 도착했어요~ [b]E[/b] 키를 누르면 선반이 열려요!", "check": func() -> bool: return _ui != null and room_panel_visible()})
@@ -164,7 +164,7 @@ func _build_steps() -> Array:
 	s.append({"info": true, "text": "[b]실패와 게임오버[/b] 긴급 요청을 시간 안에 못 채우면 실패가 1 쌓여요. [b]실패 3번[/b] 이면 게임오버예요ㅠ 던전이나 마을 방문이 끝날 때마다 자동 저장되니까, 메인 메뉴의 [b]이어하기[/b] 로 이어서 할 수 있어요."})
 	s.append({"info": true, "text": "[b]마을 방문과 무게[/b] 마을에서는 용사가 판매 후 남은 골드로 아이템을 사 와서 바닥에 떨어뜨려요. 골드가 모자라면 그 품목은 건너뛰어요. 선반 칸 하나는 무게 [b]12[/b] 까지만 들어가니까, 넘치면 다른 칸을 써 주세요!"})
 	s.append({"info": true, "text": "[b]가방, 일시정지, 설정[/b] 손에 드는 개수는 구매([b]C[/b])의 [b]가방 확장[/b] 으로 늘릴 수 있어요. [b]P[/b] 는 일시정지, [b]F2[/b] 는 설정(전체 화면)이에요~"})
-	s.append({"info": true, "text": "[b]조작 요약[/b] 이동 WASD · 줍기 X · 선반 열기 E (열면 이동이 잠겨요) · 칸 고르기 ↑↓ · 칸 안 아이템 고르기 ←→ · 꺼내기 X · 넣기 1~3 · 내려놓기 Z · 칸 추가 + · 구매 C · 일시정지 P · 설정 F2. 헷갈리면 언제든 다시 봐 주세요!"})
+	s.append({"info": true, "text": "[b]조작 요약[/b] 이동 방향키 · 줍기 X · 선반 열기 E (열면 이동이 잠겨요) · 칸 고르기 ↑↓ · 칸 안 아이템 고르기 ←→ · 꺼내기 X · 넣기 1~3 · 내려놓기 Z · 칸 추가 + · 구매 C · 일시정지 P · 설정 F2. 헷갈리면 언제든 다시 봐 주세요!"})
 	s.append({"info": true, "text": "[b]튜토리얼 완료![/b] 정말 잘했어요! 이제 메인 메뉴에서 [b]새 게임[/b] 을 눌러 시작해 봐요. 시작 버튼을 누르면 메인 메뉴로 돌아가요~"})
 	return s
 
