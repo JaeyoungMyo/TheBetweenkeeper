@@ -50,16 +50,39 @@ func toggle_menu() -> void:
 func _fill_menu() -> void:
 	_clear(_menu_box)
 	_buy_button("가방 확장 (현재 %d)" % ItemManager.bag_size, EconomyManager.bag_price(ItemManager), func() -> void: EconomyManager.buy_bag(ItemManager))
-	_buy_button("선반 추가 (현재 %d)" % room.shelves.size(), EconomyManager.shelf_price(room.shelves.size()), func() -> void: room.buy_shelf())
+	# 구역 1: 선반 구매 (새 선반을 하나 더 놓는다)
+	_section("[ 선반 구매 ]")
+	var n := room.shelves.size()
+	if n >= EconomyManager.config["shelf_prices"].size() + 1:
+		_info("새 선반: 최대 %d개입니다" % n)
+	else:
+		_buy_button("새 선반 사기 (%d번째)" % (n + 1), EconomyManager.shelf_price(n), func() -> void: room.buy_shelf())
+		_info("새 선반은 칸 3개로 시작합니다")
+	# 구역 2: 칸 확장 (선반마다 따로 칸을 늘린다)
+	_section("[ 칸 확장 ] 선반마다 따로 늘립니다")
 	for i in room.shelves.size():
 		var state: FacilityState = room.shelves[i].state
-		_buy_button("선반 %d 칸 추가 (현재 %d)" % [i + 1, state.slot_count], EconomyManager.slot_price(state, i), func() -> void: EconomyManager.buy_slot(state, i))
+		_buy_button("선반 %d · 칸 %d → 칸 추가" % [i + 1, state.slot_count], EconomyManager.slot_price(state, i), func() -> void: EconomyManager.buy_slot(state, i))
 	var close := Button.new()
 	close.name = "menu-close-button"
 	close.text = "닫기 (C)"
 	close.focus_mode = Control.FOCUS_NONE
 	close.pressed.connect(menu.hide)
 	_menu_box.add_child(close)
+
+
+func _section(title: String) -> void:
+	var l := Label.new()
+	l.text = title
+	l.add_theme_color_override("font_color", Color(1, 0.85, 0.4))
+	_menu_box.add_child(l)
+
+
+func _info(text: String) -> void:
+	var l := Label.new()
+	l.text = text
+	l.add_theme_font_size_override("font_size", 12)
+	_menu_box.add_child(l)
 
 
 func _buy_button(text: String, price: int, action: Callable) -> void:
