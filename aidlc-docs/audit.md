@@ -279,3 +279,380 @@
 **Context**: U2 Code Generation 변경 요청
 
 ---
+## U2 Code Generation 승인
+**Timestamp**: 2026-11-26T16:42:32+09:00
+**User Input**: "U2 승인할께"
+**AI Response**: U2 승인 기록 (변경 요청 3건 포함: 운반 배수 단계별 등장, 선반별 칸 확장 가격, F1 디버그 메뉴). 다음 stage = U3 던전·요청 Functional Design.
+**Context**: U2 Code Generation 완료 승인
+
+---
+## stage 스킬 이동 (Stage Jump)
+**Timestamp**: 2026-11-26T16:47:47+09:00
+**User Input**: "/aidlc-construction-functional-design U3 던전·요청"
+**AI Response**: 앞으로 U2 Code Generation 완료 → U3 던전·요청 Functional Design. SKIP 표기: 없음, 재오픈: 없음.
+**Context**: /aidlc-construction-functional-design 이동
+
+---
+
+## U3 Functional Design 계획 작성 (질문 생성)
+**Timestamp**: 2026-11-26T16:47:47+09:00
+**User Input**: (위 이동 입력과 동일 턴)
+**AI Response**: `construction/plans/u3-dungeon-requests-functional-design-plan.md` 생성. 질문 14개 (FD-U3-1 ~ FD-U3-14: 전투 횟수, 입고 배분, 수치 위치, 요청 발생, 창고 부재 요청, 제한 시간, 예약 해제, 동시 요청, 실패 판정, 보상, 수면 중 발생, 완료 시 미완료 요청, 게임오버 후 흐름, 상태 전이 범위). 답변 전까지 산출물 생성 보류.
+**Context**: Functional Design Step 2~4 (계획 · 질문 파일 생성, 답변 대기)
+
+---
+## U3 Functional Design 답변 (추천 전부 채택)
+**Timestamp**: 2026-11-26T16:53:23+09:00
+**User Input**: "모두 추천으로 진행해줘"
+**AI Response**: FD-U3-1 ~ 14 전부 추천안 (A) 채택. 가정: 요청 수량 1, 제한 시간 30초 (설정값), 전달 아이템 제거 여부는 열린 항목으로 남김. 설계 산출물 4개 생성 (business-logic-model, business-rules BR-U3-01~16, domain-entities, frontend-components). 검토 대기.
+**Context**: Functional Design Step 5~6 (답변 수집, 산출물 생성)
+
+---
+## U3 Functional Design 정정 요청
+**Timestamp**: 2026-11-26T16:56:52+09:00
+**User Input**: "아이템 전달은 특정 공간으로 아이템을 옮기는것으로 성공여부판단. 모든 아이템을 옮기면 퀘스트를 성공하며 특정 공간으로 전달된 아이템은 사라짐. 요청 수량은 2~10개로 고정. 던전 난이도에 따라서 개수가 늘어남."
+**AI Response**: 성공 조건을 전달 공간 이동 전부로 정정, 전달 아이템 삭제 (BR-U3-18), 부분 전달 실패 시 보존 (BR-U3-19). 요청 수량 Q 2~10, 난이도 비례 (BR-U3-17). 열린 항목 1, 2 해소, 던전 1 Q 초기값 2 를 가정으로 기록. 산출물 4개 반영. 검토 대기.
+**Context**: Functional Design 정정 (산출물 검토 중 사용자 요청)
+
+---
+## U3 Functional Design 정정 요청 (퀘스트 줄 구조)
+**Timestamp**: 2026-11-26T17:01:12+09:00
+**User Input**: "전달 실패하면 해당 아이템은 전달공간에 그대로 남아있게됨. 퀘스트는 화면 어딘가에 뜨게되고 전달공간에 아이템을 넣으면 하나씩 체크되는 형태로 진행 (회복약 0/3, 해독제 0/1 → 회복약 1개 → 1/3). 회복약을 4개 올려두면 3개만 사라지도록하고 리스트중 완료된것과 아닌것을 구분해서 볼수있게해줘"
+**AI Response**: 퀘스트를 줄 (종류 × 필요 개수) 구조로 정정. 전달 공간에 올리면 줄 전달 수 증가, 필요 개수 초과 세지 않음, 완료 줄 구분 표시. 성공 시 필요 개수만 삭제 (초과분 남김), 실패 시 전달 공간 아이템 보존. 가정 3개 기록: (1) 삭제는 퀘스트 성공 순간, (2) 남은 아이템 재사용, (3) 던전 1 Q=2 초기값. BR-U3-01~24 로 재작성. 검토 대기.
+**Context**: Functional Design 정정 (산출물 검토 중 사용자 요청)
+
+---
+## U3 Functional Design 승인
+**Timestamp**: 2026-11-26T17:02:42+09:00
+**User Input**: "다음 stage 진행"
+**AI Response**: U3 Functional Design 승인 기록. 승인 대상: business-logic-model, business-rules (BR-U3-01~24), domain-entities, frontend-components. 답변에서 제시한 가정 (삭제 시점 = 퀘스트 성공 순간, 실패 후 아이템 재사용, 던전 1 Q=2) 은 별도 반대 없이 승인으로 간주하고 설계 문서에 그대로 둠. 다음 stage = U3 Code Generation (사용자 직접 호출 스킬 필요).
+**Context**: U3 Functional Design 완료 승인
+
+---
+
+## stage 스킬 이동 (Stage Jump)
+**Timestamp**: 2026-11-26T17:04:44+09:00
+**User Input**: "/aidlc-construction-code-generation U3 던전·요청"
+**AI Response**: 앞으로 U3 Functional Design 완료 → U3 Code Generation. SKIP 표기: 없음, 재오픈: 없음.
+**Context**: /aidlc-construction-code-generation 이동
+
+---
+## U3 Code Generation 계획 작성 (승인 요청)
+**Timestamp**: 2026-11-26T17:04:44+09:00
+**User Input**: (위 이동 입력과 동일 턴)
+**AI Response**: `construction/plans/u3-dungeon-requests-code-generation-plan.md` 생성. Step 18개, 스토리 US-11 ~ US-17 추적성 포함. 질문 2개 (U3-CG-1 전달 공간 위치, U3-CG-2 던전 시작 시점). 계획 승인 대기.
+**Context**: Code Generation Part 1 Step 1~6 (계획 작성, 승인 요청)
+
+---
+## U3 Code Generation 계획 질문 답변
+**Timestamp**: 2026-11-26T17:08:01+09:00
+**User Input**: "둘다 추천"
+**AI Response**: U3-CG-1 = A (창고 방 고정 위치 전달 공간), U3-CG-2 = A (튜토리얼 직후 던전 1 자동 시작) 기록. 계획 승인은 아직 받지 않았으므로 승인 요청을 다시 함.
+**Context**: Code Generation Part 1 Step 7 (답변 수집, 승인 대기)
+
+---
+## U3 Code Generation 계획 승인
+**Timestamp**: 2026-11-26T17:10:38+09:00
+**User Input**: "승인"
+**AI Response**: 계획 승인 기록. Part 2 진행: Step 1~14 (데이터, 로직, 오토로드, 테스트) 구현. Step 15~17 (UI, 디버그) 는 미구현으로 남김. Godot 바이너리가 없어 headless 테스트는 미실행. code-summary 에 기록.
+**Context**: Code Generation Part 1 Step 7~8 (승인), Part 2 Step 10~13
+
+---
+## U3 UI 구현 (Step 15~17)
+**Timestamp**: 2026-11-26T17:16:05+09:00
+**User Input**: "UI 단계 진행해줘"
+**AI Response**: DungeonUi (퀘스트 목록, 전달 공간, 전투 · 수면 · 게임오버), 튜토리얼 후 던전 1 자동 시작, Enter 전달, F1 퀘스트 발생, 새 게임 reset_run 구현. Godot 헤드리스 테스트 55개 통과 (화면 통합 테스트 1개 추가), 메인 씬 smoke 실행 오류 없음. UI 는 .tscn 대신 코드로 구성. 선반 → 전달 공간 이동과 U4 연결은 한계로 기록.
+**Context**: Code Generation Part 2 Step 15~17
+
+---
+## U3 전달 방식 확인
+**Timestamp**: 2026-11-26T17:18:25+09:00
+**User Input**: "선반에서 꺼내서 옮기는 형태로 될꺼라 바로이동기능은 없어. 퀘스트는 유저가 항상 아이템을 들고 가져다두는 형태로될꺼야."
+**AI Response**: 선반 → 전달 공간 직접 이동은 만들지 않음 (한계 목록에서 제외). 전달 대상을 들고 있는 아이템으로 한정하고 바닥 아이템 자동 전달 제거. 테스트 재실행.
+**Context**: U3 UI 전달 방식 정정
+
+---
+## U3 전달 선반 변경
+**Timestamp**: 2026-11-26T17:21:02+09:00
+**User Input**: "전달 공간이 아니라 전달선반? 그런데 가서 아이템 넣는 형태로 변경하자."
+**AI Response**: 전달 공간을 전달 선반으로 명칭 변경. 플레이어가 선반 가까이 가서 Enter 로 들고 있는 아이템을 넣는 방식으로 변경 (근접 판정은 선반 기준 StorageService.near_rect 사용).
+**Context**: U3 UI 전달 방식 정정
+
+---
+## U3 전달 선반 조작 변경
+**Timestamp**: 2026-11-26T17:23:20+09:00
+**User Input**: "선반처럼 가서 클릭해서 1번을 눌러서 옮기게 해줘. 아니면 드래그앤드롭으로. 한번에 옮기는 기능은 없으면 좋겠어"
+**AI Response**: 드래그앤드롭은 제외하고 클릭 열기 + 1 키로 1개씩 넣는 방식 구현. 일괄 이동 없음. 테스트 55개 통과, 메인 씬 오류 없음.
+**Context**: U3 UI 전달 선반 조작 변경
+
+---
+## U3 전달 선반 드래그앤드롭 추가
+**Timestamp**: 2026-11-26T17:25:44+09:00
+**User Input**: "기존 선반과 똑같이 드래그앤드롭도 만들어줘"
+**AI Response**: DeliveryDropTarget 추가. 목록 항목을 전달 선반에 끌어 놓으면 1개씩 넣는다 (선반 근접 시에만). 클릭 열기 + 1 키 방식 유지. 테스트 55개 통과, 메인 씬 오류 없음.
+**Context**: U3 UI 전달 선반 드래그앤드롭
+
+---
+## 아이템 아이콘 반영
+**Timestamp**: 2026-11-26T17:33:36+09:00
+**User Input**: 아이템 스프라이트 시트 2장 첨부, "이거를 반영해줘"
+**AI Response**: 시트를 art/items 에 저장, ItemData 에 icon_sheet/icon_cell 추가, 아이템 10종에 칸 지정, ItemView 와 목록에 아이콘 표시. 칸은 눈으로 고른 값이라 주문서와 광석 상자는 확인 필요. 테스트 56개 통과, 메인 씬 오류 없음.
+**Context**: 아이템 이미지 반영
+
+---
+## 퀘스트 패널 위치 변경과 바닥 타일 적용
+**Timestamp**: 2026-11-27T00:04:12+09:00
+**User Input**: "1. 퀘스트패널은 왼쪽위로 반투명하게 발생하도록 해줘. 2. 바닥을 asset폴더의 파일중에 적당한걸 찾아서 적용해줘."
+**AI Response**: 퀘스트 패널을 왼쪽 위 (8,8) 반투명으로 이동. asset 폴더는 저장소에 없고 (gitignore) 과거 커밋의 Kenney 타일 zip 에서 tile_0049 를 바닥에 적용. 테스트 56개 통과.
+**Context**: UI 조정, 바닥 에셋 적용
+
+---
+## 퀘스트 후보에 바닥 아이템 포함
+**Timestamp**: 2026-11-27T00:08:32+09:00
+**User Input**: "선반도 바닥도 포함해 줘"
+**AI Response**: _stored_kinds 를 STORED (선반) + INCOMING (바닥) 으로 변경. BR-U3-08 과 TEST.md 갱신. 들고 있는 아이템은 후보 제외 (사용자 요청 범위 밖, 기록).
+**Context**: U3 퀘스트 후보 범위 변경
+
+---
+## 바닥 아이템 포함 수정 (파싱 오류 정정)
+**Timestamp**: 2026-11-27T00:09:14+09:00
+**User Input**: (직전 요청의 후속 수정)
+**AI Response**: 직전 커밋에서 타입 추론 파싱 오류로 dungeon_manager.gd 로드가 실패했고, 테스트 1개가 실패한 상태로 push 되었음. 타입을 명시해 정정. 테스트 56개 통과, 메인 씬 오류 없음.
+**Context**: 직전 변경의 오류 정정
+
+---
+## 퀘스트 후보에 들고 있는 아이템 포함
+**Timestamp**: 2026-11-27T00:09:53+09:00
+**User Input**: "들고있는 아이템도 포함해줘"
+**AI Response**: _stored_kinds 에 CARRIED 추가 (선반, 바닥, 들고 있는 아이템). BR-U3-08 과 TEST.md 갱신.
+**Context**: U3 퀘스트 후보 범위 변경
+
+---
+## 패널 위치 조정
+**Timestamp**: 2026-11-27T00:10:42+09:00
+**User Input**: "아이템 패널은 왼쪽위로하고 퀘스트창을 왼쪽 아래로 이동해줘. 선반 패널은 클릭하면 가운데 불투명한게 나을까? 오른쪽에 불투명한게 나을까?"
+**AI Response**: 아이템 목록 (0,0), 퀘스트 패널 (8,560) 으로 이동. 선반 패널은 오른쪽 불투명을 권장 (방 중앙을 가리지 않고 현재 배치 유지).
+**Context**: UI 배치 조정
+
+---
+## 화면 실행 확인 (Xvfb 스크린샷) 및 아이템 목록 위치 보정
+**Timestamp**: 2026-11-27T00:14:44+09:00
+**User Input**: "지금 godot실행을 못하는데 너가 실행해서 확인해봐줄수는 없나?"
+**AI Response**: xvfb-run 으로 Godot 를 띄워 스크린샷 3장 확인. 아이템 목록이 상단 골드 줄과 겹쳐서 y 40 으로 이동. 퀘스트 패널 왼쪽 아래, 선반 패널 오른쪽 불투명 배치 확인. 임시 스크립트는 삭제 (커밋 안 함).
+**Context**: 화면 검증
+
+---
+## UI 1차 정리 (플레이 테스트 차단 요소)
+**Timestamp**: 2026-11-27T00:20:31+09:00
+**User Input**: "그렇게 진행해줘. 다음에 뭐해야하는지 알려줘."
+**AI Response**: 전달 선반 안내 문구를 근접 시 표시 (열림 상태에 따라 문구 변경), 안내 위치 조정. 스크린샷으로 확인. 나머지 다듬기 (테마, 폰트, 연출) 는 전체 기능 완료 후로 미룸. 다음 작업 목록 안내.
+**Context**: UI 1차 정리
+
+---
+## U3 Code Generation 승인
+**Timestamp**: 2026-11-27T00:22:12+09:00
+**User Input**: "일단 테스트는 나중에하고 모바일로 ai할수있는것들을 최대한 할예정. 승인하고 u4로 넘어가줘"
+**AI Response**: U3 Code Generation 승인 기록. 수동 테스트는 보류 (TEST.md 유지). 다음 stage = U4 상점 Functional Design, 스킬은 사용자 직접 호출 필요.
+**Context**: U3 Code Generation 완료 승인, U4 진행 요청
+
+---
+## stage 스킬 이동 (Stage Jump)
+**Timestamp**: 2026-11-27T00:22:47+09:00
+**User Input**: "/aidlc-construction-functional-design U4 상점"
+**AI Response**: 앞으로 U3 Code Generation 완료 → U4 상점 Functional Design. SKIP 표기 없음, 재오픈 없음.
+**Context**: /aidlc-construction-functional-design 이동
+
+---
+## U4 Functional Design 계획 작성 (질문 생성)
+**Timestamp**: 2026-11-27T00:22:47+09:00
+**User Input**: (위 이동 입력과 동일 턴)
+**AI Response**: `construction/plans/u4-shop-functional-design-plan.md` 생성. 질문 11개 (FD-U4-1 ~ 11): 입력공간 · 출력공간 형태 (P-02, A-07), 판매 요청 목록, 판매가, 요청 외 아이템, 구매 추첨, 골드 부족, 가득 찬 입력공간 (UG-5 A), 구매품과 다음 던전 입고, 대량 상자 범위, 상점 화면 방식. 답변 전까지 산출물 생성 보류.
+**Context**: Functional Design Step 2~4 (계획 · 질문 파일 생성, 답변 대기)
+
+---
+## U4 Functional Design 답변 기록 및 산출물 생성
+**Timestamp**: 2026-11-27T00:30:37+09:00
+**User Input**: 댓글 답변 11개 (Q1 C, Q2 A, Q3 A, Q4 A (향후 B), Q5 X (맵 자동 이동), Q6 A, Q7 B, Q8 X (입력공간 없음, 맵 드롭), Q9 B (향후 드롭 테이블), Q10 A (상자 개념 없음), Q11 A)
+**AI Response**: 답변을 계획 파일에 기록. 산출물 4종 생성 (business-logic-model, business-rules BR-U4-01~14, domain-entities, frontend-components). 승인 대기.
+**Context**: U4 Functional Design 완료 대기 (승인 요청)
+
+---
+## 변경 요청: 판매 퀘스트화, 잡템 판매, 직업별 판매 예정, 입고 5~10개, 초기 선반 3개
+**Timestamp**: 2026-11-27T00:38:17+09:00
+**User Input**: "출력공간은(판매)는 기존의 용사 아이템 긴급요청 퀘스트처럼 퀘스트로발생하는데 아이템양이 많고 시간을 오래주는형태로 해줘. 경험치도 많이주고. 대부분의 잡템과 장비템들은 거의다 팔게해줘. 나중에 용사 직업에 따라서 자기 장비가 아닌건 다 파는형태로 진행했으면해. 매 전투마다 아이템이 5~10개정도 들어오고, 초기선반 개수는 너가 계산해봤을때 적당한 수량으로 맞춰줘"
+**AI Response**: (1) 전투 입고를 5~10개로 변경 (코드, 테스트, 설계 반영). (2) 초기 선반 3개 (한 던전 입고 약 108 무게 ≈ 선반 3개 36×3), 선반 가격표 5단계로 확장. (3) U4 판매를 퀘스트로 설계 변경 (수량 12, 시간 120초, EXP 80, 물약 제외 초기 가정, 직업별 판매는 예정). 테스트 56개 통과. U4 설계 승인 전 상태.
+**Context**: U4 설계 변경 및 U3 입고 · 선반 조정
+
+---
+## 변경 사항 관련 기존 문서 업데이트
+**Timestamp**: 2026-11-27T00:40:09+09:00
+**User Input**: "방금 변경사항에 대해서 기존문서 업데이트가 필요하면 모두 업데이트해줘"
+**AI Response**: 업데이트 대상 — 스토리 US-19 (판매 퀘스트), 요구사항 FR-30 · FR-31 · A-07 (판매 퀘스트, 맵 무작위 입고), 응용 설계 (메서드, 서비스, 컴포넌트, 의존성, 유닛 정의, 스토리 맵, 실행 계획), U3 설계 (입고 5~10), U3 코드 요약 · 계획 기록, U4 계획 기록, U4 설계 (재작성), TEST.md (입고 · 선반 · 가격), 기획서 9.5 · 8.2 변경 기록 주석. 답변 기록과 과거 질문 본문은 이력으로 보존. 테스트 코드 변경 없음.
+**Context**: 문서 일괄 업데이트
+
+---
+## U4 Functional Design 승인
+**Timestamp**: 2026-11-27T00:42:13+09:00
+**User Input**: "모두 확인했고 u4 승인. 코드 생성 시작"
+**AI Response**: U4 기능 설계 승인 기록 (판매 퀘스트 변경 반영본). 다음 stage = U4 Code Generation. 스킬은 사용자 직접 호출 필요.
+**Context**: U4 Functional Design 완료 승인
+
+---
+## stage 스킬 이동 (Stage Jump)
+**Timestamp**: 2026-11-27T00:42:57+09:00
+**User Input**: "/aidlc-construction-code-generation U4 상점"
+**AI Response**: 앞으로 U4 Functional Design 완료 → U4 Code Generation. SKIP 없음, 재오픈 없음.
+**Context**: /aidlc-construction-code-generation 이동
+
+---
+## U4 Code Generation 계획 작성 (승인 요청)
+**Timestamp**: 2026-11-27T00:42:57+09:00
+**User Input**: (위 이동 입력과 동일 턴)
+**AI Response**: `construction/plans/u4-shop-code-generation-plan.md` 생성. Step 12개, US-18 ~ US-21 추적성 포함. U3 Quest · QuestController · DeliverySpace 재사용, 판매 골드 훅 추가. 가정 4개 (구매 가격 · 가중치, 출력공간 위치, 잔여 아이템 맵 이동, 퀘스트 1건) 확인 요청.
+**Context**: Code Generation Part 1 Step 1~6 (계획 작성, 승인 요청)
+
+---
+## 출력공간 = 전달 선반 확인, 판매 퀘스트 1건 확인
+**Timestamp**: 2026-11-27T00:45:22+09:00
+**User Input**: "출력공간은 전달선반이랑 같은거아냐? 판매 퀘스트는 던전마다 1건 동의함."
+**AI Response**: FD-U4-2 (출력공간 = 전달 선반 방식) 와 일치. 계획 Step 7 을 전달 선반 공유로 수정, 별도 출력 선반 제거. 판매 퀘스트 1건 확정. 계획 승인 대기.
+**Context**: U4 Code Generation 계획 수정
+
+---
+## U4 Code Generation 승인 및 구현
+**Timestamp**: 2026-11-27T00:47:53+09:00
+**User Input**: "승인"
+**AI Response**: U4 계획 승인 기록. Part 2 구현: 상점 데이터, ShopRules, ShopFlow, 출력공간 take/remove_all, QuestController 판매가 훅, DungeonManager 전달 신호, DungeonUi 상점 연결 (다음 던전 자동 시작). 테스트 67개 통과, 메인 씬 오류 없음. 수동 테스트 항목은 TEST.md 에 추가 예정.
+**Context**: Code Generation Part 2 Step 1~11
+
+---
+## U4 Code Generation 완료 승인
+**Timestamp**: 2026-11-27T00:49:48+09:00
+**User Input**: "승인"
+**AI Response**: U4 Code Generation 완료 승인 기록 (수동 테스트는 TEST.md 로 보류). 다음 stage = U5 저장 · 플랫폼 Functional Design, 스킬은 사용자 직접 호출 필요.
+**Context**: U4 Code Generation 완료 승인
+
+---
+## stage 스킬 이동 (Stage Jump)
+**Timestamp**: 2026-11-27T00:50:34+09:00
+**User Input**: "/aidlc-construction-functional-design U5 저장"
+**AI Response**: 앞으로 U4 Code Generation 완료 → U5 저장 · 플랫폼 Functional Design. SKIP 없음, 재오픈 없음.
+**Context**: /aidlc-construction-functional-design 이동
+
+---
+## U5 Functional Design 계획 작성 (질문 생성)
+**Timestamp**: 2026-11-27T00:50:34+09:00
+**User Input**: (위 이동 입력과 동일 턴)
+**AI Response**: `construction/plans/u5-save-platform-functional-design-plan.md` 생성. 질문 11개 (FD-U5-1 ~ 11): 저장 시점, 저장 위치, 파일 보호 (V-1), HMAC 키 (V-4), 웹 내보내기 (V-2), 복원 지점, 진행 중 퀘스트, 게임오버 저장, 해상도, 언어, 저장 대상. 답변 전까지 산출물 생성 보류.
+**Context**: Functional Design Step 2~4 (계획 · 질문 파일 생성, 답변 대기)
+
+---
+## U5 Functional Design 답변 기록 및 산출물 생성
+**User Input**: "답변완료" (댓글 11개: Q1 B, Q2 A, Q3 B, Q4 A, Q5 B, Q6 B (던전완료 or 상점완료), Q7 A, Q8 A, Q9 B, Q10 B, Q11 A)
+**AI Response**: 답변을 계획 파일에 기록. 웹 내보내기는 제외 (SYS-02 범위 밖). 저장 지점은 던전 완료와 상점 완료. 산출물 4종 생성 (business-logic-model, business-rules BR-U5-01~12, domain-entities, frontend-components). 승인 대기.
+**Context**: U5 Functional Design 완료 대기 (승인 요청)
+
+---
+## U5 Functional Design 승인 및 Code Generation 계획 작성
+**Timestamp**: 2026-11-27T01:04:47+09:00
+**User Input**: "승인하고 U5 코드 생성 계획 작성"
+**AI Response**: U5 기능 설계 승인 기록. Code Generation Part 1 계획 작성 (`construction/plans/u5-save-platform-code-generation-plan.md`, Step 12개, 가정 3개). 승인 대기.
+**Context**: U5 Functional Design 승인, Code Generation Part 1 Step 1~6
+
+---
+## U5 Code Generation 구현
+**Timestamp**: 2026-11-27T06:40:58+09:00
+**User Input**: "응 진행해줘"
+**AI Response**: U5 계획 승인 기록 후 구현. 저장 코덱 (HMAC), 저장 데이터 캡처 · 복원, SaveService 오토로드, 던전 · 상점 저장 지점, 게임오버 삭제, 이어하기 선택, 선반 복원, 설정 패널 (F2). 테스트 74개 통과, 메인 씬 오류 없음.
+**Context**: Code Generation Part 2 (U5)
+
+---
+## U5 Code Generation 승인
+**Timestamp**: 2026-11-27T06:42:38+09:00
+**User Input**: "승인하고 U5 기능 설계부터 이어서 진행"
+**AI Response**: U5 Code Generation 승인 기록. U5 기능 설계는 이미 승인 완료 상태라 재작업하지 않음. 다음 stage = Build and Test (스킬은 사용자 직접 호출 필요).
+**Context**: U5 Code Generation 완료 승인
+
+---
+## Build and Test Stage
+**Timestamp**: 2026-11-27T06:43:45+09:00
+**Build Status**: Success (데스크톱 임포트, 헤드리스 실행)
+**Test Status**: Pass (74 / 74, 실패 0). 커버리지 측정 도구 · 기준 없음. 성능 · 웹 빌드 미실행.
+**Files Generated**:
+- build-instructions.md
+- unit-test-instructions.md
+- integration-test-instructions.md
+- performance-test-instructions.md
+- build-and-test-summary.md
+
+---
+## Build and Test 보정 (사용자 응답)
+**Timestamp**: 2026-11-27T06:46:38+09:00
+**User Input**: "커버리지는 80프로로 일단 해주고 우선 데스크톱만 진행. 3번은 모르겠네. godot실행하면서 테스트하는것도있지않아? 지금 테스트 하는게 매우 적은거같은데 동작테스트는 안해?"
+**AI Response**: 커버리지 기준 80% 기록 (측정 도구 없음, 미측정, 애드온 도입은 승인 대기). 웹 제외, 성능 보류. 실제 입력 이벤트로 동작하는 테스트 5개 추가 (test_behavior_input.gd). 전체 79/79 통과.
+**Context**: Build and Test 보정
+
+---
+## Build and Test 승인
+**Timestamp**: 2026-11-27T06:47:20+09:00
+**User Input**: "승인"
+**AI Response**: Build and Test 결과 승인 기록. 커버리지 측정 애드온 도입은 별도 승인이 필요하므로 이번 승인에 포함하지 않음 (미도입 상태 유지). 성능 · 웹 빌드는 보류 · 제외.
+**Context**: Build and Test 승인
+
+---
+## 커버리지 애드온 도입 검토 결과
+**Timestamp**: 2026-11-27T06:48:07+09:00
+**User Input**: "에드온 도입 승인"
+**AI Response**: gdUnit4 (v7.0.0) 를 읽기 전용으로 클론해 확인. 라인 커버리지 기능이 없어서 도입하지 않음 (테스트 프레임워크일 뿐 커버리지 측정 아님). 저장소에는 아무것도 추가하지 않음. 80% 측정 방법은 사용자 결정 필요.
+**Context**: 커버리지 측정 도구 검토
+
+---
+## 커버리지 측정 도구 조사 (1번 방법)
+**Timestamp**: 2026-11-27T06:49:09+09:00
+**User Input**: "커버리지 측정 방법 1번으로 진행해줘"
+**AI Response**: GitHub 검색으로 후보 확인. (1) jamie-pate/godot-code-coverage: Godot 3.5 전용이라 4.7 에서 사용 불가. (2) IgorBayerl/nano-coverage-godot: Godot 4 지원, 알파 단계. C++ GDExtension 을 직접 빌드해야 하고 (SCons, 엔진 · 라이브러리 다운로드), 빌드 스크립트 실행이 자동 보안 정책에 막힘. 저장소에 아무것도 추가하지 않음. 사용자 결정 필요 (허용 규칙 추가 또는 직접 빌드 또는 커버리지 보류).
+**Context**: 커버리지 측정 도구 도입 시도
+
+---
+## 커버리지 측정 보류
+**Timestamp**: 2026-11-27T06:51:43+09:00
+**User Input**: "보류해줘 다만 어딘가 기록을 남겨줘"
+**AI Response**: 커버리지 측정 보류. 경위, 재개 방법, 확인 사항을 `construction/build-and-test/coverage-hold.md` 에 기록. 요약과 상태 파일도 보류로 갱신.
+**Context**: 커버리지 보류
+
+---
+## 배포 방식 결정
+**Timestamp**: 2026-11-27T06:53:12+09:00
+**User Input**: "배포 방식 정하기" (질문 응답: Windows 만, zip 파일로 직접 전달)
+**AI Response**: `operations/deployment/deployment-plan.md` 작성. Windows Desktop 내보내기 절차, zip 구성, 배포 전 검증 체크리스트. 빌드는 Windows PC 에서 사람이 수행 (이 환경은 Windows 내보내기 템플릿 없음).
+**Context**: Operations - Deployment Execution 계획
+
+---
+## 배포 계획 승인, 나중에 할 일 기록
+**Timestamp**: 2026-11-27T06:54:21+09:00
+**User Input**: "배포계획은 확인했음. 해당 내용만 어딘가 나중에 할일로 기입해두고 다음 단계를 진행"
+**AI Response**: 배포 계획 승인 기록. 배포 빌드 · 검증을 `backlog/TODO.md` 에 이월. 다음 stage = Performance Validation (기준 PC 사양 필요, 보류 상태).
+**Context**: Deployment Execution 계획 승인
+
+---
+## Performance Validation
+**Timestamp**: 2026-11-27T06:55:47+09:00
+**User Input**: "i5에 1060 6gi야. 성능 pc사양을 적당히 잡아서 진행해줘"
+**AI Response**: 기준 사양 i5 + GTX 1060 6GB 로 기록. 로직 · 목록 갱신 성능 측정 스크립트 (tests/perf/perf_items.gd) 실행: 평균 3.2ms, 최악 10ms (예산 16.67ms), 헤드리스와 Xvfb 모두 통과. 실제 FPS 는 PC 에서 확인 (TODO). 결과는 operations/performance/performance-validation.md.
+**Context**: Operations - Performance Validation
+
+---
+## 자동 동작 테스트 추가
+**Timestamp**: 2026-11-27T07:02:21+09:00
+**User Input**: "자동 테스트항목을 더 추가해줘 (같은 자리 2개, 추가 버튼 100번, 1·2·3 칸 적재 등)"
+**AI Response**: tests/integration/test_behavior_more.gd 추가: 같은 자리 아이템 2개 (호버 목록 · 줍기 1개), 디버그 생성 버튼 100회 (오류 없음, 뷰 일치), 1·2·3 키 칸 적재 순서, 칸 한도 12 초과 거부. 전체 83/83 통과.
+**Context**: 자동 테스트 확대
+
+---
+## 서브에이전트 조사 기반 테스트 추가
+**Timestamp**: 2026-11-27T07:06:44+09:00
+**User Input**: "서브에이전트 2개로 프로젝트를 보면서 필요한 테스트항목이 뭐가있을지 파악해봐. 나온 항목들에 대해서 테스트를 추가해줘"
+**AI Response**: 조사 2건 (게임플레이, 로직 · 경계) 결과 반영. 실제 결함 수정: 칸 가격 행 부족 (5~6번째 선반), shelf_price(0) 오류, 증강 대기 저장 누락, 저장 형식 검사 없음, 새 게임 시 튜토리얼 플래그 잔존, 전투 종료 가드 없음. 테스트 98개 통과 (edge 15, 이어하기 씬 3 추가). 남은 후보는 test-gap-survey.md.
+**Context**: 테스트 누락 조사 및 보강
+
+---

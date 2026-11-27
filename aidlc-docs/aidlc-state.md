@@ -3,7 +3,7 @@
 ## Project Information
 - **Project Type**: Greenfield
 - **Start Date**: 2026-11-23T20:59:03+09:00
-- **Current Stage**: CONSTRUCTION - Code Generation (U2)
+- **Current Stage**: OPERATIONS - Performance Validation (로직 측정 통과, 승인 대기)
 
 ## Workspace State
 - **Existing Code**: No
@@ -23,13 +23,20 @@
 - [x] INCEPTION - Units Generation [EXECUTE] (unit 5개, 승인 완료)
 - [x] CONSTRUCTION - U1 창고·조작: Functional Design [EXECUTE] (승인 완료, 속도 무관·칸 12 정정 반영)
 - [x] CONSTRUCTION - U1 창고·조작: Code Generation [EXECUTE] (승인 완료)
-- [ ] CONSTRUCTION - U2 성장·경제: Code Generation [EXECUTE] (코드 생성, 테스트 33개 통과, 승인 대기)
+- [x] CONSTRUCTION - U2 성장·경제: Code Generation [EXECUTE] (승인 완료, 테스트 33개 통과, 운반 배수 단계별 · 선반별 확장 · F1 디버그 메뉴 반영)
+- [x] CONSTRUCTION - U3 던전·요청: Functional Design [EXECUTE] (승인 완료, 질문 14개 추천 채택 + 퀘스트 줄 구조 정정 반영)
+- [x] CONSTRUCTION - U3 던전·요청: Code Generation [EXECUTE] (승인 완료. 로직 · UI · 테스트 56개 통과. 수동 테스트는 TEST.md 로 보류)
+- [x] CONSTRUCTION - U4 상점: Functional Design [EXECUTE] (승인 완료, 판매 퀘스트 변경 반영)
+- [x] CONSTRUCTION - U4 상점: Code Generation [EXECUTE] (승인 완료, 구현 · 테스트 67개 통과, 수동 테스트 보류)
+- [x] CONSTRUCTION - U5 저장·플랫폼: Functional Design [EXECUTE] (승인 완료)
+- [x] CONSTRUCTION - U5 저장·플랫폼: Code Generation [EXECUTE] (승인 완료. 구현 · 테스트 74개 통과, 수동 테스트 보류)
+- [x] CONSTRUCTION - Build and Test [EXECUTE] (승인 완료. 자동 테스트 79/79 통과. 데스크톱만. 커버리지 80% 기준 보류 (coverage-hold.md), 성능 보류)
   - 정정: 선반 3칸, 칸 한도 12 고정, 아이템 무게 1·2·3·4·6, 선반 최대 36 (FD-A1 확정)
 - [x] INCEPTION - User Stories [EXECUTE: 사용자 요청으로 추가] (승인 완료, 스토리 26개)
 - [ ] INCEPTION - Reverse Engineering [SKIP: Greenfield]
 - [ ] CONSTRUCTION - Functional Design [EXECUTE, 복잡 unit] / NFR Requirements [SKIP] / NFR Design [SKIP] / Infrastructure Design [SKIP]
 - [ ] CONSTRUCTION - Code Generation [EXECUTE, unit 별] / Build and Test [EXECUTE]
-- [ ] OPERATIONS - Deployment Execution [EXECUTE] / Performance Validation [EXECUTE] / 나머지 [SKIP]
+- [x] OPERATIONS - Deployment Execution [EXECUTE] (계획 승인: Windows zip 직접 전달. 빌드 · 검증은 backlog/TODO.md 로 이월) / Performance Validation [EXECUTE] (로직 측정 통과, 실제 FPS 는 PC 확인 TODO) / 나머지 [SKIP]
 
 ## Execution Plan Summary
 - **Total Stages**: 20 (표 기준)

@@ -11,12 +11,18 @@ const COLORS := {"light": Color(0.6, 0.9, 0.5), "medium": Color(0.95, 0.8, 0.35)
 
 func setup(instance: ItemInstance) -> void:
 	item = instance
-	_box = ColorRect.new()
-	_box.size = SIZE
-	_box.position = -SIZE / 2
-	_box.color = COLORS.get(item.data.weight_class(), Color.WHITE)
-	_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(_box)
+	var tex := item.data.icon()
+	if tex != null:
+		var sprite := Sprite2D.new()
+		sprite.texture = tex
+		add_child(sprite)
+	else:
+		_box = ColorRect.new()
+		_box.size = SIZE
+		_box.position = -SIZE / 2
+		_box.color = COLORS.get(item.data.weight_class(), Color.WHITE)
+		_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		add_child(_box)
 	sync()
 
 

@@ -4,6 +4,7 @@ extends Node2D
 
 const ITEM_IDS := ["potion_hp", "scroll", "sword", "dagger", "axe", "helmet", "shield", "boots", "armor", "ore_box"]
 const ROOM := Rect2(220, 60, 780, 600)
+const START_SHELVES := 3
 const SHELF_POSITIONS := [Vector2(610, 140), Vector2(360, 140), Vector2(860, 140), Vector2(360, 340)]
 
 var player: PlayerController
@@ -30,10 +31,12 @@ func _ready() -> void:
 
 
 func _build_room() -> void:
-	var floor_rect := ColorRect.new()
+	var floor_rect := TextureRect.new()
+	floor_rect.texture = load("res://art/floor/floor_tile.png")
+	floor_rect.stretch_mode = TextureRect.STRETCH_TILE
+	floor_rect.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	floor_rect.position = ROOM.position
 	floor_rect.size = ROOM.size
-	floor_rect.color = Color(0.16, 0.14, 0.22)
 	floor_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(floor_rect)
 	var t := 20.0
@@ -41,12 +44,56 @@ func _build_room() -> void:
 	_wall(Rect2(ROOM.position.x - t, ROOM.end.y, ROOM.size.x + t * 2, t))
 	_wall(Rect2(ROOM.position.x - t, ROOM.position.y, t, ROOM.size.y))
 	_wall(Rect2(ROOM.end.x, ROOM.position.y, t, ROOM.size.y))
-	add_shelf()
+	# 초기 선반 3개: 한 던전의 신규 입고 (전투 3~5회 x 5~10개, 약 108 무게) 를 한 번에 담는 양 (선반 1개 = 36)
+	for i in START_SHELVES:
+		add_shelf()
 	shelf = shelves[0]
 	player = preload("res://scenes/storage/player.tscn").instantiate()
 	player.position = ROOM.get_center()
 	player.z_index = 1
 	add_child(player)
+
+
+## 저장용 선반 목록 (SaveService 가 호출)
+func _capture_shelves() -> Array:
+	var out := []
+	for s in shelves:
+		out.append({
+			"facility_id": s.state.facility_id,
+			"slot_count": s.state.slot_count,
+			"slot_items": s.state.slot_items.duplicate(true),
+			"slot_weights": s.state.slot_weights.duplicate(true),
+		})
+	return out
+
+
+## 이어하기: 저장된 선반 배치와 모든 아이템 표시를 다시 만든다. JSON 숫자는 float 이므로 int 로 바꾼다
+func restore_layout(rows: Array) -> void:
+	for v in views.values():
+		v.queue_free()
+	views.clear()
+	for s in shelves:
+		s.queue_free()
+	shelves.clear()
+	ItemManager.floor_blocked = []
+	for row: Dictionary in rows:
+		add_shelf()
+		var st: FacilityState = shelves[-1].state
+		shelves[-1].facility_id = row["facility_id"]
+		st.facility_id = row["facility_id"]
+		while st.slot_count < int(row["slot_count"]):
+			st.add_slot()
+		for i in st.slot_count:
+			st.slot_items[i] = []
+			st.slot_weights[i] = []
+			for id in row["slot_items"][i]:
+				st.slot_items[i].append(int(id))
+			for w in row["slot_weights"][i]:
+				st.slot_weights[i].append(int(w))
+	for item: ItemInstance in ItemManager.items.values():
+		if item.state != ItemInstance.State.SOLD:
+			attach_item(item)
+	refresh()
 
 
 func add_shelf() -> void:
@@ -124,7 +171,7 @@ func _build_ui() -> void:
 	_map.gui_input.connect(_on_map_input)
 	layer.add_child(_map)
 	list_panel = preload("res://scenes/ui_storage/item_list_panel.tscn").instantiate()
-	list_panel.position = Vector2(0, 60)
+	list_panel.position = Vector2(0, 40)
 	layer.add_child(list_panel)
 	list_panel.take_out_requested.connect(_on_take_out)
 	shelf_panel = preload("res://scenes/ui_storage/shelf_panel.tscn").instantiate()
@@ -146,6 +193,14 @@ func _build_ui() -> void:
 	message.position = Vector2(560, 20)
 	message.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	layer.add_child(message)
+	var dungeon := DungeonUi.new()
+	dungeon.name = "DungeonUi"
+	dungeon.room = self
+	add_child(dungeon)
+	SaveService.shelves_provider = Callable(self, "_capture_shelves")
+	var settings := SettingsPanel.new()
+	settings.name = "SettingsPanel"
+	add_child(settings)
 	var growth := GrowthUi.new()
 	growth.name = "GrowthUi"
 	growth.room = self
@@ -167,11 +222,16 @@ func drop_to_floor(id: int) -> void:
 func add_item(data: ItemData, pos: Vector2) -> ItemInstance:
 	var item: ItemInstance = ItemManager.create_item(data, 0)
 	item.world_position = ItemManager.floor_position(pos)
+	attach_item(item)
+	return item
+
+
+## 이미 만들어진 아이템에 맵 표시 (상점 구매품, 출력공간에서 나온 아이템)
+func attach_item(item: ItemInstance) -> void:
 	var view: ItemView = preload("res://scenes/storage/item.tscn").instantiate()
 	add_child(view)
 	view.setup(item)
 	views[item.instance_id] = view
-	return item
 
 
 func show_message(text: String) -> void:

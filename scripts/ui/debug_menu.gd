@@ -20,6 +20,7 @@ func _ready() -> void:
 	_add("가방 +1", func() -> void: ItemManager.upgrade_bag())
 	_add("아이템 1개 생성", func() -> void: spawn(1))
 	_add("아이템 10개 생성", func() -> void: spawn(10))
+	_add("퀘스트 발생", func() -> void: DungeonManager.debug_spawn_quest())
 	_add("바닥 아이템 모두 제거", clear_floor)
 
 

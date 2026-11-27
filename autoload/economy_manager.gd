@@ -26,6 +26,17 @@ func _ready() -> void:
 	ItemManager.item_stored.connect(func(item: ItemInstance) -> void: grant_exp(item))
 
 
+## 새 게임: 골드 · EXP · 증강을 처음으로 되돌린다
+func reset_run() -> void:
+	level = 1
+	exp_points = 0
+	pending_choices = 0
+	augments = {}
+	_ledger = GoldLedger.new()
+	_ledger.add(int(config["start_gold"]))
+	gold_changed.emit(gold())
+
+
 func gold() -> int:
 	return _ledger.amount()
 
@@ -97,6 +108,8 @@ func sell_price(data: ItemData) -> int:
 
 ## 판매 화면은 U4 에서 연결한다
 func sell(item: ItemInstance, items: Node, facility: FacilityState = null) -> bool:
+	if item.state == ItemInstance.State.DELIVERED:  # U3 BR-U3-23: 전달 공간 아이템은 판매 불가
+		return false
 	if not items.mark_sold(item, facility):
 		return false
 	add_gold(sell_price(item.data))
@@ -105,16 +118,22 @@ func sell(item: ItemInstance, items: Node, facility: FacilityState = null) -> bo
 
 ## 가격이 -1 이면 더 살 수 없음
 func bag_price(items: Node) -> int:
-	return int(config["bag_prices"][items.bag_size - 1]) if items.bag_size < CarryRules.MAX_BAG else -1
+	if items.bag_size < 1 or items.bag_size >= CarryRules.MAX_BAG:
+		return -1
+	return int(config["bag_prices"][items.bag_size - 1])
 
 
 func shelf_price(shelf_count: int) -> int:
-	return int(config["shelf_prices"][shelf_count - 1]) if shelf_count <= config["shelf_prices"].size() else -1
+	if shelf_count < 1 or shelf_count > config["shelf_prices"].size():
+		return -1
+	return int(config["shelf_prices"][shelf_count - 1])
 
 
 ## 선반마다 따로 확장한다. shelf_index 는 0 부터 (나중에 산 선반일수록 비쌈)
 func slot_price(facility: FacilityState, shelf_index: int) -> int:
 	var i := facility.slot_count - 3
+	if shelf_index < 0 or shelf_index >= config["slot_prices"].size() or i < 0:
+		return -1
 	var prices: Array = config["slot_prices"][shelf_index]
 	return int(prices[i]) if i < prices.size() else -1
 

@@ -62,7 +62,7 @@ flowchart LR
 
 ```mermaid
 flowchart LR
-    U[용사 판매 요청] --> D[DungeonManager.request_sell_item]
+    U[상점 판매 퀘스트 발생] --> D[ShopFlow.start_sell_quest]
     D --> P[플레이어가 아이템을 OutputSpace 로 이동]
     P --> I[ItemManager.move_to_output]
     I --> C[confirm_sale]

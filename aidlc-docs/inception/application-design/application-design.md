@@ -47,8 +47,8 @@
 | FR-27 1280x720 고정 | Main, HUD | - |
 | FR-28 한국어 UI | 모든 UI 노드 (번역 리소스) | - |
 | FR-29 튜토리얼 아이템 10개 | DungeonTable (튜토리얼 항목) | DungeonFlowService |
-| FR-30 판매 요청 → 출력공간 | OutputSpace, ItemManager, DungeonManager | ShopService |
-| FR-31 구매품 입력공간 무작위 입고 | InputSpace, ItemManager (PlacementRules) | ShopService |
+| FR-30 판매 퀘스트 → 출력공간 | OutputSpace, ItemManager, ShopFlow | ShopService |
+| FR-31 구매품 맵 무작위 입고 | ItemManager (FloorRules) | ShopService |
 
 ## 3. 비기능 요구사항 대응
 

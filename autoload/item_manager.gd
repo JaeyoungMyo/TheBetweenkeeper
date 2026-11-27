@@ -25,6 +25,16 @@ func create_item(data: ItemData, stage_id: int) -> ItemInstance:
 	return item
 
 
+## 새 게임: 아이템과 가방 상태를 처음으로 되돌린다
+func reset_run() -> void:
+	items.clear()
+	carried_ids.clear()
+	bag_size = 1
+	carry_multiplier = 1
+	_next_id = 1
+	floor_blocked = []
+
+
 func capacity() -> int:
 	return CarryRules.capacity(bag_size, carry_multiplier)
 
