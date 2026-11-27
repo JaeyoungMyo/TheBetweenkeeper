@@ -14,17 +14,17 @@ func _find_button(node: Node, text: String):
 	return null
 
 
-func test_shop_menu_buys_bag() -> void:
+func test_buy_menu_buys_bag() -> void:
 	SaveService.delete_save()
 	var room = load("res://scenes/storage/tutorial_storage.tscn").instantiate()
 	room.auto_return = false
 	tree.root.add_child(room)
 	await tree.process_frame
 	var growth = room.get_node("GrowthUi")
-	expect(growth.get_node_or_null("shop-open-button") != null or growth.find_child("shop-open-button", true, false) != null, "top-right shop button exists")
+	expect(growth.get_node_or_null("buy-open-button") != null or growth.find_child("buy-open-button", true, false) != null, "top-right village button exists")
 	growth._fill_menu()
 	var bag_button = _find_button(growth.menu, "가방 확장")
-	expect(bag_button != null, "bag purchase is in the shop menu")
+	expect(bag_button != null, "bag purchase is in the village menu")
 	var before := ItemManager.bag_size
 	EconomyManager.add_gold(1000)
 	growth._fill_menu()

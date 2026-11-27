@@ -1,8 +1,8 @@
-# 던전 상태 머신 (U3 DungeonFlow). READY → IN_BATTLE ↔ READY → DUNGEON_COMPLETE → SLEEP → SHOP_HANDOFF (BR-U3-01, 02, 20, 22)
+# 던전 상태 머신 (U3 DungeonFlow). READY → IN_BATTLE ↔ READY → DUNGEON_COMPLETE → SLEEP → VILLAGE_HANDOFF (BR-U3-01, 02, 20, 22)
 class_name DungeonFlow
 extends RefCounted
 
-enum State { READY, IN_BATTLE, DUNGEON_COMPLETE, SLEEP, SHOP_HANDOFF, GAME_OVER }
+enum State { READY, IN_BATTLE, DUNGEON_COMPLETE, SLEEP, VILLAGE_HANDOFF, GAME_OVER }
 
 var state: State = State.READY
 var dungeon_no := 0
@@ -12,7 +12,7 @@ var battle_index := 0
 var rng: RandomNumberGenerator
 var quest_battles: Array[int] = []
 var sleep_left := 0.0
-var shop_handoffs := 0
+var village_handoffs := 0
 
 
 func start(no: int, rng: RandomNumberGenerator) -> void:
@@ -24,7 +24,7 @@ func start(no: int, rng: RandomNumberGenerator) -> void:
 	if config.has("fixed_quest_battle"):
 		quest_battles = [int(config["fixed_quest_battle"])]  # 고정 퀘스트 (던전 1)
 	battle_index = 0
-	shop_handoffs = 0
+	village_handoffs = 0
 	state = State.READY
 
 
@@ -63,8 +63,8 @@ func tick_sleep(delta: float) -> bool:
 	sleep_left = maxf(0.0, sleep_left - delta)
 	if sleep_left > 0.0:
 		return false
-	state = State.SHOP_HANDOFF
-	shop_handoffs += 1
+	state = State.VILLAGE_HANDOFF
+	village_handoffs += 1
 	return true
 
 

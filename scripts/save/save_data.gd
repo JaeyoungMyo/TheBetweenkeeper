@@ -2,8 +2,21 @@
 class_name SaveData
 extends RefCounted
 
-const VERSION := 1
-const REQUIRED := ["version", "point", "dungeon_no", "failures", "gold", "level", "exp", "augments", "bag_size", "carry_multiplier", "tutorial_done", "shop_visits", "items", "shelves", "pending_choices"]
+const VERSION := 2
+const REQUIRED := ["version", "point", "dungeon_no", "failures", "gold", "level", "exp", "augments", "bag_size", "carry_multiplier", "tutorial_done", "village_visits", "items", "shelves", "pending_choices"]
+
+
+## 옛 저장 (버전 1) 을 새 형식으로 옮긴다: shop_visits → village_visits, point shop_clear → village_clear
+static func migrate(d: Dictionary) -> Dictionary:
+	if int(d.get("version", -1)) != 1:
+		return d
+	if d.has("shop_visits"):
+		d["village_visits"] = d["shop_visits"]
+		d.erase("shop_visits")
+	if d.get("point", "") == "shop_clear":
+		d["point"] = "village_clear"
+	d["version"] = VERSION
+	return d
 
 
 ## 형식 검사: 버전과 필수 키가 모두 있어야 한다 (잘못된 저장은 새 게임으로 처리)
@@ -27,7 +40,7 @@ static func _saved_state(state: ItemInstance.State) -> String:
 			return "incoming"
 
 
-static func capture(shelves: Array, point: String, tutorial_done: bool, shop_visits: int) -> Dictionary:
+static func capture(shelves: Array, point: String, tutorial_done: bool, village_visits: int) -> Dictionary:
 	var items := []
 	for item: ItemInstance in ItemManager.items.values():
 		if item.state == ItemInstance.State.SOLD:
@@ -55,7 +68,7 @@ static func capture(shelves: Array, point: String, tutorial_done: bool, shop_vis
 		"bag_size": ItemManager.bag_size,
 		"carry_multiplier": ItemManager.carry_multiplier,
 		"tutorial_done": tutorial_done,
-		"shop_visits": shop_visits,
+		"village_visits": village_visits,
 		"items": items,
 		"shelves": shelves,
 	}

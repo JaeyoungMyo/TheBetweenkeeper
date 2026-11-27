@@ -36,7 +36,7 @@ func _ready() -> void:
 	DungeonManager.start_dungeon(1)
 	_ui = find_child("DungeonUi", true, false) as DungeonUi
 	_ui.tutorial_mode = true
-	_ui.tutorial_shop_done.connect(_on_tutorial_shop_done)
+	_ui.tutorial_village_done.connect(_on_tutorial_village_done)
 	_ui.tutorial_sell_result.connect(_on_tutorial_sell)
 	_build_guide()
 	_create_tutorial_items()
@@ -153,7 +153,7 @@ func _build_steps() -> Array:
 	# 4. 증강 선택
 	s.append({"text": "[b]4. 증강 선택[/b] 와아, 레벨이 올랐어요! 나온 증강 중에서 하나를 골라 주세요~ (고르는 동안 게임이 잠시 멈춰요)", "enter": func() -> void: _level_up(), "check": func() -> bool: return not EconomyManager.augments.is_empty() and EconomyManager.pending_choices == 0})
 	# 5. 수면
-	s.append({"text": "[b]5. 수면[/b] 용사님이 잠이 들었어요. 쿨쿨~ (튜토리얼은 6초예요). 수면 중에도 [b]C[/b] 로 새 선반을 살 수 있어요.", "enter": func() -> void: _start_sleep(), "check": func() -> bool: return _ui != null and _ui._shop_active})
+	s.append({"text": "[b]5. 수면[/b] 용사님이 잠이 들었어요. 쿨쿨~ (튜토리얼은 6초예요). 수면 중에도 [b]C[/b] 로 새 선반을 살 수 있어요.", "enter": func() -> void: _start_sleep(), "check": func() -> bool: return _ui != null and _ui._village_active})
 	# 6. 마을 퀘스트
 	s.append({"text": "[b]6. 마을 퀘스트[/b] 용사가 마을에 도착했어요! 요청 품목 [b]검[/b] 과 [b]투구[/b] 를 선반에서 꺼내서 [b]전달 선반[/b] 에 [b]Z[/b] 로 넣어 주세요. 팔리면 골드와 EXP 를 받을 수 있어요~", "enter": func() -> void: _ensure_on_shelf("sword"); _ensure_on_shelf("helmet"), "check": func() -> bool: return _sell_ok})
 	# 7. 선반 구매와 확장
@@ -290,7 +290,7 @@ func _on_tutorial_sell(r: Dictionary) -> void:
 		_sell_ok = true
 
 
-func _on_tutorial_shop_done() -> void:
+func _on_tutorial_village_done() -> void:
 	pass
 
 

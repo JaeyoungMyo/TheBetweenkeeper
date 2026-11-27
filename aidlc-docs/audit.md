@@ -896,3 +896,11 @@
 - 변경: 용사 쪽 이벤트 → "마을 방문" (상태 표시, 판매 퀘스트 배너, 튜토리얼 6단계 "마을 퀘스트", 설명 페이지 "마을 방문과 무게"). 유저 쪽 C 메뉴 → "구매" (상단 버튼 "구매 (C)", HUD "[C] 구매", 메뉴 제목 "[ 구매 ]"). 설명 페이지의 "구매할 수 있다" 를 용사의 자동 구매 설명으로 고침
 - 범위: 화면에 보이는 글자, 튜토리얼, TEST.md 만 변경. 코드 식별자(ShopFlow 등)와 내부 주석은 그대로 둠
 - 검증: PBT seed=20261124 tests=117 failed=0
+
+## 클래스·파일·세이브 키를 shop → village 로 변경 (마을 방문 용어 통일)
+- 요청: 클래스 이름과 세이브 키도 바꿔 달라는 요청
+- 변경: ShopFlow→VillageFlow, ShopRules→VillageRules, scripts/shop→scripts/village, data/shop/shop.json→data/village/village.json, 테스트 파일명 정리 (test_buy_bag, test_village_*). 세이브 키 shop_visits→village_visits, point shop_clear→village_clear. 입력 액션 shop_menu→buy_menu, 상단 버튼 노드명 buy-open-button
+- 세이브 버전: 1 → 2. SaveData.migrate 가 버전 1 저장을 새 키로 옮기고, load_save 가 검사 전에 호출
+- 테스트: 버전 1 저장 이전 검증 테스트 추가 (test_legacy_v1_shop_save_migrates_to_village_keys)
+- 범위: aidlc-docs 의 U4·U5 설계 기록은 당시 이름 그대로 둠
+- 검증: PBT seed=20261124 tests=118 failed=0

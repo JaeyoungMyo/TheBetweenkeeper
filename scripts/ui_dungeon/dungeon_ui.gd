@@ -23,14 +23,14 @@ var _battle_timer := 0.0
 var _gap_timer := 0.0
 var _running := false
 var _shown_quest_text := ""
-var shop: ShopFlow = null
+var village: VillageFlow = null
 ## 튜토리얼 모드: 상점은 열리지만 다음 던전을 시작하지 않고 튜토리얼에 알린다
 var tutorial_mode := false
 signal tutorial_sell_result(r: Dictionary)
-signal tutorial_shop_done()
-var _shop_active := false
-var _shop_close_timer := 0.0
-var _shop_pending := 0.0
+signal tutorial_village_done()
+var _village_active := false
+var _village_close_timer := 0.0
+var _village_pending := 0.0
 var _visit_label: Label
 var _shelf_hint: Label
 
@@ -44,7 +44,7 @@ func _ready() -> void:
 	DungeonManager.intake_ready.connect(_on_intake)
 	DungeonManager.quest_result.connect(_on_quest_result)
 	DungeonManager.game_over_reached.connect(_on_game_over)
-	DungeonManager.shop_visit_ready.connect(_on_shop_visit)
+	DungeonManager.village_visit_ready.connect(_on_village_visit)
 	DungeonManager.delivery_changed.connect(_on_delivery_changed)
 	DungeonManager.quest_started.connect(func() -> void: _announce("긴급 요청 발생!", Color(1, 0.85, 0.3)))
 	room.drop_override = Callable(self, "drop_to_shelf")
@@ -65,15 +65,15 @@ func _begin_battle() -> void:
 func _process(delta: float) -> void:
 	# 화면 표시 (긴급 요청 패널, 수면, 전달 선반) 은 튜토리얼에서도 항상 갱신한다
 	_refresh_hud()
-	if _shop_pending > 0.0:
-		_shop_pending -= delta
-		if _shop_pending <= 0.0:
-			_shop_pending = 0.0
+	if _village_pending > 0.0:
+		_village_pending -= delta
+		if _village_pending <= 0.0:
+			_village_pending = 0.0
 			_visit_label.visible = false
-			_open_shop()
+			_open_village()
 		return
-	if _shop_active:
-		_process_shop(delta)
+	if _village_active:
+		_process_village(delta)
 		return
 	if not _running:
 		return
@@ -137,8 +137,8 @@ func _deliver_item(id: int) -> void:
 
 
 func _refresh_quest() -> void:
-	if _shop_active:
-		_show_quest(shop.quests, "판매 퀘스트")
+	if _village_active:
+		_show_quest(village.quests, "판매 퀘스트")
 		return
 	_show_quest(DungeonManager.quests, "긴급 요청")
 
@@ -202,35 +202,35 @@ func _on_game_over(failures: int) -> void:
 
 
 ## 수면이 끝나면 먼저 "상점 방문 중" 을 보여 주고, 잠시 뒤 상점 판매 퀘스트를 연다
-func _on_shop_visit() -> void:
+func _on_village_visit() -> void:
 	_running = false
-	_shop_pending = 2.5
+	_village_pending = 2.5
 	_visit_label.text = "마을 방문 중..."
 	_visit_label.visible = true
 
 
-func _open_shop() -> void:
-	if shop == null:
-		shop = ShopFlow.new(DungeonManager.delivery, Callable(self, "_place_floor"))
-		shop.sell_finished.connect(_on_sell_finished)
-		shop.buy_finished.connect(_on_buy_finished)
-	_shop_active = true
-	_shop_close_timer = 0.0
+func _open_village() -> void:
+	if village == null:
+		village = VillageFlow.new(DungeonManager.delivery, Callable(self, "_place_floor"))
+		village.sell_finished.connect(_on_sell_finished)
+		village.buy_finished.connect(_on_buy_finished)
+	_village_active = true
+	_village_close_timer = 0.0
 	var override: Dictionary = room.sell_override() if room.has_method("sell_override") else {}
-	shop.open(override)
-	if shop.quests.is_active():
+	village.open(override)
+	if village.quests.is_active():
 		_announce("판매 퀘스트 발생!", Color(0.5, 1, 0.6))
 	room.show_message("마을 방문: 판매 퀘스트 시작")
 
 
-func _process_shop(delta: float) -> void:
-	shop.tick(delta)
+func _process_village(delta: float) -> void:
+	village.tick(delta)
 	_zone_label.text = "전달 선반\n" + _summary()
 	_refresh_quest()
-	if shop.state == ShopFlow.State.DONE:
-		_shop_close_timer -= delta
-		if _shop_close_timer <= 0.0:
-			_finish_shop()
+	if village.state == VillageFlow.State.DONE:
+		_village_close_timer -= delta
+		if _village_close_timer <= 0.0:
+			_finish_village()
 
 
 func _on_sell_finished(r: Dictionary) -> void:
@@ -246,18 +246,18 @@ func _on_sell_finished(r: Dictionary) -> void:
 
 func _on_buy_finished(lines: Array) -> void:
 	if not tutorial_mode:
-		SaveService.shop_visits += 1
-		SaveService.save_point("shop_clear")
+		SaveService.village_visits += 1
+		SaveService.save_point("village_clear")
 	var parts := PackedStringArray()
 	for l: Dictionary in lines:
 		parts.append("%s %s" % [_name(l["item_id"]), "구매" if l["bought"] else "골드 부족"])
 	room.show_message("구매: " + ", ".join(parts))
-	_shop_close_timer = 3.0
+	_village_close_timer = 3.0
 
 
 ## 이어하기: 던전 완료 저장 시점 → 상점부터
-func resume_at_shop() -> void:
-	_on_shop_visit()
+func resume_at_village() -> void:
+	_on_village_visit()
 
 
 ## 이어하기: 상점 완료 저장 시점 → 다음 던전 시작
@@ -268,12 +268,12 @@ func resume_next_dungeon() -> void:
 
 
 ## 상점 종료 후 다음 던전을 시작한다
-func _finish_shop() -> void:
-	shop.close()
-	_shop_active = false
+func _finish_village() -> void:
+	village.close()
+	_village_active = false
 	if tutorial_mode:
 		_running = false
-		tutorial_shop_done.emit()
+		tutorial_village_done.emit()
 		return
 	DungeonManager.start_dungeon(DungeonManager.flow.dungeon_no + 1)
 	_running = true
@@ -282,8 +282,8 @@ func _finish_shop() -> void:
 
 
 func _on_delivery_changed() -> void:
-	if _shop_active and shop.state == ShopFlow.State.SELL:
-		shop.on_output_changed()
+	if _village_active and village.state == VillageFlow.State.SELL:
+		village.on_output_changed()
 
 
 ## 상점 구매품 등을 맵 무작위 위치에 놓는다 (입력공간 없음, FD-U4-8 X)
@@ -399,5 +399,5 @@ func _new_game() -> void:
 	ItemManager.reset_run()
 	EconomyManager.reset_run()
 	SaveService.tutorial_done = false
-	SaveService.shop_visits = 0
+	SaveService.village_visits = 0
 	get_tree().reload_current_scene()

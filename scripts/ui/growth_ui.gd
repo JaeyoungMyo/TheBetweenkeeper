@@ -27,15 +27,15 @@ func _ready() -> void:
 	choice_panel.hide()
 	add_child(choice_panel)
 	# 오른쪽 위 상점 버튼 (C 키와 같은 동작). 일시정지 버튼 왼쪽에 둔다
-	var shop_button := Button.new()
-	shop_button.name = "shop-open-button"
-	shop_button.text = "구매 (C)"
-	shop_button.position = Vector2(1000, 8)
-	shop_button.focus_mode = Control.FOCUS_NONE
-	shop_button.pressed.connect(func() -> void:
+	var buy_button := Button.new()
+	buy_button.name = "buy-open-button"
+	buy_button.text = "구매 (C)"
+	buy_button.position = Vector2(1000, 8)
+	buy_button.focus_mode = Control.FOCUS_NONE
+	buy_button.pressed.connect(func() -> void:
 		if not get_tree().paused:
 			toggle_menu())
-	add_child(shop_button)
+	add_child(buy_button)
 	EconomyManager.gold_changed.connect(_on_gold_changed)
 	EconomyManager.exp_changed.connect(_on_exp_changed)
 	EconomyManager.level_up.connect(_on_level_up)
@@ -43,7 +43,7 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
-	if not get_tree().paused and Input.is_action_just_pressed("shop_menu"):
+	if not get_tree().paused and Input.is_action_just_pressed("buy_menu"):
 		toggle_menu()
 
 

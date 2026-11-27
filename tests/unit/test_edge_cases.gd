@@ -49,7 +49,7 @@ func test_pending_choices_survive_save_restore() -> void:
 func test_empty_inventory_roundtrip() -> void:
 	ItemManager.reset_run()
 	EconomyManager.reset_run()
-	var d := SaveCodec.decode(SaveCodec.encode(SaveData.capture([], "shop_clear", true, 1)))
+	var d := SaveCodec.decode(SaveCodec.encode(SaveData.capture([], "village_clear", true, 1)))
 	expect(SaveData.is_valid(d), "valid save")
 	SaveData.restore(d)
 	expect(ItemManager.items.is_empty() and ItemManager._next_id == 1, "no items, ids start at 1")
@@ -125,3 +125,17 @@ func test_tutorial_choices_disabled_gives_no_augment() -> void:
 	EconomyManager.add_exp(60)
 	expect(EconomyManager.level == 2 and EconomyManager.pending_choices == 0, "level up without augment choice")
 	EconomyManager.reset_run()
+
+
+func test_legacy_v1_shop_save_migrates_to_village_keys() -> void:
+	# 버전 1 저장 (shop_visits, shop_clear) 은 새 형식 (village_visits, village_clear) 으로 옮겨져 이어할 수 있다
+	var d := SaveData.capture([], "village_clear", true, 2)
+	d["version"] = 1
+	d["shop_visits"] = d["village_visits"]
+	d.erase("village_visits")
+	d["point"] = "shop_clear"
+	var m := SaveData.migrate(d)
+	expect(SaveData.is_valid(m), "migrated legacy save is valid")
+	expect(m["point"] == "village_clear", "point renamed to village_clear")
+	expect(int(m["village_visits"]) == 2 and not m.has("shop_visits"), "visit count moved to village_visits")
+	expect(SaveData.migrate(SaveData.capture([], "dungeon_clear", true, 0)).get("point") == "dungeon_clear", "current saves pass through unchanged")

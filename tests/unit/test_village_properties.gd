@@ -11,7 +11,7 @@ func _rng(i: int) -> RandomNumberGenerator:
 func test_purchase_count_always_matches_config() -> void:
 	var pool := [{"item_id": "a", "weight": 5, "price": 1}, {"item_id": "b", "weight": 3, "price": 1}, {"item_id": "c", "weight": 2, "price": 1}]
 	for i in Pbt.RUNS:
-		var picks := ShopRules.roll_purchases(pool, 4, _rng(i))
+		var picks := VillageRules.roll_purchases(pool, 4, _rng(i))
 		expect(picks.size() == 4, "4 purchases per visit")
 
 

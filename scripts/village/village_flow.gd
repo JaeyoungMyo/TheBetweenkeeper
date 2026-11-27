@@ -1,5 +1,5 @@
 # 상점 흐름 (U4): 판매 퀘스트 (출력공간 = 전달 선반) → 구매 추첨 → 닫힘 (BR-U4-01, 02, 05, 06, 10~12)
-class_name ShopFlow
+class_name VillageFlow
 extends RefCounted
 
 signal sell_finished(result: Dictionary)
@@ -19,7 +19,7 @@ var _place: Callable
 func _init(space: DeliverySpace, place: Callable) -> void:
 	output = space
 	_place = place
-	config = ShopRules.load_config()
+	config = VillageRules.load_config()
 	quests = QuestController.new(space)
 	quests.value_of = Callable(EconomyManager, "sell_price")
 	rng.randomize()
@@ -28,7 +28,7 @@ func _init(space: DeliverySpace, place: Callable) -> void:
 ## override: 튜토리얼 등에서 판매 퀘스트 값을 바꿀 때 (예: fixed_lines, quantity, time_limit)
 func open(override: Dictionary = {}) -> void:
 	state = State.SELL
-	var kinds := ShopRules.sellable_kinds(ItemManager.items.values(), config["sell_excluded_categories"])
+	var kinds := VillageRules.sellable_kinds(ItemManager.items.values(), config["sell_excluded_categories"])
 	var spec := {
 		"quantity": int(config["sell_quantity"]),
 		"line_max": int(config["sell_line_max"]),
@@ -81,7 +81,7 @@ func _end_sell(r: Dictionary) -> void:
 func _run_buy() -> void:
 	state = State.BUY
 	var lines: Array = []
-	for p: Dictionary in ShopRules.roll_purchases(config["purchase_pool"], int(config["buy_count"]), rng):
+	for p: Dictionary in VillageRules.roll_purchases(config["purchase_pool"], int(config["buy_count"]), rng):
 		var ok := EconomyManager.spend_gold(int(p["price"]))  # BR-U4-11: 부족하면 이 품목만 건너뜀
 		if ok:
 			var data: ItemData = load("res://data/items/%s.tres" % p["item_id"])

@@ -1,8 +1,8 @@
 # 상점 규칙 (U4): 판매 가능 품목, 구매 추첨 (BR-U4-03, 07, 10)
-class_name ShopRules
+class_name VillageRules
 extends RefCounted
 
-const PATH := "res://data/shop/shop.json"
+const PATH := "res://data/village/village.json"
 
 
 static func load_config() -> Dictionary:

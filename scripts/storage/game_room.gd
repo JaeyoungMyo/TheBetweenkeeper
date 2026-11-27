@@ -20,6 +20,6 @@ func _continue_game(ui: DungeonUi) -> void:
 		return
 	restore_layout(d["shelves"])
 	if d["point"] == "dungeon_clear":
-		ui.resume_at_shop()
+		ui.resume_at_village()
 	else:
 		ui.resume_next_dungeon()

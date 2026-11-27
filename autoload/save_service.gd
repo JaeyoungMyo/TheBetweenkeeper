@@ -4,15 +4,15 @@ extends Node
 const PATH := "user://save.dat"
 
 var tutorial_done := false
-var shop_visits := 0
+var village_visits := 0
 ## 선반 배치를 돌려주는 콜백 (StorageRoom 이 등록). 반환: [{facility_id, position, slot_count, slot_items}]
 var shelves_provider: Callable
 
 
-## point: "dungeon_clear" 또는 "shop_clear". 실패해도 게임은 계속 (메시지만)
+## point: "dungeon_clear" 또는 "village_clear". 실패해도 게임은 계속 (메시지만)
 func save_point(point: String) -> bool:
 	var shelves: Array = shelves_provider.call() if shelves_provider.is_valid() else []
-	var data := SaveData.capture(shelves, point, tutorial_done, shop_visits)
+	var data := SaveData.capture(shelves, point, tutorial_done, village_visits)
 	return _write(SaveCodec.encode(data))
 
 
@@ -25,12 +25,12 @@ func load_save() -> Dictionary:
 	var text := _read()
 	if text == "":
 		return {}
-	var d := SaveCodec.decode(text)
+	var d := SaveData.migrate(SaveCodec.decode(text))
 	if d.is_empty() or not SaveData.is_valid(d):
 		return {}
 	SaveData.restore(d)
 	tutorial_done = bool(d["tutorial_done"])
-	shop_visits = int(d["shop_visits"])
+	village_visits = int(d["village_visits"])
 	return d
 
 

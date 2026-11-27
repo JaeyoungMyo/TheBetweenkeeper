@@ -32,7 +32,7 @@ func test_save_then_restore_gold_failures_and_items() -> void:
 
 
 func test_tampered_file_is_rejected_and_treated_as_new_game() -> void:
-	SaveService.save_point("shop_clear")
+	SaveService.save_point("village_clear")
 	var f := FileAccess.open_encrypted_with_pass(SaveService.PATH, FileAccess.WRITE, SaveCodec.KEY)
 	f.store_string(SaveCodec.encode({"version": 1, "point": "x"}).replace("x", "y"))
 	f.close()

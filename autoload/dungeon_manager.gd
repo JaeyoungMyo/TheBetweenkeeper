@@ -4,7 +4,7 @@ extends Node
 signal intake_ready(count: int, kinds: Array)
 signal quest_result(result: Dictionary)
 signal game_over_reached(failures: int)
-signal shop_visit_ready()
+signal village_visit_ready()
 signal delivery_changed()
 signal quest_started()
 
@@ -76,7 +76,7 @@ func _process(delta: float) -> void:
 	if flow.is_ticking_quests() and quests.is_active():
 		_handle(quests.tick(delta))
 	if flow.tick_sleep(delta):
-		shop_visit_ready.emit()
+		village_visit_ready.emit()
 
 
 ## spawn 결과 중 끝난 퀘스트 결과만 꺼낸다

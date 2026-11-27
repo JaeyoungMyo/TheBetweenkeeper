@@ -15,7 +15,7 @@ func _frames(n: int) -> void:
 		await tree.process_frame
 
 
-func test_continue_after_dungeon_clear_opens_shop() -> void:
+func test_continue_after_dungeon_clear_opens_village() -> void:
 	SaveService.delete_save()
 	DungeonManager.start_dungeon(1)
 	SaveService.save_point("dungeon_clear")
@@ -24,21 +24,21 @@ func test_continue_after_dungeon_clear_opens_shop() -> void:
 	await _frames(2)
 	var ui = room.find_child("DungeonUi", true, false)
 	ui._process(3.0)  # 마을 방문 중 표시 (2.5초) 가 지난 뒤 상점이 열린다
-	expect(ui._shop_active, "dungeon_clear save resumes at the shop")
+	expect(ui._village_active, "dungeon_clear save resumes at the village")
 	room.free()
 	GameSession.continue_requested = false
 	SaveService.delete_save()
 
 
-func test_continue_after_shop_clear_starts_next_dungeon() -> void:
+func test_continue_after_village_clear_starts_next_dungeon() -> void:
 	SaveService.delete_save()
 	DungeonManager.start_dungeon(2)
-	SaveService.save_point("shop_clear")
+	SaveService.save_point("village_clear")
 	GameSession.continue_requested = true
 	var room = _game()
 	await _frames(2)
 	var ui = room.find_child("DungeonUi", true, false)
-	expect(not ui._shop_active and DungeonManager.flow.dungeon_no == 3, "shop_clear save starts dungeon 3")
+	expect(not ui._village_active and DungeonManager.flow.dungeon_no == 3, "village_clear save starts dungeon 3")
 	expect(DungeonManager.flow.state == DungeonFlow.State.IN_BATTLE, "battle started")
 	room.free()
 	GameSession.continue_requested = false
@@ -54,7 +54,7 @@ func test_corrupt_save_falls_back_to_new_game() -> void:
 	var room = _game()
 	await _frames(2)
 	var ui = room.find_child("DungeonUi", true, false)
-	expect(DungeonManager.flow.state == DungeonFlow.State.IN_BATTLE and not ui._shop_active, "corrupt save starts a new game")
+	expect(DungeonManager.flow.state == DungeonFlow.State.IN_BATTLE and not ui._village_active, "corrupt save starts a new game")
 	room.free()
 	GameSession.continue_requested = false
 	SaveService.delete_save()

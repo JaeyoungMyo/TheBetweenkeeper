@@ -48,5 +48,5 @@ func test_dungeon_one_full_flow_without_scene() -> void:
 	flow.begin_sleep()
 	expect(not flow.tick_sleep(59.0), "still sleeping at 59s")
 	expect(flow.tick_sleep(1.0), "sleep over at 60s")
-	expect(flow.state == DungeonFlow.State.SHOP_HANDOFF and flow.shop_handoffs == 1, "shop handoff exactly once")
+	expect(flow.state == DungeonFlow.State.VILLAGE_HANDOFF and flow.village_handoffs == 1, "village handoff exactly once")
 	expect(not failures.is_game_over(), "no failures")

@@ -1,4 +1,4 @@
-# U4 BR-U4-03, 07, 10, 15 (ShopRules, DeliverySpace.take/remove_all, 판매 퀘스트 값 훅)
+# U4 BR-U4-03, 07, 10, 15 (VillageRules, DeliverySpace.take/remove_all, 판매 퀘스트 값 훅)
 extends TestBase
 
 
@@ -20,7 +20,7 @@ func test_sellable_excludes_potions_and_delivered() -> void:
 		_item("ore_box", "재료", ItemInstance.State.CARRIED, 4),
 		_item("scroll", "주문서", ItemInstance.State.DELIVERED, 5),
 	]
-	var kinds := ShopRules.sellable_kinds(items, ["물약"])
+	var kinds := VillageRules.sellable_kinds(items, ["물약"])
 	expect(kinds.has("sword") and kinds.has("armor") and kinds.has("ore_box"), "weapons, armor, materials sellable")
 	expect(not kinds.has("potion_hp"), "potions excluded")
 	expect(not kinds.has("scroll"), "delivered items not counted")
@@ -30,7 +30,7 @@ func test_roll_purchases_count_and_pool() -> void:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = 5
 	var pool := [{"item_id": "a", "weight": 1, "price": 1}, {"item_id": "b", "weight": 3, "price": 2}]
-	var picks := ShopRules.roll_purchases(pool, 4, rng)
+	var picks := VillageRules.roll_purchases(pool, 4, rng)
 	expect(picks.size() == 4, "4 picks")
 	for p in picks:
 		expect(p["item_id"] == "a" or p["item_id"] == "b", "pick from pool")
