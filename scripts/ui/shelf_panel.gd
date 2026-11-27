@@ -30,7 +30,7 @@ func show_for(state: FacilityState, items: Dictionary, title := "", price := -2)
 	if title != "":
 		var buy := Button.new()
 		buy.name = "shelf-buy-slot-button"
-		buy.text = "%s 칸 추가 - %s" % [title, "최대" if price < 0 else "%d 골드" % price]
+		buy.text = "%s 칸 추가 (+ 키) - %s" % [title, "최대" if price < 0 else "%d 골드" % price]
 		buy.disabled = price < 0 or price > EconomyManager.gold()
 		buy.focus_mode = Control.FOCUS_NONE
 		buy.pressed.connect(func() -> void: slot_purchase_requested.emit())

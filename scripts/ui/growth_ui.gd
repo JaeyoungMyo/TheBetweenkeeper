@@ -49,20 +49,14 @@ func toggle_menu() -> void:
 
 func _fill_menu() -> void:
 	_clear(_menu_box)
-	_buy_button("가방 확장 (현재 %d)" % ItemManager.bag_size, EconomyManager.bag_price(ItemManager), func() -> void: EconomyManager.buy_bag(ItemManager))
-	# 구역 1: 선반 구매 (새 선반을 하나 더 놓는다)
+	# C 메뉴는 선반 구매만 다룬다. 칸 추가는 선반을 열어서 (버튼 또는 + 키)
 	_section("[ 선반 구매 ]")
 	var n := room.shelves.size()
 	if n >= EconomyManager.config["shelf_prices"].size() + 1:
 		_info("새 선반: 최대 %d개입니다" % n)
 	else:
 		_buy_button("새 선반 사기 (%d번째)" % (n + 1), EconomyManager.shelf_price(n), func() -> void: room.buy_shelf())
-		_info("새 선반은 칸 3개로 시작합니다")
-	# 구역 2: 칸 확장 (선반마다 따로 칸을 늘린다)
-	_section("[ 칸 확장 ] 선반마다 따로 늘립니다")
-	for i in room.shelves.size():
-		var state: FacilityState = room.shelves[i].state
-		_buy_button("선반 %d · 칸 %d → 칸 추가" % [i + 1, state.slot_count], EconomyManager.slot_price(state, i), func() -> void: EconomyManager.buy_slot(state, i))
+		_info("새 선반은 칸 3개로 시작합니다. 칸 추가는 선반을 열고 버튼이나 + 키")
 	var close := Button.new()
 	close.name = "menu-close-button"
 	close.text = "닫기 (C)"

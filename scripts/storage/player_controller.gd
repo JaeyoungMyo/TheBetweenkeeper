@@ -93,6 +93,7 @@ static func _ensure_actions() -> void:
 		"slot_4": [KEY_4, KEY_KP_4],
 		"slot_5": [KEY_5, KEY_KP_5],
 		"slot_6": [KEY_6, KEY_KP_6],
+		"slot_add": [KEY_EQUAL, KEY_KP_ADD],
 	}
 	for action in binds:
 		if InputMap.has_action(action):

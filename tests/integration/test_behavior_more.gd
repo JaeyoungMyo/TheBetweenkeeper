@@ -196,3 +196,20 @@ func test_shelf_can_be_bought_up_to_six() -> void:
 	expect(room.shelves.size() == 6, "six shelves (got %d)" % room.shelves.size())
 	expect(not room.buy_shelf(), "seventh shelf is not sold")
 	room.free()
+
+
+func test_plus_key_adds_slot_on_open_shelf() -> void:
+	# 선반이 열려 있으면 + 키로 그 선반에 칸을 추가한다 (C 메뉴는 선반 구매만)
+	var room = _room()
+	await _frames(3)
+	var eco = room.get_node("/root/EconomyManager")
+	eco.add_gold(1000)
+	room.shelf = room.shelves[0]
+	room.player.position = room.shelves[0].position + Vector2(0, 60)
+	room.shelf_panel.show_for(room.shelf.state, room.get_node("/root/ItemManager").items, "선반 1", eco.slot_price(room.shelf.state, 0))
+	room.shelf_panel.show()
+	var before: int = room.shelves[0].state.slot_count
+	await _key(KEY_EQUAL)
+	await _frames(2)
+	expect(room.shelves[0].state.slot_count == before + 1, "+ key adds a slot to the open shelf")
+	room.free()

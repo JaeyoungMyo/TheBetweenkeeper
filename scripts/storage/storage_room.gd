@@ -257,6 +257,8 @@ func _process(_d: float) -> void:
 	_update_hover(get_global_mouse_position())
 	if shelf_panel.visible and not near_shelf():
 		shelf_panel.hide()
+	if shelf_panel.visible and Input.is_action_just_pressed("slot_add"):
+		buy_current_slot()
 	if Input.is_action_just_pressed("interact"):
 		interact()
 	if Input.is_action_just_pressed("drop_item"):

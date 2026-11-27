@@ -114,8 +114,8 @@ func _build_steps() -> Array:
 	# 6. 상점 퀘스트
 	s.append({"text": "[b]6. 상점 퀘스트[/b] 상점이 열렸습니다. 요청 품목 [b]검[/b] 을 선반에서 꺼내 [b]전달 선반[/b] 에 [b]Z[/b] 로 넣으세요. 판매되면 골드와 EXP 를 얻습니다.", "check": func() -> bool: return _sell_ok})
 	# 7. 선반 구매와 확장
-	s.append({"text": "[b]7. 선반 구매[/b] 튜토리얼 지원금 500골드를 드렸습니다. [b]C[/b] 키로 메뉴를 열고 위 구역 [b]새 선반 사기[/b] 를 누르세요.", "enter": func() -> void: EconomyManager.add_gold(500), "check": func() -> bool: return room_shelves() >= 2})
-	s.append({"text": "[b]7. 칸 확장[/b] 아래 구역 [b]칸 확장[/b] 에서 [b]선반 1 · 칸 추가[/b] 를 눌러 칸을 늘리세요. 선반마다 따로 늘립니다.", "check": func() -> bool: return shelves[0].state.slot_count > 3})
+	s.append({"text": "[b]7. 선반 구매[/b] 튜토리얼 지원금 500골드를 드렸습니다. [b]C[/b] 키로 메뉴를 열고 [b]새 선반 사기[/b] 를 누르세요. (C 메뉴는 선반 구매만 합니다)", "enter": func() -> void: EconomyManager.add_gold(500), "check": func() -> bool: return room_shelves() >= 2})
+	s.append({"text": "[b]7. 칸 확장[/b] 선반 [b]앞[/b] 에서 [b]X[/b] 로 선반을 열고, 패널 맨 위 [b]칸 추가[/b] 버튼을 누르거나 [b]+[/b] 키를 누르세요. 선반마다 따로 늘립니다.", "check": func() -> bool: return shelves[0].state.slot_count > 3})
 	s.append({"info": true, "text": "[b]튜토리얼 완료![/b] 이제 메인 메뉴에서 [b]새 게임[/b] 을 눌러 시작하세요. 시작 버튼을 누르면 메인 메뉴로 돌아갑니다."})
 	return s
 
