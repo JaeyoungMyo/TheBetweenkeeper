@@ -23,15 +23,7 @@ func refresh(items: Array, capacity: int) -> void:
 	_box.add_child(title)
 	for item in items:
 		_box.add_child(make_entry(item))
-	# 가방 확장 (운반 개수) 은 목록 아래에 둔다
-	var bag := Button.new()
-	bag.name = "bag-expand-button"
-	var price := EconomyManager.bag_price(ItemManager)
-	bag.text = "가방 확장 (현재 %d) - %s" % [ItemManager.bag_size, "최대" if price < 0 else "%d 골드" % price]
-	bag.disabled = price < 0 or price > EconomyManager.gold()
-	bag.focus_mode = Control.FOCUS_NONE
-	bag.pressed.connect(func() -> void: EconomyManager.buy_bag(ItemManager))
-	_box.add_child(bag)
+	# 가방 확장은 상점(C)에서만 살 수 있다 (목록에는 버튼을 두지 않는다)
 
 
 static func describe(items: Array) -> String:
