@@ -16,7 +16,7 @@ func test_main_menu_has_three_options_and_continue_depends_on_save() -> void:
 		if n.text == "이어하기":
 			cont = n
 	var has_tutorial := texts.any(func(t: String) -> bool: return t.begins_with("튜토리얼"))
-	expect(texts.has("새 게임") and has_tutorial and cont != null, "three options: %s" % str(texts))
+	expect(texts.has("새 게임") and has_tutorial and cont != null and texts.has("게임 종료"), "options incl. quit: %s" % str(texts))
 	expect(cont != null and cont.disabled, "continue disabled without a save")
 	SaveService.save_point("dungeon_clear")
 	menu.free()

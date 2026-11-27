@@ -28,6 +28,7 @@ func _ready() -> void:
 	box.add_child(cont)
 	var done := "  ✔ 완료" if SaveService.tutorial_done_saved() else ""
 	box.add_child(_button("튜토리얼" + done, _tutorial))
+	box.add_child(_button("게임 종료", _quit))
 
 
 func _button(text: String, action: Callable) -> Button:
@@ -55,3 +56,7 @@ func _continue() -> void:
 func _tutorial() -> void:
 	GameSession.continue_requested = false
 	get_tree().change_scene_to_file(TUTORIAL_SCENE)
+
+
+func _quit() -> void:
+	get_tree().quit()
