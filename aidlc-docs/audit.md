@@ -865,3 +865,9 @@
 - 요청: 가방 위치(아이템 목록 아래)의 가방 구매 버튼을 없애고 상점에서만 구매 가능하게
 - 변경: item_list_panel.gd 의 bag-expand-button 제거. 가방 구매는 상점(C) 메뉴에만 남김. TEST.md 체크 항목 갱신
 - 검증: PBT seed=20261124 tests=115 failed=0
+
+## 가방 확장과 증강 배수의 순서 무관성 확인
+- 요청: 가방 확장과 증강 2배/3배가 순서와 상관없이 같은 운반 개수가 되는지 확인하고 테스트 추가
+- 확인: 운반 개수는 CarryRules.capacity(bag, multiplier) = bag × multiplier 로 매번 계산되며, 두 값은 따로 저장되므로 구매 순서와 무관하다. 저장 복원도 두 값을 각각 보존한다
+- 테스트: test_bag_and_multiplier_order_independent 추가 (가방→배수 와 배수→가방 비교, 최대치 5×3=15 양쪽 순서 비교, 두 값 보존)
+- 검증: PBT seed=20261124 tests=116 failed=0
