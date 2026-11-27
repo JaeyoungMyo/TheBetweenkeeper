@@ -69,6 +69,16 @@ func _build_guide() -> void:
 	panel.position = Vector2(290, 585)
 	panel.custom_minimum_size = Vector2(700, 0)
 	_guide.add_child(panel)
+	# 안내 캐릭터: 대화창 왼쪽에서 설명해 주는 느낌 (화면 밖으로 나가지 않도록 아래쪽에 맞춘다)
+	var guide_img := TextureRect.new()
+	guide_img.name = "guide-character"
+	guide_img.texture = load("res://art/guide/guide_character.png")
+	guide_img.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	guide_img.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	guide_img.position = Vector2(60, 500)
+	guide_img.size = Vector2(220, 221)
+	guide_img.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_guide.add_child(guide_img)
 	var box := VBoxContainer.new()
 	panel.add_child(box)
 	_guide_label = RichTextLabel.new()
