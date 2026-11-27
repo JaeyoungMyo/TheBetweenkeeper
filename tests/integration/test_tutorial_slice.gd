@@ -24,7 +24,7 @@ func test_tutorial_pieces() -> void:
 	# 숫자 키는 꺼내지 않는다: 손이 비어 있으면 아무것도 꺼내지 않고 안내만 한다
 	room.store_in_slot(0)
 	expect(room.take_out_count == 0 and im.carried_ids.is_empty(), "key 1 with empty hands does not take out")
-	# 꺼내기는 ↑↓ 로 고르고 Enter (= 목록 선택 꺼내기)
+	# 꺼내기는 ←→ 로 고르고 X (= 선택 아이템 꺼내기)
 	room.open_panel()
 	room._on_take_out(room.shelf_panel.selected_id())
 	expect(room.take_out_count == 1 and im.carried_ids.size() == 1, "selected item taken out")

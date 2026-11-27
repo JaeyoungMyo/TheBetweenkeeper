@@ -134,7 +134,7 @@ func test_delivery_shelf_z_moves_one_item_not_floor() -> void:
 
 
 func test_enter_takes_selected_shelf_item() -> void:
-	# 숫자 키는 넣기만 하고, 꺼내기는 패널에서 ↑↓ 로 고른 뒤 Enter 로 한다
+	# 숫자 키는 넣기만 하고, 꺼내기는 패널에서 ←→ 로 고른 뒤 X 로 한다
 	var room = _room()
 	await _frames(3)
 	var im = room.get_node("/root/ItemManager")
@@ -154,10 +154,10 @@ func test_enter_takes_selected_shelf_item() -> void:
 	expect(im.carried_ids.is_empty(), "number key with empty hands does not take out")
 	room.open_panel()
 	await _frames(1)
-	await _key(KEY_ENTER)
+	await _key(KEY_X)
 	await _frames(2)
-	expect(im.carried_ids.has(it.instance_id), "Enter takes the selected shelf item")
-	expect(shelf.state.slot_items[0].is_empty(), "slot empty after Enter take-out")
+	expect(im.carried_ids.has(it.instance_id), "X takes the selected shelf item")
+	expect(shelf.state.slot_items[0].is_empty(), "slot empty after X take-out")
 	room.free()
 
 

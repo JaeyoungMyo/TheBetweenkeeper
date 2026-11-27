@@ -69,7 +69,7 @@ func reset_selection() -> void:
 	_highlight()
 
 
-## Enter: 선택된 아이템 id (없으면 -1)
+## X: 선택된 아이템 id (없으면 -1)
 func selected_id() -> int:
 	return _selected_id
 

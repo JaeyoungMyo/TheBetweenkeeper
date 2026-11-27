@@ -877,3 +877,9 @@
 - 변경: ShelfPanel.move_selection 은 같은 칸 안에서만 이동 (칸 끝에서 멈춤), reset_selection 추가. StorageRoom._focus_shelf 가 ↑↓ 로 앞뒤 선반을 열고 첫 칸 첫 아이템 선택. 패널 자동 닫힘은 어느 선반이든 가까이 있으면 유지 (_near_any_shelf). 액션 shelf_left/shelf_right (←→) 추가. 튜토리얼 문구와 TEST.md 갱신
 - 테스트: test_arrows_move_items_in_slot_and_switch_shelves 추가
 - 검증: PBT seed=20261124 tests=117 failed=0
+
+## 선반 꺼내기 키를 줍기 키(X)로 통일, Enter 제거
+- 요청: 꺼내기를 아이템 줍기 키와 같은 키로 하고, Enter 는 사용성이 떨어져 제외
+- 변경: 선반 패널이 열려 있고 고른 아이템이 있으면 X 가 그 아이템을 꺼냄. 아니면 기존처럼 가까운 아이템 줍기. shelf_take(Enter) 액션 제거. 문구와 TEST.md 갱신
+- 테스트: 꺼내기 테스트를 X 기준으로 변경
+- 검증: PBT seed=20261124 tests=117 failed=0

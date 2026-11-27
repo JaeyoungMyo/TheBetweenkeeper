@@ -146,7 +146,7 @@ func _build_steps() -> Array:
 	# 2. 아이템 드랍
 	s.append({"text": "[b]2. 아이템 드랍[/b] 바닥에 떨어진 아이템 쪽으로 가서 [b]X[/b] 로 주워 볼까요? 그다음 선반에서 조금 떨어진 곳에서 [b]Z[/b] 를 누르면 내려놓을 수 있어요~", "enter": func() -> void: _spawn_floor_item(), "check": func() -> bool: return _dropped_on_floor()})
 	# 3. 긴급 퀘스트 (아이템 꺼내서 전달)
-	s.append({"text": "[b]3. 긴급 퀘스트[/b] 큰일이에요! 왼쪽 아래에 [b]긴급 요청 (회복약 1개)[/b] 이 떴어요. 선반을 열고 [b]회복약[/b] 을 ←→ 로 고른 뒤 [b]Enter[/b] 로 꺼내 주세요 (이름을 클릭해도 돼요)!", "enter": func() -> void: _ensure_on_shelf("potion_hp"); _spawn_potion_quest(), "check": func() -> bool: return _carrying("potion_hp")})
+	s.append({"text": "[b]3. 긴급 퀘스트[/b] 큰일이에요! 왼쪽 아래에 [b]긴급 요청 (회복약 1개)[/b] 이 떴어요. 선반을 열고 [b]회복약[/b] 을 ←→ 로 고른 뒤 [b]X[/b] 로 꺼내 주세요 (이름을 클릭해도 돼요)!", "enter": func() -> void: _ensure_on_shelf("potion_hp"); _spawn_potion_quest(), "check": func() -> bool: return _carrying("potion_hp")})
 	s.append({"text": "[b]3. 긴급 퀘스트[/b] 회복약을 들고 [b]전달 선반[/b] (오른쪽 아래 파란 칸) 앞에서 [b]Z[/b] 를 눌러 주세요.", "check": func() -> bool: return _quest_done()})
 	# 4. 증강 선택
 	s.append({"text": "[b]4. 증강 선택[/b] 와아, 레벨이 올랐어요! 나온 증강 중에서 하나를 골라 주세요~ (고르는 동안 게임이 잠시 멈춰요)", "enter": func() -> void: _level_up(), "check": func() -> bool: return not EconomyManager.augments.is_empty() and EconomyManager.pending_choices == 0})
@@ -162,7 +162,7 @@ func _build_steps() -> Array:
 	s.append({"info": true, "text": "[b]실패와 게임오버[/b] 긴급 요청을 시간 안에 못 채우면 실패가 1 쌓여요. [b]실패 3번[/b] 이면 게임오버예요ㅠ 던전이나 상점이 끝날 때마다 자동 저장되니까, 메인 메뉴의 [b]이어하기[/b] 로 이어서 할 수 있어요."})
 	s.append({"info": true, "text": "[b]상점 구매와 무게[/b] 상점에서는 판매 후 골드로 아이템을 [b]구매[/b] 할 수 있고, 구매한 아이템은 바닥에 떨어져요. 골드가 모자라면 그 품목은 건너뛰어요. 선반 칸 하나는 무게 [b]12[/b] 까지만 들어가니까, 넘치면 다른 칸을 써 주세요!"})
 	s.append({"info": true, "text": "[b]가방, 일시정지, 설정[/b] 손에 드는 개수는 상점([b]C[/b])의 [b]가방 확장[/b] 으로 늘릴 수 있어요. [b]P[/b] 는 일시정지, [b]F2[/b] 는 설정(전체 화면)이에요~"})
-	s.append({"info": true, "text": "[b]조작 요약[/b] 이동 WASD · 줍기 X · 선반 열기 E (열면 이동이 잠겨요) · 아이템 고르기 ←→ · 선반 바꾸기 ↑↓ · 꺼내기 Enter · 넣기 1~3 · 내려놓기 Z · 칸 추가 + · 상점 C · 일시정지 P · 설정 F2. 헷갈리면 언제든 다시 봐 주세요!"})
+	s.append({"info": true, "text": "[b]조작 요약[/b] 이동 WASD · 줍기 X · 선반 열기 E (열면 이동이 잠겨요) · 아이템 고르기 ←→ · 선반 바꾸기 ↑↓ · 꺼내기 X · 넣기 1~3 · 내려놓기 Z · 칸 추가 + · 상점 C · 일시정지 P · 설정 F2. 헷갈리면 언제든 다시 봐 주세요!"})
 	s.append({"info": true, "text": "[b]튜토리얼 완료![/b] 정말 잘했어요! 이제 메인 메뉴에서 [b]새 게임[/b] 을 눌러 시작해 봐요. 시작 버튼을 누르면 메인 메뉴로 돌아가요~"})
 	return s
 
