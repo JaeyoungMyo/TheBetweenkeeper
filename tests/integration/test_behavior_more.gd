@@ -183,3 +183,16 @@ func test_six_potions_in_one_shelf_slot_are_all_listed_and_clickable() -> void:
 			listed += 1
 	expect(listed == 6, "all six potions listed in the shelf panel (got %d)" % listed)
 	room.free()
+
+
+func test_shelf_can_be_bought_up_to_six() -> void:
+	# 선반 1개에서 시작해 추가 구매로 6개까지 늘어난다 (3번째 선반 포함)
+	var room = _room()
+	await _frames(3)
+	var eco = room.get_node("/root/EconomyManager")
+	eco.add_gold(5000)
+	for k in 5:
+		expect(room.buy_shelf(), "buy shelf %d" % (room.shelves.size() + 1))
+	expect(room.shelves.size() == 6, "six shelves (got %d)" % room.shelves.size())
+	expect(not room.buy_shelf(), "seventh shelf is not sold")
+	room.free()

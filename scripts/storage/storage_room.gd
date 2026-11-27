@@ -5,7 +5,8 @@ extends Node2D
 const ITEM_IDS := ["potion_hp", "scroll", "sword", "dagger", "axe", "helmet", "shield", "boots", "armor", "ore_box"]
 const ROOM := Rect2(220, 60, 780, 600)
 const START_SHELVES := 3
-const SHELF_POSITIONS := [Vector2(610, 140), Vector2(360, 140), Vector2(860, 140), Vector2(360, 340)]
+## 선반 최대 6개 (economy.json 의 선반 가격 5단계 + 기본 1개)
+const SHELF_POSITIONS := [Vector2(610, 140), Vector2(360, 140), Vector2(860, 140), Vector2(360, 340), Vector2(610, 340), Vector2(860, 340)]
 
 var player: PlayerController
 ## 마지막으로 다가간 선반

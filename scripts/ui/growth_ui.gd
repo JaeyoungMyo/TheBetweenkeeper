@@ -67,6 +67,8 @@ func _buy_button(text: String, price: int, action: Callable) -> void:
 	b.focus_mode = Control.FOCUS_NONE
 	b.text = "%s - %s" % [text, "최대" if price < 0 else "%d 골드" % price]
 	b.disabled = price < 0 or price > EconomyManager.gold()
+	if price >= 0 and price > EconomyManager.gold():
+		b.text += " (골드 부족)"
 	b.pressed.connect(func() -> void:
 		action.call()
 		_fill_menu()
