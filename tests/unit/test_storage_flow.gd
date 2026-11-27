@@ -14,12 +14,14 @@ func test_pick_up_then_store_sets_stored() -> void:
 	expect(fs.total_weight() == 2, "shelf total should be 2")
 
 
-func test_default_capacity_is_one() -> void:
+func test_default_capacity_is_two() -> void:
 	var mgr = load("res://autoload/item_manager.gd").new()
 	var a = mgr.create_item(_data(1), 1)
 	var b = mgr.create_item(_data(1), 1)
+	var c = mgr.create_item(_data(1), 1)
 	expect(mgr.try_pick_up(a, Vector2.ZERO), "first pick must succeed")
-	expect(not mgr.try_pick_up(b, Vector2.ZERO), "second pick while holding must fail")
+	expect(mgr.try_pick_up(b, Vector2.ZERO), "second pick succeeds (capacity 2)")
+	expect(not mgr.try_pick_up(c, Vector2.ZERO), "third pick while holding must fail")
 
 
 func test_pickup_range_48() -> void:

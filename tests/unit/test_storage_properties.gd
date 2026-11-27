@@ -26,6 +26,7 @@ func _total_prop(ws: Array) -> String:
 
 func _run_model(cmds: Array) -> String:
 	var mgr = load("res://autoload/item_manager.gd").new()
+	mgr.bag_size = 1  # 모델은 한 손 (1개) 기준. 기본 가방은 2개
 	var err := _drive(mgr, cmds)
 	mgr.free()
 	return err

@@ -54,6 +54,8 @@ func test_tutorial_scene_completes() -> void:
 	room.interact()
 	expect(mgr.carried_ids.size() == 1 and not room.shelf_panel.visible, "X picks up first")
 	room.interact()
+	expect(mgr.carried_ids.size() == 2, "second X fills the two-item bag")
+	room.interact()
 	expect(room.shelf_panel.visible, "hands full: X opens shelf")
 	var gold_before: int = eco.gold()
 	room.buy_current_slot()

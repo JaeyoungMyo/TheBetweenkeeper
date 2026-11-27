@@ -11,7 +11,7 @@ const REJECT_MESSAGE := "무게 초과"
 
 var items: Dictionary = {}
 var carried_ids: Array[int] = []
-var bag_size: int = 1
+var bag_size: int = 2
 var carry_multiplier: int = 1
 var _next_id: int = 1
 var floor_bounds := Rect2()
@@ -29,7 +29,7 @@ func create_item(data: ItemData, stage_id: int) -> ItemInstance:
 func reset_run() -> void:
 	items.clear()
 	carried_ids.clear()
-	bag_size = 1
+	bag_size = 2
 	carry_multiplier = 1
 	_next_id = 1
 	floor_blocked = []

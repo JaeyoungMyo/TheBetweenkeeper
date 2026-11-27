@@ -4,8 +4,8 @@ extends TestBase
 
 func test_upgrades_reach_fifteen_and_stop() -> void:
 	var mgr = load("res://autoload/item_manager.gd").new()
-	expect(mgr.capacity() == 1, "default 1")
-	for i in 4:
+	expect(mgr.capacity() == 2, "default 2")
+	for i in 3:
 		expect(mgr.upgrade_bag(), "bag up")
 	expect(mgr.capacity() == 5 and not mgr.upgrade_bag(), "bag max 5")
 	expect(mgr.upgrade_multiplier() and mgr.capacity() == 10, "x2")

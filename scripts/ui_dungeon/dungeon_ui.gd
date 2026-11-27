@@ -7,8 +7,8 @@ const DELIVERY_SHELF := Rect2(900, 470, 90, 110)
 ## 입고 아이템이 떨어지는 영역 (선반과 전달 선반을 피한 바닥)
 const INTAKE_AREA := Rect2(260, 480, 560, 150)
 ## 전투 길이와 전투 사이 간격 (초기값, 연출 조정 대상)
-const BATTLE_SEC := 8.0
-const BATTLE_GAP_SEC := 2.0
+const BATTLE_SEC := 16.0
+const BATTLE_GAP_SEC := 4.0
 
 var room: StorageRoom
 var _quest_box: PanelContainer
