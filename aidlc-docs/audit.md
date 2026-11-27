@@ -871,3 +871,9 @@
 - 확인: 운반 개수는 CarryRules.capacity(bag, multiplier) = bag × multiplier 로 매번 계산되며, 두 값은 따로 저장되므로 구매 순서와 무관하다. 저장 복원도 두 값을 각각 보존한다
 - 테스트: test_bag_and_multiplier_order_independent 추가 (가방→배수 와 배수→가방 비교, 최대치 5×3=15 양쪽 순서 비교, 두 값 보존)
 - 검증: PBT seed=20261124 tests=116 failed=0
+
+## 선반 선택 조작: ←→ 는 같은 칸 안 아이템, ↑↓ 는 앞뒤 선반으로 포커스 이동
+- 요청: 1번 칸에서 ←→ 로 선택 아이템 변경, ↑↓ 로 다른 선반 포커스 이동
+- 변경: ShelfPanel.move_selection 은 같은 칸 안에서만 이동 (칸 끝에서 멈춤), reset_selection 추가. StorageRoom._focus_shelf 가 ↑↓ 로 앞뒤 선반을 열고 첫 칸 첫 아이템 선택. 패널 자동 닫힘은 어느 선반이든 가까이 있으면 유지 (_near_any_shelf). 액션 shelf_left/shelf_right (←→) 추가. 튜토리얼 문구와 TEST.md 갱신
+- 테스트: test_arrows_move_items_in_slot_and_switch_shelves 추가
+- 검증: PBT seed=20261124 tests=117 failed=0

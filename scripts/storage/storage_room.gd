@@ -133,6 +133,16 @@ func open_panel() -> void:
 	shelf_panel.show_for(shelf.state, ItemManager.items, "선반 %d" % (i + 1), EconomyManager.slot_price(shelf.state, i))
 
 
+## ↑↓: 패널이 열린 채로 앞/뒤 선반으로 포커스를 옮긴다 (끝에서는 멈춘다). 선반 바꾸면 첫 칸 첫 아이템을 고른다
+func _focus_shelf(step: int) -> void:
+	var i := shelves.find(shelf) + step
+	if i < 0 or i >= shelves.size():
+		return
+	shelf = shelves[i]
+	open_panel()
+	shelf_panel.reset_selection()
+
+
 func buy_current_slot() -> void:
 	EconomyManager.buy_slot(shelf.state, shelves.find(shelf))
 	_refresh()
@@ -255,7 +265,7 @@ func _process(_d: float) -> void:
 		if v.item.state == ItemInstance.State.CARRIED:
 			v.position = player.position + Vector2(0, -18 - 8 * ItemManager.carried_ids.find(v.item.instance_id))
 	_update_hover(get_global_mouse_position())
-	if shelf_panel.visible and not near_shelf():
+	if shelf_panel.visible and not _near_any_shelf():
 		shelf_panel.hide()
 	if shelf_panel.visible and Input.is_action_just_pressed("slot_add"):
 		buy_current_slot()
@@ -263,13 +273,18 @@ func _process(_d: float) -> void:
 		interact()
 	if Input.is_action_just_pressed("open_shelf"):
 		toggle_shelf()
-	# 선반 패널이 열려 있으면 이동을 잠그고, ↑↓ 로 고르고 Enter 로 꺼낸다
+	# 선반 패널이 열려 있으면 이동을 잠그고, ←→ 로 고르고 Enter 로 꺼낸다
 	player.locked = shelf_panel.visible
 	if shelf_panel.visible:
-		if Input.is_action_just_pressed("shelf_up"):
+		# ←→: 같은 칸 안에서 아이템 고르기 / ↑↓: 다른 선반으로 포커스 이동
+		if Input.is_action_just_pressed("shelf_left"):
 			shelf_panel.move_selection(-1)
-		if Input.is_action_just_pressed("shelf_down"):
+		if Input.is_action_just_pressed("shelf_right"):
 			shelf_panel.move_selection(1)
+		if Input.is_action_just_pressed("shelf_up"):
+			_focus_shelf(-1)
+		if Input.is_action_just_pressed("shelf_down"):
+			_focus_shelf(1)
 		if Input.is_action_just_pressed("shelf_take") and shelf_panel.selected_id() >= 0:
 			_on_take_out(shelf_panel.selected_id())
 	if Input.is_action_just_pressed("drop_item"):
@@ -292,12 +307,12 @@ func drop_first() -> void:
 
 
 ## 숫자 키 1~6: 패널이 열려 있으면 목록 맨 위 아이템을 해당 칸에 적재
-## 숫자 키 1~6 (선반 열림 상태): 들고 있는 맨 위 아이템을 그 칸에 넣는다 (꺼내기는 ↑↓ + Enter 또는 클릭)
+## 숫자 키 1~6 (선반 열림 상태): 들고 있는 맨 위 아이템을 그 칸에 넣는다 (꺼내기는 ←→ + Enter 또는 클릭)
 func store_in_slot(slot: int) -> void:
 	if not shelf_panel.visible or slot >= shelf.state.slot_count:
 		return
 	if ItemManager.carried_ids.is_empty():
-		show_message("들고 있는 아이템이 없습니다. ↑↓ 로 고르고 Enter 로 꺼내세요")
+		show_message("들고 있는 아이템이 없습니다. ←→ 로 고르고 Enter 로 꺼내세요")
 		return
 	ItemManager.place_carried(ItemManager.carried_ids[0], shelf.state, slot)
 
@@ -308,6 +323,14 @@ func on_take_out_done() -> void:
 
 
 ## 앞에 있는 선반을 현재 선반으로 고른다 (패널이 열려 있으면 유지)
+## 어느 선반이든 가까이 있는지 (↑↓ 로 먼 선반을 보고 있어도 패널을 유지한다)
+func _near_any_shelf() -> bool:
+	for s in shelves:
+		if StorageService.near_rect(player.global_position, s.bounds()):
+			return true
+	return false
+
+
 func near_shelf() -> bool:
 	if not shelf_panel.visible:
 		for s in shelves:

@@ -177,3 +177,42 @@ func test_only_e_closes_shelf() -> void:
 	await _frames(1)
 	expect(not room.shelf_panel.visible, "E closes the shelf")
 	room.free()
+
+
+func test_arrows_move_items_in_slot_and_switch_shelves() -> void:
+	# ←→ 는 같은 칸 안에서 아이템을 고르고, ↑↓ 는 앞뒤 선반으로 포커스를 옮긴다
+	var room = _room()
+	await _frames(3)
+	room.add_shelf()
+	var im = room.get_node("/root/ItemManager")
+	var shelf0 = room.shelves[0]
+	var a = room.tutorial_items[0]
+	var b = room.tutorial_items[1]
+	im.try_pick_up(a, a.world_position)
+	im.place_carried(a.instance_id, shelf0.state, 0)
+	im.try_pick_up(b, b.world_position)
+	im.place_carried(b.instance_id, shelf0.state, 0)
+	room.player.position = shelf0.position + Vector2(0, 60)
+	room.shelf = shelf0
+	room.open_panel()
+	await _frames(1)
+	var first: int = room.shelf_panel.selected_id()
+	expect(first == a.instance_id or first == b.instance_id, "first item of slot 1 is selected")
+	await _key(KEY_RIGHT)
+	await _frames(1)
+	expect(room.shelf_panel.selected_id() != first, "RIGHT moves to the next item in the slot")
+	await _key(KEY_RIGHT)
+	await _frames(1)
+	expect(room.shelf_panel.selected_id() != first, "RIGHT stops at the end of the slot")
+	await _key(KEY_LEFT)
+	await _frames(1)
+	expect(room.shelf_panel.selected_id() == first, "LEFT moves back")
+	await _key(KEY_DOWN)
+	await _frames(1)
+	expect(room.shelf == room.shelves[1], "DOWN focuses the next shelf")
+	expect(room.shelf_panel.visible, "panel stays open when switching shelves")
+	await _key(KEY_UP)
+	await _frames(1)
+	expect(room.shelf == shelf0, "UP focuses the previous shelf")
+	room.free()
+

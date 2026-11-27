@@ -13,6 +13,8 @@ var _box := VBoxContainer.new()
 var _order: Array[int] = []
 var _buttons := {}
 var _selected_id := -1
+## 아이템 id → 칸 번호 (←→ 는 같은 칸 안에서만 움직인다)
+var _slot_of := {}
 
 
 func _ready() -> void:
@@ -41,6 +43,7 @@ func show_for(state: FacilityState, items: Dictionary, title := "", price := -2)
 		_box.add_child(buy)
 	_order.clear()
 	_buttons.clear()
+	_slot_of.clear()
 	for i in state.slot_count:
 		_box.add_child(_make_slot(state, items, i))
 	if not _order.has(_selected_id):
@@ -49,12 +52,20 @@ func show_for(state: FacilityState, items: Dictionary, title := "", price := -2)
 	show()
 
 
-## ↑/↓ (delta -1/+1): 선택 항목 이동. 목록 끝에서는 멈춘다
+## ←/→ (delta -1/+1): 같은 칸 안에서 선택 항목 이동. 칸의 끝에서는 멈춘다
 func move_selection(delta: int) -> void:
-	if _order.is_empty():
+	if _order.is_empty() or _selected_id < 0:
 		return
-	var idx := _order.find(_selected_id)
-	_selected_id = _order[clampi(idx + delta, 0, _order.size() - 1)]
+	var slot: int = _slot_of[_selected_id]
+	var in_slot: Array = _order.filter(func(id: int) -> bool: return _slot_of[id] == slot)
+	var idx := in_slot.find(_selected_id)
+	_selected_id = in_slot[clampi(idx + delta, 0, in_slot.size() - 1)]
+	_highlight()
+
+
+## 선반을 바꾼 뒤: 첫 칸의 첫 아이템을 고른다 (없으면 -1)
+func reset_selection() -> void:
+	_selected_id = _order[0] if not _order.is_empty() else -1
 	_highlight()
 
 
@@ -109,6 +120,7 @@ func _make_slot(state: FacilityState, items: Dictionary, i: int) -> Control:
 		grid.add_child(entry)
 		_order.append(id)
 		_buttons[id] = entry
+		_slot_of[id] = i
 	return slot
 
 

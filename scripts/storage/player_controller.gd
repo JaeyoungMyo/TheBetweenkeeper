@@ -94,6 +94,8 @@ static func _ensure_actions() -> void:
 		"open_shelf": [KEY_E],
 		"shelf_up": [KEY_UP],
 		"shelf_down": [KEY_DOWN],
+		"shelf_left": [KEY_LEFT],
+		"shelf_right": [KEY_RIGHT],
 		"shelf_take": [KEY_ENTER, KEY_KP_ENTER],
 		"drop_item": [KEY_Z],
 		"shop_menu": [KEY_C],
