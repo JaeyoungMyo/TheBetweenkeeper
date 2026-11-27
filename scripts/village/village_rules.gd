@@ -19,6 +19,41 @@ static func sellable_kinds(items: Array, excluded: Array) -> Array:
 	return kinds
 
 
+## 창고에 있는 판매 가능 아이템의 종류별 개수 (kind → 개수)
+static func sellable_stock(items: Array, excluded: Array) -> Dictionary:
+	var stock := {}
+	for item: ItemInstance in items:
+		var holding: bool = item.state == ItemInstance.State.STORED or item.state == ItemInstance.State.INCOMING or item.state == ItemInstance.State.CARRIED
+		if holding and not excluded.has(item.data.category):
+			stock[item.data.item_id] = int(stock.get(item.data.item_id, 0)) + 1
+	return stock
+
+
+## 판매 퀘스트 줄: 실제 가진 개수를 넘지 않게 나눈다. 총량 = min(quantity, 고른 종류의 재고 합)
+static func sell_lines(stock: Dictionary, quantity: int, line_max: int, rng: RandomNumberGenerator) -> Array:
+	var pool: Array = stock.keys()
+	var picked: Array = []
+	while picked.size() < line_max and not pool.is_empty():
+		var idx := rng.randi_range(0, pool.size() - 1)
+		picked.append(pool[idx])
+		pool.remove_at(idx)
+	var req := {}
+	var left := quantity
+	var progress := true
+	while left > 0 and progress:
+		progress = false
+		for k in picked:
+			if left > 0 and int(req.get(k, 0)) < int(stock[k]):
+				req[k] = int(req.get(k, 0)) + 1
+				left -= 1
+				progress = true
+	var out: Array = []
+	for k in picked:
+		if int(req.get(k, 0)) > 0:
+			out.append({"item_kind": k, "required": int(req[k])})
+	return out
+
+
 ## 가중치 추첨. 같은 품목이 여러 번 나올 수 있다
 static func roll_purchases(pool: Array, count: int, rng: RandomNumberGenerator) -> Array:
 	var total := 0

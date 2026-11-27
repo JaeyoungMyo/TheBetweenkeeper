@@ -51,3 +51,34 @@ func test_remove_all_empties_output() -> void:
 	space.put(_item("armor", "방어구", ItemInstance.State.INCOMING, 2))
 	var all := space.remove_all()
 	expect(all.size() == 2 and space.size() == 0, "all removed from output")
+
+
+func test_sell_lines_never_exceed_stock() -> void:
+	var items := [
+		_item("sword", "무기", ItemInstance.State.STORED, 1),
+		_item("sword", "무기", ItemInstance.State.INCOMING, 2),
+		_item("armor", "방어구", ItemInstance.State.STORED, 3),
+		_item("potion_hp", "물약", ItemInstance.State.STORED, 4),
+		_item("helmet", "방어구", ItemInstance.State.DELIVERED, 5),
+	]
+	var stock := VillageRules.sellable_stock(items, ["물약"])
+	expect(stock == {"sword": 2, "armor": 1}, "stock counts only owned sellable items")
+	var rng := RandomNumberGenerator.new()
+	for seed in 20:
+		rng.seed = seed
+		var lines := VillageRules.sell_lines(stock, 12, 3, rng)
+		var total := 0
+		for l: Dictionary in lines:
+			expect(stock.has(l["item_kind"]), "only owned kinds are requested")
+			expect(int(l["required"]) <= int(stock[l["item_kind"]]), "required never exceeds stock")
+			total += int(l["required"])
+		expect(total == 3, "total is capped by stock (2 + 1)")
+	expect(VillageRules.sell_lines({}, 12, 3, rng).is_empty(), "no stock: no lines (quest skipped)")
+
+
+func test_wake_up_skips_sleep() -> void:
+	var flow := DungeonFlow.new()
+	flow.begin_sleep()
+	flow.wake_up()
+	expect(flow.tick_sleep(0.0), "wake up ends sleep on the next tick")
+	expect(flow.state == DungeonFlow.State.VILLAGE_HANDOFF, "goes to village handoff")

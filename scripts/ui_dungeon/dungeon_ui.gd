@@ -375,6 +375,14 @@ func _build_sleep() -> void:
 	_sleep_label = Label.new()
 	_sleep_label.position = Vector2(540, 300)
 	_sleep.add_child(_sleep_label)
+	# 정리할 게 없으면 바로 깨워서 마을 방문으로 넘어간다
+	var wake := Button.new()
+	wake.name = "sleep-wake-button"
+	wake.text = "용사 깨우기 (수면 건너뛰기)"
+	wake.position = Vector2(520, 360)
+	wake.focus_mode = Control.FOCUS_NONE
+	wake.pressed.connect(func() -> void: DungeonManager.flow.wake_up())
+	_sleep.add_child(wake)
 
 
 func _build_game_over() -> void:

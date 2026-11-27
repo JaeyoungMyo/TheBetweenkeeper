@@ -56,6 +56,12 @@ func begin_sleep() -> void:
 	sleep_left = float(config["sleep_sec"])
 
 
+## 수면 건너뛰기: 다음 tick_sleep 에서 바로 마을 방문으로 넘어간다
+func wake_up() -> void:
+	if state == State.SLEEP:
+		sleep_left = 0.0
+
+
 ## 수면이 끝나면 true. 상점 호출은 던전마다 정확히 한 번 (BR-U3-22)
 func tick_sleep(delta: float) -> bool:
 	if state != State.SLEEP:

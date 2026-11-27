@@ -37,6 +37,10 @@ func open(override: Dictionary = {}) -> void:
 		"exp": int(config["sell_reward_exp"]),
 	}
 	spec.merge(override, true)
+	# 판매 줄은 지금 가진 아이템 개수 안에서만 만든다 (없는 품목 · 모자란 수량 요구 금지)
+	if not spec.has("fixed_lines"):
+		var stock := VillageRules.sellable_stock(ItemManager.items.values(), config["sell_excluded_categories"])
+		spec["fixed_lines"] = VillageRules.sell_lines(stock, int(spec["quantity"]), int(spec["line_max"]), rng)
 	var r := quests.spawn(spec, kinds, rng)
 	if r["status"] == "skipped":
 		_end_sell({"result": "skipped"})
