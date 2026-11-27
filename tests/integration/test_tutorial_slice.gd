@@ -79,3 +79,21 @@ func test_tutorial_lesson_one_with_keys_then_finish_marks_done() -> void:
 	room._finish_tutorial()
 	expect(SaveService.tutorial_done_saved(), "tutorial completion is saved")
 	room.free()
+
+
+func test_tutorial_quest_panel_shows_when_quest_starts() -> void:
+	# 튜토리얼 중 긴급 퀘스트가 나오면 패널이 바로 보인다
+	SaveService.delete_save()
+	var room = load("res://scenes/storage/tutorial_storage.tscn").instantiate()
+	room.auto_return = false
+	tree.root.add_child(room)
+	await tree.process_frame
+	var it = room.tutorial_items[0]
+	ItemManager.try_pick_up(it, it.world_position)
+	ItemManager.place_carried(it.instance_id, room.shelves[0].state, 0)
+	room._spawn_quest_from_top()
+	var ui = room.find_child("DungeonUi", true, false)
+	ui._process(0.1)
+	expect(ui._quest_box.visible, "quest panel visible during the tutorial")
+	DungeonManager.quests.quest = null
+	room.free()

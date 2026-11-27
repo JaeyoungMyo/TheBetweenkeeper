@@ -63,9 +63,8 @@ func _begin_battle() -> void:
 
 
 func _process(delta: float) -> void:
-	_sleep.visible = DungeonManager.flow.state == DungeonFlow.State.SLEEP
-	if _sleep.visible:
-		_sleep_label.text = "용사가 잠들었습니다\n정리 시간 %d초" % ceili(DungeonManager.flow.sleep_left)
+	# 화면 표시 (긴급 요청 패널, 수면, 전달 선반) 은 튜토리얼에서도 항상 갱신한다
+	_refresh_hud()
 	if _shop_pending > 0.0:
 		_shop_pending -= delta
 		if _shop_pending <= 0.0:
@@ -89,9 +88,14 @@ func _process(delta: float) -> void:
 			_gap_timer -= delta
 			if _gap_timer <= 0.0:
 				_begin_battle()
+
+
+func _refresh_hud() -> void:
+	var flow := DungeonManager.flow
 	_sleep.visible = flow.state == DungeonFlow.State.SLEEP
 	if _sleep.visible:
 		_sleep_label.text = "용사가 잠들었습니다\n정리 시간 %d초" % ceili(flow.sleep_left)
+	_battle_label.visible = _running
 	_battle_label.text = "던전 %d · 전투 %d / %d" % [flow.dungeon_no, flow.battle_index, flow.battle_total]
 	_zone_label.text = "전달 선반\n" + _summary()
 	_shelf_hint.visible = _near_shelf() and not ItemManager.carried_ids.is_empty()
