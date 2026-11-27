@@ -52,33 +52,13 @@ func hit(point: Vector2) -> bool:
 	return bounds().has_point(point)
 
 
-## 빈 선반과 아이템이 있는 선반의 그림을 다르게 보여 준다 (번호별 색 + 안에 든 아이템 아이콘)
-var _icons: HBoxContainer
-
+## 빈 선반과 아이템이 있는 선반의 그림을 다르게 보여 준다 (번호별 색)
 func refresh_look() -> void:
 	if body == null or state == null:
 		return
-	if _icons == null:
-		_icons = HBoxContainer.new()
-		_icons.position = Vector2(-SIZE.x / 2 + 6, -4)
-		_icons.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		add_child(_icons)
-	for c in _icons.get_children():
-		_icons.remove_child(c)
-		c.queue_free()
 	var shown := 0
 	for ids in state.slot_items:
-		for id in ids:
-			if shown >= 5 or not ItemManager.items.has(id):
-				continue
-			var r := TextureRect.new()
-			r.texture = ItemManager.items[id].data.icon()
-			r.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-			r.custom_minimum_size = Vector2(10, 10)
-			r.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-			r.mouse_filter = Control.MOUSE_FILTER_IGNORE
-			_icons.add_child(r)
-			shown += 1
+		shown += ids.size()
 	body.texture = FULL_TEX if shown > 0 else EMPTY_TEX
 	body.modulate = TINTS[shelf_index % TINTS.size()]
 	body.size = SIZE
