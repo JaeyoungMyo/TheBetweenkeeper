@@ -68,6 +68,27 @@ func _build_guide() -> void:
 	var panel := PanelContainer.new()
 	panel.position = Vector2(290, 585)
 	panel.custom_minimum_size = Vector2(700, 0)
+	# 말풍선: 둥근 밝은 상자 + 캐릭터 쪽을 가리키는 꼬리
+	var bubble := StyleBoxFlat.new()
+	bubble.bg_color = Color(1.0, 0.98, 0.93, 0.96)
+	bubble.border_color = Color(0.45, 0.32, 0.55)
+	bubble.set_border_width_all(3)
+	bubble.set_corner_radius_all(14)
+	bubble.content_margin_left = 16
+	bubble.content_margin_right = 16
+	bubble.content_margin_top = 10
+	bubble.content_margin_bottom = 10
+	panel.add_theme_stylebox_override("panel", bubble)
+	# 꼬리는 말풍선 왼쪽 윗부분에 붙어 캐릭터 쪽을 가리킨다 (말풍선 local 좌표)
+	var tail := Polygon2D.new()
+	tail.name = "guide-bubble-tail"
+	tail.color = Color(0.45, 0.32, 0.55)
+	tail.polygon = PackedVector2Array([Vector2(0, 12), Vector2(-20, 20), Vector2(0, 28)])
+	panel.add_child(tail)
+	var tail_fill := Polygon2D.new()
+	tail_fill.color = Color(1.0, 0.98, 0.93)
+	tail_fill.polygon = PackedVector2Array([Vector2(2, 15), Vector2(-14, 20), Vector2(2, 25)])
+	panel.add_child(tail_fill)
 	_guide.add_child(panel)
 	# 안내 캐릭터: 대화창 왼쪽에서 설명해 주는 느낌 (화면 밖으로 나가지 않도록 아래쪽에 맞춘다)
 	var guide_img := TextureRect.new()
@@ -85,6 +106,7 @@ func _build_guide() -> void:
 	_guide_label.bbcode_enabled = true
 	_guide_label.fit_content = true
 	_guide_label.custom_minimum_size = Vector2(680, 0)
+	_guide_label.add_theme_color_override("default_color", Color(0.18, 0.13, 0.22))
 	box.add_child(_guide_label)
 	_guide_button = Button.new()
 	_guide_button.text = "다음"
