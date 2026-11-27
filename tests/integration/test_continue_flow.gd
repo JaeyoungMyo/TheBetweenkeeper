@@ -59,6 +59,6 @@ func test_corrupt_save_falls_back_to_new_game() -> void:
 	await _frames(2)
 	room._continue_game()
 	await _frames(2)
-	expect(room.tutorial_items.size() == 10, "corrupt save: tutorial items created (new game)")
+	expect(room.tutorial_items.size() == 5, "corrupt save: tutorial items created (new game)")
 	room.free()
 	SaveService.delete_save()

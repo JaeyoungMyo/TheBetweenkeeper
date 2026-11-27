@@ -10,7 +10,8 @@ func _key(keycode: Key) -> void:
 		ev.keycode = keycode
 		ev.physical_keycode = keycode
 		ev.pressed = pressed
-		tree.root.push_input(ev)
+		Input.parse_input_event(ev)
+		await tree.process_frame
 		await tree.process_frame
 
 
@@ -21,7 +22,8 @@ func _click(pos: Vector2) -> void:
 		ev.pressed = pressed
 		ev.position = pos
 		ev.global_position = pos
-		tree.root.push_input(ev)
+		Input.parse_input_event(ev)
+		await tree.process_frame
 		await tree.process_frame
 
 
@@ -96,7 +98,12 @@ func test_click_walks_player_to_point() -> void:
 	var room = _room()
 	await _frames(3)
 	var goal := Vector2(420, 300)
-	await _click(goal)
+	# 헤드리스에서는 마우스 위치가 없어서 GUI 입력 대신 맵 클릭 처리를 직접 호출한다 (화면 클릭은 TEST.md 에서 확인)
+	var ev := InputEventMouseButton.new()
+	ev.button_index = MOUSE_BUTTON_LEFT
+	ev.pressed = true
+	ev.position = goal
+	room._on_map_input(ev)
 	var guard := 0
 	while room.player.has_target() and guard < 600:
 		await _frames(1)

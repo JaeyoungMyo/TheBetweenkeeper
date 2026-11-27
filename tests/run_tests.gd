@@ -60,7 +60,12 @@ func _run() -> void:
 				continue
 			total += 1
 			obj.failures = []
-			obj.call(method_name)
+			root.get_node("SaveService").delete_save()  # 각 테스트는 저장 없이 시작 (튜토리얼이 이어하기로 가지 않도록)
+			paused = false  # 이전 테스트의 레벨업 선택 일시정지가 남지 않도록
+			root.get_node("ItemManager").reset_run()
+			root.get_node("EconomyManager").reset_run()
+			root.get_node("DungeonManager").reset_run()
+			await obj.call(method_name)
 			if obj.failures.size() > 0:
 				failed += 1
 				print("FAIL %s::%s -> %s" % [path, method_name, ", ".join(obj.failures)])

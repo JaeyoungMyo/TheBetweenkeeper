@@ -7,7 +7,7 @@ func run(tree: SceneTree) -> void:
 	tree.root.add_child(room)
 	await _click(tree, room, Vector2(400, 300))
 	expect(room.player.position.distance_to(Vector2(400, 300)) < 5, "arrives at %s" % room.player.position)
-	var target = room.tutorial_items[9]
+	var target = room.tutorial_items[4]
 	await _click(tree, room, target.world_position)
 	expect(target.state == ItemInstance.State.INCOMING, "far item click only moves")
 	expect(room.player.position.distance_to(target.world_position) < 5, "moved to item")

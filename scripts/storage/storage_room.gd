@@ -270,13 +270,32 @@ func drop_first() -> void:
 
 
 ## 숫자 키 1~6: 패널이 열려 있으면 목록 맨 위 아이템을 해당 칸에 적재
+## 숫자 키 1~6 (선반 열림 상태): 들고 있으면 그 칸에 넣고, 손이 비어 있으면 그 칸의 맨 위 아이템을 꺼낸다
 func store_in_slot(slot: int) -> void:
 	if not shelf_panel.visible or slot >= shelf.state.slot_count:
 		return
 	if ItemManager.carried_ids.is_empty():
-		show_message("들고 있는 아이템이 없습니다")
+		take_out_from_slot(slot)
 		return
 	ItemManager.place_carried(ItemManager.carried_ids[0], shelf.state, slot)
+
+
+func take_out_from_slot(slot: int) -> void:
+	var ids: Array = shelf.state.slot_items[slot]
+	if ids.is_empty():
+		show_message("이 칸은 비어 있습니다")
+		return
+	var item: ItemInstance = ItemManager.items[ids.back()]
+	if ItemManager.take_out(item, shelf.state):
+		show_message("%s 를 꺼냈습니다" % item.data.display_name)
+		on_take_out_done()
+	else:
+		show_message("더 들 수 없습니다")
+
+
+## 선반에서 꺼낸 뒤 호출 (튜토리얼이 확인에 쓴다)
+func on_take_out_done() -> void:
+	pass
 
 
 ## 앞에 있는 선반을 현재 선반으로 고른다 (패널이 열려 있으면 유지)
@@ -290,9 +309,12 @@ func near_shelf() -> bool:
 
 
 ## X (또는 E): 열린 패널 닫기 → 가까운 아이템 줍기 → 선반 앞이면 패널 열기
+## 들고 있을 때 선반 앞이면 줍지 않고 선반을 연다 (선반 넣기 안내와 맞춤)
 func interact() -> void:
 	if shelf_panel.visible:
 		shelf_panel.hide()
+	elif near_shelf() and not ItemManager.carried_ids.is_empty():
+		toggle_shelf()
 	elif not _pick_nearest():
 		toggle_shelf()
 
@@ -367,6 +389,8 @@ func _walkable(point: Vector2) -> Vector2:
 func _on_take_out(id: int) -> void:
 	if not ItemManager.take_out(ItemManager.items[id], shelf_of(ItemManager.items[id])):
 		show_message("더 들 수 없습니다")
+	else:
+		on_take_out_done()
 
 
 func _on_weight_rejected(_facility_id: String, text: String) -> void:
