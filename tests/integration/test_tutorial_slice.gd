@@ -56,6 +56,30 @@ func test_tutorial_refills_missing_shelf_item() -> void:
 	room.free()
 
 
+func test_tutorial_shelf_close_step_waits_for_close() -> void:
+	# 선반 닫기 단계: 열린 뒤 닫혀야 통과한다 (처음부터 닫혀 있으면 통과하지 않는다)
+	SaveService.delete_save()
+	var room = load("res://scenes/storage/tutorial_storage.tscn").instantiate()
+	room.auto_return = false
+	tree.root.add_child(room)
+	await tree.process_frame
+	room._guide_running = true
+	room._steps = room._build_steps()
+	var idx := -1
+	for i in room._steps.size():
+		if "선반을 닫아 볼까요" in room._steps[i]["text"]:
+			idx = i
+	expect(idx >= 0, "shelf close step exists")
+	room._step = idx
+	room._show_step()
+	expect(not room._steps[idx]["check"].call(), "closed shelf does not pass the close step")
+	room.shelf_panel.show()
+	expect(not room._steps[idx]["check"].call(), "open shelf does not pass yet")
+	room.shelf_panel.hide()
+	expect(room._steps[idx]["check"].call(), "closing the open shelf passes the close step")
+	room.free()
+
+
 func _key(k: Key) -> void:
 	for p in [true, false]:
 		var ev := InputEventKey.new()
