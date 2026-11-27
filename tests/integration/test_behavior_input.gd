@@ -15,18 +15,6 @@ func _key(keycode: Key) -> void:
 		await tree.process_frame
 
 
-func _click(pos: Vector2) -> void:
-	for pressed in [true, false]:
-		var ev := InputEventMouseButton.new()
-		ev.button_index = MOUSE_BUTTON_LEFT
-		ev.pressed = pressed
-		ev.position = pos
-		ev.global_position = pos
-		Input.parse_input_event(ev)
-		await tree.process_frame
-		await tree.process_frame
-
-
 func _frames(n: int) -> void:
 	for i in n:
 		await tree.process_frame
@@ -90,25 +78,6 @@ func test_menu_keys_open_and_close() -> void:
 	await _key(KEY_F2)
 	await _frames(2)
 	expect(not settings._panel.visible, "F2 closes settings")
-	room.free()
-
-
-func test_click_walks_player_to_point() -> void:
-	# 빈 바닥 클릭은 플레이어를 그 지점으로 보낸다
-	var room = _room()
-	await _frames(3)
-	var goal := Vector2(420, 300)
-	# 헤드리스에서는 마우스 위치가 없어서 GUI 입력 대신 맵 클릭 처리를 직접 호출한다 (화면 클릭은 TEST.md 에서 확인)
-	var ev := InputEventMouseButton.new()
-	ev.button_index = MOUSE_BUTTON_LEFT
-	ev.pressed = true
-	ev.position = goal
-	room._on_map_input(ev)
-	var guard := 0
-	while room.player.has_target() and guard < 600:
-		await _frames(1)
-		guard += 1
-	expect(room.player.position.distance_to(goal) < 6, "walked to clicked point")
 	room.free()
 
 

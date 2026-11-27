@@ -29,6 +29,14 @@ func _ready() -> void:
 	var done := "  ✔ 완료" if SaveService.tutorial_done_saved() else ""
 	box.add_child(_button("튜토리얼" + done, _tutorial))
 	box.add_child(_button("게임 종료", _quit))
+	_focus_first_button(box)
+
+
+func _focus_first_button(box: Node) -> void:
+	for c in box.get_children():
+		if c is Button and not c.disabled:
+			c.call_deferred("grab_focus")
+			return
 
 
 func _button(text: String, action: Callable) -> Button:

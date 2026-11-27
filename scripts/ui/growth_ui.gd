@@ -26,16 +26,13 @@ func _ready() -> void:
 	choice_panel.add_child(_choice_box)
 	choice_panel.hide()
 	add_child(choice_panel)
-	# 오른쪽 위 상점 버튼 (C 키와 같은 동작). 일시정지 버튼 왼쪽에 둔다
-	var buy_button := Button.new()
-	buy_button.name = "buy-open-button"
-	buy_button.text = "구매 (C)"
-	buy_button.position = Vector2(1000, 8)
-	buy_button.focus_mode = Control.FOCUS_NONE
-	buy_button.pressed.connect(func() -> void:
-		if not get_tree().paused:
-			toggle_menu())
-	add_child(buy_button)
+	# 오른쪽 위 구매 안내 (C 키로 연다. 마우스 버튼 없음)
+	var buy_hint := Label.new()
+	buy_hint.name = "buy-open-button"
+	buy_hint.text = "구매 (C)"
+	buy_hint.position = Vector2(1000, 8)
+	buy_hint.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(buy_hint)
 	EconomyManager.gold_changed.connect(_on_gold_changed)
 	EconomyManager.exp_changed.connect(_on_exp_changed)
 	EconomyManager.level_up.connect(_on_level_up)
@@ -75,9 +72,17 @@ func _fill_menu() -> void:
 	var close := Button.new()
 	close.name = "menu-close-button"
 	close.text = "닫기 (C)"
-	close.focus_mode = Control.FOCUS_NONE
 	close.pressed.connect(menu.hide)
 	_menu_box.add_child(close)
+	_focus_first(_menu_box)
+
+
+## 키보드 포커스: 처음 쓸 수 있는 버튼에 놓는다 (↑↓ 로 옮기고 Enter 로 누른다)
+func _focus_first(box: Node) -> void:
+	for c in box.get_children():
+		if c is Button and not c.disabled:
+			c.call_deferred("grab_focus")
+			return
 
 
 func _section(title: String) -> void:
@@ -96,7 +101,6 @@ func _info(text: String) -> void:
 
 func _buy_button(text: String, price: int, action: Callable) -> void:
 	var b := Button.new()
-	b.focus_mode = Control.FOCUS_NONE
 	b.text = "%s - %s" % [text, "최대" if price < 0 else "%d 골드" % price]
 	b.disabled = price < 0 or price > EconomyManager.gold()
 	if price >= 0 and price > EconomyManager.gold():
@@ -124,11 +128,11 @@ func show_choices() -> void:
 		var b := Button.new()
 		b.name = "augment-%s-button" % a["id"]
 		b.text = describe(a)
-		b.focus_mode = Control.FOCUS_NONE
 		b.pressed.connect(pick.bind(a["id"]))
 		_choice_box.add_child(b)
 	menu.hide()
 	choice_panel.show()
+	_focus_first(_choice_box)
 	get_tree().paused = true
 
 

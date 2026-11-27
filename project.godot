@@ -15,6 +15,7 @@ ItemManager="*res://autoload/item_manager.gd"
 EconomyManager="*res://autoload/economy_manager.gd"
 DungeonManager="*res://autoload/dungeon_manager.gd"
 SaveService="*res://autoload/save_service.gd"
+KeyboardOnly="*res://autoload/keyboard_only.gd"
 
 [display]
 

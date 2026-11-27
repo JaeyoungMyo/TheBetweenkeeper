@@ -1,12 +1,7 @@
-# 선반 패널: 칸 3개와 X 버튼 (FR-03)
+# 선반 패널: 칸별 아이템 목록 (FR-03). 키보드로만 고른다 (마우스 없음)
 class_name ShelfPanel
 extends PanelContainer
 
-signal slot_dropped(slot_index: int, item_id: int)
-signal closed
-signal slot_purchase_requested
-## 선반 칸의 아이템을 클릭했을 때 (바로 들기)
-signal item_clicked(item_id: int)
 
 var _box := VBoxContainer.new()
 ## 키보드 선택: ↑↓ 로 칸을 고르고, ←→ 로 그 칸 안의 아이템을 고른다
@@ -31,20 +26,13 @@ func show_for(state: FacilityState, items: Dictionary, title := "", price := -2)
 	for c in _box.get_children():
 		_box.remove_child(c)
 		c.queue_free()
-	var x := Button.new()
-	x.name = "shelf-close-button"
-	x.text = "선반 닫기 (E)"
-	x.focus_mode = Control.FOCUS_NONE
-	x.pressed.connect(func() -> void: closed.emit())
-	_box.add_child(x)
+	# 키보드만 쓴다: 닫기는 E, 칸 추가는 + 키 (안내 글만 보여 준다)
 	if title != "":
-		var buy := Button.new()
-		buy.name = "shelf-buy-slot-button"
-		buy.text = "%s 칸 추가 (+ 키) - %s" % [title, "최대" if price < 0 else "%d 골드" % price]
-		buy.disabled = price < 0 or price > EconomyManager.gold()
-		buy.focus_mode = Control.FOCUS_NONE
-		buy.pressed.connect(func() -> void: slot_purchase_requested.emit())
-		_box.add_child(buy)
+		var hint := Label.new()
+		hint.name = "shelf-title"
+		hint.text = "%s  ·  E: 선반 닫기\n+: 칸 추가 - %s" % [title, "최대" if price < 0 else "%d 골드" % price]
+		hint.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_box.add_child(hint)
 	_order.clear()
 	_buttons.clear()
 	_slot_of.clear()
@@ -111,15 +99,10 @@ func _highlight() -> void:
 
 
 func _make_slot(state: FacilityState, items: Dictionary, i: int) -> Control:
-	var slot := preload("res://scripts/ui/drop_target.gd").new()
+	var slot := Control.new()
 	slot.name = "shelf-slot-%d" % i
-	slot.slot_index = i
 	slot.custom_minimum_size = Vector2(250, 470.0 / state.slot_count - 10)
-	slot.dropped.connect(func(s: int, id: int) -> void: slot_dropped.emit(s, id))
-	# 이미 선반에 있는 아이템은 먼저 목록으로 꺼내야 한다
-	slot.accept_check = func(_s: int, id: int) -> bool: return id in ItemManager.carried_ids
-	var slot_items: Array = state.slot_items[i].map(func(id: int) -> ItemInstance: return items[id])
-	slot.tooltip_text = ItemListPanel.describe(slot_items)
+	slot.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var bg := ColorRect.new()
 	bg.color = Color(0.2, 0.16, 0.12)
 	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -146,9 +129,6 @@ func _make_slot(state: FacilityState, items: Dictionary, i: int) -> Control:
 	for id in state.slot_items[i]:
 		var item: ItemInstance = items[id]
 		var entry := _compact_entry(item)
-		entry.tooltip_text = "%s (무게 %d)" % [item.data.display_name, item.weight()]
-		var clicked_id: int = id
-		entry.pressed.connect(func() -> void: item_clicked.emit(clicked_id))
 		grid.add_child(entry)
 		_order.append(id)
 		_buttons[id] = entry
@@ -158,14 +138,13 @@ func _make_slot(state: FacilityState, items: Dictionary, i: int) -> Control:
 
 ## 선반 칸용 작은 항목: 아이콘 + 짧은 이름 (칸에 많이 들어가도록)
 func _compact_entry(item: ItemInstance) -> Button:
-	var b: Button = preload("res://scripts/ui/item_list_entry.gd").new()
+	var b := Button.new()
 	b.name = "item-entry-%d" % item.instance_id
-	b.item_id = item.instance_id
 	b.text = item.data.display_name
 	b.icon = item.data.icon()
 	b.expand_icon = true
 	b.custom_minimum_size = Vector2(76, 30)
 	b.clip_text = true
-	b.mouse_filter = Control.MOUSE_FILTER_PASS
+	b.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	b.focus_mode = Control.FOCUS_NONE
 	return b

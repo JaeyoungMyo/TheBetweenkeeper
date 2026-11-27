@@ -92,14 +92,17 @@ func _process(delta: float) -> void:
 
 func _refresh_hud() -> void:
 	var flow := DungeonManager.flow
+	var was_sleeping := _sleep.visible
 	_sleep.visible = flow.state == DungeonFlow.State.SLEEP
+	if _sleep.visible and not was_sleeping:
+		_focus_first_button(_sleep)
 	if _sleep.visible:
 		_sleep_label.text = "용사가 잠들었습니다\n정리 시간 %d초" % ceili(flow.sleep_left)
 	_battle_label.visible = _running
 	_battle_label.text = "던전 %d · 전투 %d / %d" % [flow.dungeon_no, flow.battle_index, flow.battle_total]
 	_zone_label.text = "전달 선반\n" + _summary()
 	_shelf_hint.visible = _near_shelf() and not ItemManager.carried_ids.is_empty()
-	_shelf_hint.text = "Z: 1개 넣기 / 드래그로 넣기"
+	_shelf_hint.text = "Z: 1개 넣기"
 	_refresh_quest()
 
 
@@ -123,7 +126,7 @@ func _deliver_one() -> void:
 	_deliver_item(ItemManager.carried_ids[0])
 
 
-## 드래그앤드롭 또는 1 키로 아이템 1개를 넣는다
+## Z 로 아이템 1개를 넣는다
 func _deliver_item(id: int) -> void:
 	if not ItemManager.carried_ids.has(id) or not _near_shelf():
 		return
@@ -198,6 +201,7 @@ func _on_game_over(failures: int) -> void:
 	SaveService.delete_save()
 	_game_over_label.text = "요청 실패 %d / %d\n게임오버" % [failures, FailureCounter.LIMIT]
 	_game_over.visible = true
+	_focus_first_button(_game_over)
 	_running = false
 
 
@@ -305,12 +309,6 @@ func _build_zone() -> void:
 	_shelf_hint.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_shelf_hint.visible = false
 	add_child(_shelf_hint)
-	var drop := DeliveryDropTarget.new()
-	drop.position = DELIVERY_SHELF.position
-	drop.size = DELIVERY_SHELF.size
-	drop.accept_check = func(id: int) -> bool: return ItemManager.carried_ids.has(id) and _near_shelf()
-	drop.on_drop = func(id: int) -> void: _deliver_item(id)
-	add_child(drop)
 	_zone_label = Label.new()
 	_zone_label.position = DELIVERY_SHELF.position + Vector2(0, DELIVERY_SHELF.size.y + 4)
 	_zone_label.custom_minimum_size = Vector2(200, 0)
@@ -380,9 +378,16 @@ func _build_sleep() -> void:
 	wake.name = "sleep-wake-button"
 	wake.text = "용사 깨우기 (수면 건너뛰기)"
 	wake.position = Vector2(520, 360)
-	wake.focus_mode = Control.FOCUS_NONE
 	wake.pressed.connect(func() -> void: DungeonManager.flow.wake_up())
 	_sleep.add_child(wake)
+
+
+## 키보드 포커스: 화면 안의 첫 버튼을 고른다 (Enter 로 누른다)
+func _focus_first_button(node: Node) -> void:
+	for c in node.get_children():
+		if c is Button and not c.disabled:
+			c.call_deferred("grab_focus")
+			return
 
 
 func _build_game_over() -> void:

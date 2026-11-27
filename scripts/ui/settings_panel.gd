@@ -34,6 +34,10 @@ func _unhandled_input(event: InputEvent) -> void:
 	var key := event as InputEventKey
 	if key != null and key.pressed and not key.echo and key.keycode == KEY_F2:
 		_panel.visible = not _panel.visible
+		if _panel.visible:
+			for c in _panel.find_children("*", "Button", true, false):
+				c.call_deferred("grab_focus")
+				break
 		get_viewport().set_input_as_handled()
 
 

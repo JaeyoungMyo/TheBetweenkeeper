@@ -14,6 +14,7 @@ const TEST_FILES := [
 	"res://tests/unit/test_carry_capacity.gd",
 	"res://tests/unit/test_storage_properties.gd",
 	"res://tests/integration/test_tutorial_slice.gd",
+	"res://tests/integration/test_keyboard_only.gd",
 	"res://tests/integration/test_buy_bag.gd",
 	"res://tests/unit/test_dungeon_rules.gd",
 	"res://tests/unit/test_quest_rules.gd",
@@ -73,11 +74,5 @@ func _run() -> void:
 				failed += 1
 				print("FAIL %s::%s -> %s" % [path, method_name, ", ".join(obj.failures)])
 	root.get_node("SaveService").delete_save()
-	var move = load("res://tests/integration/test_click_move.gd").new()
-	total += 1
-	await move.run(self)
-	if move.failures.size() > 0:
-		failed += 1
-		print("FAIL click_move -> %s" % ", ".join(move.failures))
 	print("PBT seed=%d tests=%d failed=%d" % [load("res://tests/support/pbt.gd").base_seed(), total, failed])
 	quit(1 if failed > 0 else 0)

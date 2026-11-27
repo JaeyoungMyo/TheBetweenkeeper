@@ -5,11 +5,6 @@ extends CharacterBody2D
 @export var move_speed: float = 180.0
 
 const FEET_OFFSET := Vector2(0, 10)
-const ARRIVE_DISTANCE := 4.0
-const STUCK_SECONDS := 0.25
-
-var move_target := Vector2.INF
-var _stuck_time := 0.0
 
 
 func _ready() -> void:
@@ -31,47 +26,15 @@ func _ready() -> void:
 var locked := false
 
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	if locked:
 		velocity = Vector2.ZERO
-		stop_moving()
 		return
+	# 키보드 방향키로만 이동한다 (마우스 클릭 이동 없음)
 	var dir := Input.get_vector("move_left", "move_right", "move_up", "move_down")
-	if dir != Vector2.ZERO:
-		stop_moving()
-	elif has_target():
-		dir = global_position.direction_to(move_target)
 	# BR-U1-09: 손에 든 아이템 무게와 무관하게 속도는 일정
 	velocity = dir * current_speed()
-	var before := global_position
 	move_and_slide()
-	if has_target():
-		_check_arrival(before, delta)
-
-
-## 마우스 클릭 이동 (키보드 입력이 우선)
-func move_to(point: Vector2) -> void:
-	move_target = point
-	_stuck_time = 0.0
-
-
-func has_target() -> bool:
-	return move_target != Vector2.INF
-
-
-func stop_moving() -> void:
-	move_target = Vector2.INF
-
-
-func _check_arrival(before: Vector2, delta: float) -> void:
-	var step := current_speed() * delta
-	if global_position.distance_to(move_target) <= maxf(ARRIVE_DISTANCE, step):
-		stop_moving()
-		return
-	var progress := before.distance_to(move_target) - global_position.distance_to(move_target)
-	_stuck_time = _stuck_time + delta if progress < step * 0.1 else 0.0
-	if _stuck_time > STUCK_SECONDS:
-		stop_moving()
 
 
 ## 무게와 무관 (BR-U1-09). 이동 속도 증강만 반영

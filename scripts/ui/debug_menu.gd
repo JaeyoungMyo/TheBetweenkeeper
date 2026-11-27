@@ -32,7 +32,6 @@ func _process(_delta: float) -> void:
 func _add(text: String, action: Callable) -> void:
 	var b := Button.new()
 	b.text = text
-	b.focus_mode = Control.FOCUS_NONE
 	b.pressed.connect(func() -> void:
 		action.call()
 		room.refresh())

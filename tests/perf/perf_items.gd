@@ -27,7 +27,6 @@ func _run() -> void:
 	for f in FRAMES:
 		var t := Time.get_ticks_usec()
 		room._process(1.0 / 60.0)
-		room._update_hover(Vector2(400, 300))
 		room.list_panel.refresh(im.carried_items(), im.capacity())
 		var dt := Time.get_ticks_usec() - t
 		total += dt

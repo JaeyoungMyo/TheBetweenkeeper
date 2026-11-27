@@ -5,18 +5,19 @@ extends CanvasLayer
 
 var _user_paused := false
 var _overlay: ColorRect
-var _button: Button
+var _hint: Label
+var _resume_button: Button
 
 
 func _ready() -> void:
 	layer = 7
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	_button = Button.new()
-	_button.text = "일시정지 (P)"
-	_button.position = Vector2(1120, 8)
-	_button.focus_mode = Control.FOCUS_NONE
-	_button.pressed.connect(toggle)
-	add_child(_button)
+	# 상단 표시만 (마우스 버튼 없음). 일시정지는 P 키
+	_hint = Label.new()
+	_hint.text = "일시정지 (P)"
+	_hint.position = Vector2(1120, 8)
+	_hint.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_hint)
 	_overlay = ColorRect.new()
 	_overlay.color = Color(0, 0, 0, 0.55)
 	_overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -33,6 +34,7 @@ func _ready() -> void:
 	resume.position = Vector2(560, 400)
 	resume.pressed.connect(toggle)
 	_overlay.add_child(resume)
+	_resume_button = resume
 	# 튜토리얼 · 게임 중 초기 화면으로. 마지막 자동 저장 이후 진행은 남지 않는다
 	var to_menu := Button.new()
 	to_menu.text = "메인 메뉴로"
@@ -64,9 +66,8 @@ func toggle() -> void:
 		_user_paused = true
 		get_tree().paused = true
 		_overlay.visible = true
-		_button.text = "계속하기 (P)"
+		_resume_button.call_deferred("grab_focus")
 	else:
 		_user_paused = false
 		get_tree().paused = false
 		_overlay.visible = false
-		_button.text = "일시정지 (P)"

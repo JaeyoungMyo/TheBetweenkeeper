@@ -45,8 +45,6 @@ func test_two_items_on_same_spot_both_listed_and_pickable() -> void:
 	expect(a.world_position.distance_to(b.world_position) < 16.0, "items overlap on the same cell")
 	room.player.position = spot + Vector2(0, 30)
 	await _frames(2)
-	var under: Array = room.items_under(a.world_position)
-	expect(under.size() == 2, "hover lists both overlapping items (got %d)" % under.size())
 	var im = room.get_node_or_null("/root/ItemManager")
 	expect(im != null and im.items.has(a.instance_id) and im.items.has(b.instance_id), "both exist in ItemManager")
 	room.player.position = a.world_position + Vector2(0, 10)
@@ -141,8 +139,8 @@ func test_shelf_upgrade_menu_usable_during_sleep() -> void:
 	DungeonManager.flow.state = DungeonFlow.State.READY
 
 
-func test_click_shelf_item_moves_it_to_hands() -> void:
-	# 선반 패널에서 아이템을 클릭하면 바로 손으로 옮겨진다 (드래그 불필요)
+func test_x_takes_selected_shelf_item_into_hands() -> void:
+	# 선반 패널에서 고른 아이템은 X 로 바로 손으로 옮겨진다 (마우스 없이)
 	var room = _room()
 	await _frames(3)
 	var im = room.get_node("/root/ItemManager")
@@ -150,21 +148,18 @@ func test_click_shelf_item_moves_it_to_hands() -> void:
 	im.try_pick_up(it, it.world_position)
 	im.place_carried(it.instance_id, room.shelves[0].state, 0)
 	room.shelf = room.shelves[0]
-	room.shelf_panel.show_for(room.shelf.state, im.items, "선반 1", 0)
+	room.open_panel()
+	room.player.position = room.shelves[0].position + Vector2(0, 60)
 	await _frames(2)
-	var entry = room.shelf_panel.find_child("item-entry-%d" % it.instance_id, true, false)
-	expect(entry != null, "shelf panel lists the stored item")
-	if entry == null:
-		room.free()
-		return
-	entry.pressed.emit()
+	expect(room.shelf_panel.selected_id() == it.instance_id, "first item of the shelf is selected")
+	await _key(KEY_X)
 	await _frames(2)
-	expect(it.state == ItemInstance.State.CARRIED and im.carried_ids.has(it.instance_id), "click moves the item into hands")
+	expect(it.state == ItemInstance.State.CARRIED and im.carried_ids.has(it.instance_id), "X takes the selected item into hands")
 	room.free()
 
 
-func test_six_potions_in_one_shelf_slot_are_all_listed_and_clickable() -> void:
-	# 물약 6개를 한 칸에 넣으면 6개 모두 선반 패널에 보이고 각각 누를 수 있다
+func test_six_potions_in_one_shelf_slot_are_all_listed() -> void:
+	# 물약 6개를 한 칸에 넣으면 6개 모두 선반 패널에 보인다
 	var room = _room()
 	await _frames(3)
 	var im = room.get_node("/root/ItemManager")

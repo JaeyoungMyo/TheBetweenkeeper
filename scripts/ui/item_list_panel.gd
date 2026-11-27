@@ -1,8 +1,6 @@
-# 들고 있는 아이템 목록, 상시 표시 (FR-02). 선반에서 꺼내기 드롭도 받는다.
+# 들고 있는 아이템 목록, 상시 표시 (FR-02). 마우스 없이 보기만 한다.
 class_name ItemListPanel
 extends PanelContainer
-
-signal take_out_requested(item_id: int)
 
 var _box := VBoxContainer.new()
 
@@ -35,19 +33,10 @@ static func describe(items: Array) -> String:
 
 
 static func make_entry(item: ItemInstance) -> Button:
-	var b: Button = preload("res://scripts/ui/item_list_entry.gd").new()
+	var b := Button.new()
 	b.name = "item-entry-%d" % item.instance_id
-	b.item_id = item.instance_id
 	b.text = "%s (무게 %d)" % [item.data.display_name, item.weight()]
 	b.icon = item.data.icon()
-	b.mouse_filter = Control.MOUSE_FILTER_PASS
+	b.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	b.focus_mode = Control.FOCUS_NONE
 	return b
-
-
-func _can_drop_data(_p: Vector2, data: Variant) -> bool:
-	return data is Dictionary and data.has("item_id") and data["item_id"] not in ItemManager.carried_ids
-
-
-func _drop_data(_p: Vector2, data: Variant) -> void:
-	take_out_requested.emit(data["item_id"])

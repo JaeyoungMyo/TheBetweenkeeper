@@ -10,6 +10,7 @@ const START_SHELVES := 3
 const SHELF_POSITIONS := [Vector2(640, 175), Vector2(435, 175), Vector2(845, 175), Vector2(435, 365), Vector2(640, 365), Vector2(845, 365)]
 
 var player: PlayerController
+var growth: GrowthUi
 ## 마지막으로 다가간 선반
 var shelf: StorageFacility
 var shelves: Array[StorageFacility] = []
@@ -17,8 +18,6 @@ var views: Dictionary = {}
 var list_panel: ItemListPanel
 var shelf_panel: ShelfPanel
 var message: Label
-var hover_list: Label
-var _map: Control
 
 
 func _ready() -> void:
@@ -125,7 +124,6 @@ func buy_shelf() -> bool:
 			v.sync()
 	if area.has_point(player.position):
 		player.position = front
-		player.stop_moving()
 	return true
 
 
@@ -170,32 +168,12 @@ func _wall(r: Rect2) -> void:
 func _build_ui() -> void:
 	var layer := CanvasLayer.new()
 	add_child(layer)
-	_map = preload("res://scripts/ui/drop_target.gd").new()
-	_map.set_anchors_preset(Control.PRESET_FULL_RECT)
-	_map.accept_check = func(_s: int, id: int) -> bool: return id in ItemManager.items
-	_map.dropped.connect(func(_s: int, id: int) -> void: drop_to_floor(id))
-	_map.gui_input.connect(_on_map_input)
-	layer.add_child(_map)
 	list_panel = preload("res://scenes/ui_storage/item_list_panel.tscn").instantiate()
 	list_panel.position = Vector2(0, 40)
 	layer.add_child(list_panel)
-	list_panel.take_out_requested.connect(_on_take_out)
 	shelf_panel = preload("res://scenes/ui_storage/shelf_panel.tscn").instantiate()
 	shelf_panel.position = Vector2(1015, 60)
 	layer.add_child(shelf_panel)
-	shelf_panel.closed.connect(shelf_panel.hide)
-	shelf_panel.slot_purchase_requested.connect(buy_current_slot)
-	shelf_panel.item_clicked.connect(_on_take_out)
-	shelf_panel.slot_dropped.connect(func(s: int, id: int) -> void: ItemManager.place_carried(id, shelf.state, s))
-	hover_list = Label.new()
-	hover_list.name = "hover-item-list"
-	hover_list.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0, 0, 0, 0.8)
-	style.set_content_margin_all(6)
-	hover_list.add_theme_stylebox_override("normal", style)
-	hover_list.hide()
-	layer.add_child(hover_list)
 	message = Label.new()
 	message.position = Vector2(560, 20)
 	message.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -211,7 +189,7 @@ func _build_ui() -> void:
 	var pause := PauseMenu.new()
 	pause.name = "PauseMenu"
 	add_child(pause)
-	var growth := GrowthUi.new()
+	growth = GrowthUi.new()
 	growth.name = "GrowthUi"
 	growth.room = self
 	add_child(growth)
@@ -255,7 +233,6 @@ func _process(_d: float) -> void:
 	for v: ItemView in views.values():
 		if v.item.state == ItemInstance.State.CARRIED:
 			v.position = player.position + Vector2(0, -18 - 8 * ItemManager.carried_ids.find(v.item.instance_id))
-	_update_hover(get_global_mouse_position())
 	if shelf_panel.visible and not _near_any_shelf():
 		shelf_panel.hide()
 	if shelf_panel.visible and Input.is_action_just_pressed("slot_add"):
@@ -269,7 +246,8 @@ func _process(_d: float) -> void:
 	if Input.is_action_just_pressed("open_shelf"):
 		toggle_shelf()
 	# 선반 패널이 열려 있으면 이동을 잠그고, ←→ 로 고른 뒤 X 로 꺼낸다
-	player.locked = shelf_panel.visible
+	# 선반 패널이나 구매 메뉴가 열려 있는 동안에는 캐릭터가 움직이지 않는다 (↑↓←→ 는 메뉴용)
+	player.locked = shelf_panel.visible or (growth != null and growth.menu.visible)
 	if shelf_panel.visible:
 		# ←→: 같은 칸 안에서 아이템 고르기 / ↑↓: 다른 선반으로 포커스 이동
 		if Input.is_action_just_pressed("shelf_left"):
@@ -300,7 +278,7 @@ func drop_first() -> void:
 
 
 ## 숫자 키 1~6: 패널이 열려 있으면 목록 맨 위 아이템을 해당 칸에 적재
-## 숫자 키 1~6 (선반 열림 상태): 들고 있는 맨 위 아이템을 그 칸에 넣는다 (꺼내기는 ←→ 고른 뒤 X 또는 클릭)
+## 숫자 키 1~6 (선반 열림 상태): 들고 있는 맨 위 아이템을 그 칸에 넣는다 (꺼내기는 ←→ 고른 뒤 X)
 func store_in_slot(slot: int) -> void:
 	if not shelf_panel.visible or slot >= shelf.state.slot_count:
 		return
@@ -352,28 +330,6 @@ func toggle_shelf() -> void:
 		open_panel()
 
 
-## 마우스 아래 아이템과 같은 바닥 칸에 있는 아이템 전체
-func items_under(point: Vector2) -> Array:
-	var cells := {}
-	for v: ItemView in views.values():
-		if v.hit(point) and StorageService.can_hover(v.item, player.position):
-			cells[FloorRules.cell_of(v.item.world_position)] = true
-	var found := []
-	for v: ItemView in views.values():
-		if v.item.state == ItemInstance.State.INCOMING and cells.has(FloorRules.cell_of(v.item.world_position)):
-			found.append(v.item)
-	return found
-
-
-func _update_hover(mouse: Vector2) -> void:
-	var found := items_under(mouse)
-	hover_list.visible = not found.is_empty()
-	if hover_list.visible:
-		hover_list.text = ItemListPanel.describe(found)
-		hover_list.reset_size()
-		hover_list.position = (mouse + Vector2(16, 16)).min(Vector2(1280, 720) - hover_list.size)
-
-
 func _has_pickable_nearby() -> bool:
 	for v: ItemView in views.values():
 		if v.item.state == ItemInstance.State.INCOMING and player.position.distance_to(v.item.world_position) <= StorageService.PICKUP_RANGE:
@@ -388,35 +344,6 @@ func _pick_nearest() -> bool:
 			if best == null or v.item.world_position.distance_to(player.position) < best.world_position.distance_to(player.position):
 				best = v.item
 	return best != null and ItemManager.try_pick_up(best, player.position)
-
-
-func _on_map_input(event: InputEvent) -> void:
-	if not (event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT):
-		return
-	for v: ItemView in views.values():
-		if v.item.state == ItemInstance.State.INCOMING and v.hit(event.position):
-			if not ItemManager.has_room():
-				show_message("더 들 수 없습니다")
-			elif not ItemManager.try_pick_up(v.item, player.position):
-				player.move_to(_walkable(event.position))
-			return
-	for s in shelves:
-		if not s.hit(event.position):
-			continue
-		if shelf_panel.visible and s == shelf:
-			shelf_panel.hide()
-		elif StorageService.near_rect(player.global_position, s.bounds()):
-			shelf = s
-			open_panel()
-		else:
-			player.move_to(_walkable(event.position))
-		return
-	if ROOM.has_point(event.position):
-		player.move_to(_walkable(event.position))
-
-
-func _walkable(point: Vector2) -> Vector2:
-	return point.clamp(ROOM.position + Vector2(10, 10), ROOM.end - Vector2(10, 10))
 
 
 func _on_take_out(id: int) -> void:

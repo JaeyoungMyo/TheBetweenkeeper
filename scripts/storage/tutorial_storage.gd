@@ -131,7 +131,7 @@ func _start_guide() -> void:
 func _build_steps() -> Array:
 	var s := []
 	# 1. 아이템 적재
-	s.append({"text": "[b]1. 아이템 적재[/b] 반짝이는 아이템 쪽으로 살금살금 다가가 볼까요? [b]방향키[/b] 로 움직이거나 빈 바닥을 클릭하면 돼요~", "check": func() -> bool: return _near_any_item()})
+	s.append({"text": "[b]1. 아이템 적재[/b] 반짝이는 아이템 쪽으로 살금살금 다가가 볼까요? [b]방향키[/b] 로 움직여 볼까요~", "check": func() -> bool: return _near_any_item()})
 	s.append({"text": "[b]1. 아이템 적재[/b] 좋아요! [b]X[/b] 키를 눌러서 아이템을 주워 볼까요?", "check": func() -> bool: return not ItemManager.carried_ids.is_empty()})
 	s.append({"text": "[b]1. 아이템 적재[/b] 잘했어요! 이제 저기 선반 [b]앞[/b] 으로 가 볼까요?", "check": func() -> bool: return _near_shelf0()})
 	s.append({"text": "[b]1. 아이템 적재[/b] 선반 앞에 도착했어요~ [b]E[/b] 키를 누르면 선반이 열려요!", "check": func() -> bool: return _ui != null and room_panel_visible()})
@@ -149,7 +149,7 @@ func _build_steps() -> Array:
 	# 2. 아이템 드랍
 	s.append({"text": "[b]2. 아이템 드랍[/b] 바닥에 떨어진 아이템 쪽으로 가서 [b]X[/b] 로 주워 볼까요? 그다음 선반에서 조금 떨어진 곳에서 [b]Z[/b] 를 누르면 내려놓을 수 있어요~", "enter": func() -> void: _spawn_floor_item(), "check": func() -> bool: return _dropped_on_floor()})
 	# 3. 긴급 퀘스트 (아이템 꺼내서 전달)
-	s.append({"text": "[b]3. 긴급 퀘스트[/b] 큰일이에요! 왼쪽 아래에 [b]긴급 요청 (회복약 1개)[/b] 이 떴어요. 선반을 열고 [b]회복약[/b] 이 든 칸을 ↑↓ 로, 아이템을 ←→ 로 고른 뒤 [b]X[/b] 로 꺼내 주세요 (이름을 클릭해도 돼요)!", "enter": func() -> void: _ensure_on_shelf("potion_hp"); _spawn_potion_quest(), "check": func() -> bool: return _carrying("potion_hp")})
+	s.append({"text": "[b]3. 긴급 퀘스트[/b] 큰일이에요! 왼쪽 아래에 [b]긴급 요청 (회복약 1개)[/b] 이 떴어요. 선반을 열고 [b]회복약[/b] 이 든 칸을 ↑↓ 로, 아이템을 ←→ 로 고른 뒤 [b]X[/b] 로 꺼내 주세요!", "enter": func() -> void: _ensure_on_shelf("potion_hp"); _spawn_potion_quest(), "check": func() -> bool: return _carrying("potion_hp")})
 	s.append({"text": "[b]3. 긴급 퀘스트[/b] 회복약을 들고 [b]전달 선반[/b] (오른쪽 아래 파란 칸) 앞에서 [b]Z[/b] 를 눌러 주세요.", "check": func() -> bool: return _quest_done()})
 	# 4. 증강 선택
 	s.append({"text": "[b]4. 증강 선택[/b] 와아, 레벨이 올랐어요! 나온 증강 중에서 하나를 골라 주세요~ (고르는 동안 게임이 잠시 멈춰요)", "enter": func() -> void: _level_up(), "check": func() -> bool: return not EconomyManager.augments.is_empty() and EconomyManager.pending_choices == 0})
@@ -198,6 +198,8 @@ func _show_step() -> void:
 		step["enter"].call()
 	_guide_label.text = step["text"]
 	_guide_button.visible = step.get("info", false)
+	if _guide_button.visible:
+		_guide_button.call_deferred("grab_focus")
 	_guide_button.text = "시작" if _step == _steps.size() - 1 else "다음"
 
 
