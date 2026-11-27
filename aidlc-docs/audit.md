@@ -796,3 +796,10 @@
 **Context**: 선반 표시 정리
 
 ---
+
+## 선반 조작키 분리 (X: 줍기 / E: 선반 열기·닫기)
+- 요청: 선반 앞에서 Z 로 넣을 때 X 로 선반을 여는 것이 어렵다는 피드백 → "E 키로 선반 열기" 승인
+- 변경: `interact` 액션은 X 만 사용 (줍기 전용), 새 `open_shelf` 액션은 E (선반 열기/닫기, `toggle_shelf`). 마우스 클릭 선반 열기 유지
+- 튜토리얼 문구(1단계, 1단계 남은 아이템, 7단계, 조작 요약)와 TEST.md 체크리스트를 E 기준으로 수정
+- 테스트: 선반 열기 입력을 KEY_E 로 변경 (test_behavior_input, test_tutorial_slice), 줍기 입력은 KEY_X 유지
+- 검증: `godot --headless --path . -s res://tests/run_tests.gd` → PBT seed=20261124 tests=110 failed=0

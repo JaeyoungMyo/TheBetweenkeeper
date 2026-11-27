@@ -261,6 +261,8 @@ func _process(_d: float) -> void:
 		buy_current_slot()
 	if Input.is_action_just_pressed("interact"):
 		interact()
+	if Input.is_action_just_pressed("open_shelf"):
+		toggle_shelf()
 	if Input.is_action_just_pressed("drop_item"):
 		drop_first()
 	for i in 6:
@@ -319,18 +321,13 @@ func near_shelf() -> bool:
 	return StorageService.near_rect(player.global_position, shelf.bounds())
 
 
-## X (또는 E): 열린 패널 닫기 → 가까운 아이템 줍기 → 선반 앞이면 패널 열기
-## 들고 있을 때 선반 앞이면 줍지 않고 선반을 연다 (선반 넣기 안내와 맞춤)
+## X: 열린 패널 닫기 → 가까운 아이템 줍기 (선반은 열지 않는다)
 func interact() -> void:
 	if shelf_panel.visible:
 		shelf_panel.hide()
-	elif near_shelf() and not ItemManager.carried_ids.is_empty():
-		toggle_shelf()
 	elif not _pick_nearest():
 		if not ItemManager.has_room() and _has_pickable_nearby():
 			show_message("더 들 수 없습니다 (손이 가득 찼습니다)")
-		else:
-			toggle_shelf()
 
 
 func toggle_shelf() -> void:

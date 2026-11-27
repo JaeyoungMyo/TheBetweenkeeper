@@ -70,7 +70,7 @@ func test_tutorial_lesson_one_with_keys_then_finish_marks_done() -> void:
 		room.player.position = front
 		await tree.process_frame
 		if not room.shelf_panel.visible:
-			await _key(KEY_X)
+			await _key(KEY_E)
 		await _key(KEY_1 if i < 4 else KEY_2)
 	expect(room._all_stored(), "all five stored by keys")
 	await tree.process_frame
