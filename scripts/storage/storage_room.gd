@@ -44,14 +44,18 @@ func _build_room() -> void:
 	_wall(Rect2(ROOM.position.x - t, ROOM.end.y, ROOM.size.x + t * 2, t))
 	_wall(Rect2(ROOM.position.x - t, ROOM.position.y, t, ROOM.size.y))
 	_wall(Rect2(ROOM.end.x, ROOM.position.y, t, ROOM.size.y))
-	# 초기 선반 3개: 한 던전의 신규 입고 (전투 3~5회 x 5~10개, 약 108 무게) 를 한 번에 담는 양 (선반 1개 = 36)
-	for i in START_SHELVES:
+	# 초기 선반: 본 게임 3개 (한 던전 입고 약 108 무게). 튜토리얼은 1개 (_initial_shelf_count 재정의)
+	for i in _initial_shelf_count():
 		add_shelf()
 	shelf = shelves[0]
 	player = preload("res://scenes/storage/player.tscn").instantiate()
 	player.position = ROOM.get_center()
 	player.z_index = 1
 	add_child(player)
+
+
+func _initial_shelf_count() -> int:
+	return START_SHELVES
 
 
 ## 저장용 선반 목록 (SaveService 가 호출)
@@ -201,6 +205,9 @@ func _build_ui() -> void:
 	var settings := SettingsPanel.new()
 	settings.name = "SettingsPanel"
 	add_child(settings)
+	var pause := PauseMenu.new()
+	pause.name = "PauseMenu"
+	add_child(pause)
 	var growth := GrowthUi.new()
 	growth.name = "GrowthUi"
 	growth.room = self

@@ -86,6 +86,7 @@ static func _ensure_actions() -> void:
 		"drop_item": [KEY_Z],
 		"shop_menu": [KEY_C],
 		"debug_menu": [KEY_F1],
+		"pause": [KEY_P],
 		"slot_1": [KEY_1, KEY_KP_1],
 		"slot_2": [KEY_2, KEY_KP_2],
 		"slot_3": [KEY_3, KEY_KP_3],

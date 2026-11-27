@@ -29,6 +29,11 @@ func _ready() -> void:
 		_create_tutorial_items()
 
 
+## 튜토리얼은 선반 1개로 시작한다
+func _initial_shelf_count() -> int:
+	return 1
+
+
 func _create_tutorial_items() -> void:
 	tutorial_items.clear()
 	EconomyManager.choices_enabled = false  # 튜토리얼 중에는 증강 선택이 나오지 않는다
@@ -170,6 +175,9 @@ func _finish_guide() -> void:
 	completed = true
 	SaveService.tutorial_done = true
 	EconomyManager.choices_enabled = true
+	# 튜토리얼 끝: 본 게임 선반 3개가 되도록 2개 추가
+	while shelves.size() < StorageRoom.START_SHELVES:
+		add_shelf()
 	show_message("튜토리얼 완료!")
 	tutorial_completed.emit()
 

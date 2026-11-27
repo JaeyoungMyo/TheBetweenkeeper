@@ -33,6 +33,7 @@ const TEST_FILES := [
 	"res://tests/integration/test_behavior_input.gd",
 	"res://tests/integration/test_behavior_more.gd",
 	"res://tests/integration/test_continue_flow.gd",
+	"res://tests/integration/test_pause.gd",
 ]
 
 

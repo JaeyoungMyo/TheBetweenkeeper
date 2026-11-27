@@ -60,6 +60,7 @@ func test_tutorial_guide_end_to_end_with_keys() -> void:
 	tree.root.add_child(room)
 	await tree.process_frame
 	var shelf = room.shelves[0]
+	expect(room.shelves.size() == 1, "tutorial starts with one shelf")
 	var front: Vector2 = shelf.position + Vector2(0, 60)
 	for i in room.tutorial_items.size():
 		var it = room.tutorial_items[i]
@@ -87,6 +88,7 @@ func test_tutorial_guide_end_to_end_with_keys() -> void:
 		room._on_guide_next()
 	await tree.process_frame
 	expect(room.completed and not room._guide_running, "guide finished")
+	expect(room.shelves.size() == 3, "three shelves after the tutorial")
 	var ui = room.find_child("DungeonUi", true, false)
 	expect(DungeonManager.flow.state == DungeonFlow.State.IN_BATTLE, "dungeon 1 started after the tutorial")
 	room.free()
