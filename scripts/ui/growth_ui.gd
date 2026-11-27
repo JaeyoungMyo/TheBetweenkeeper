@@ -26,6 +26,16 @@ func _ready() -> void:
 	choice_panel.add_child(_choice_box)
 	choice_panel.hide()
 	add_child(choice_panel)
+	# 오른쪽 위 상점 버튼 (C 키와 같은 동작). 일시정지 버튼 왼쪽에 둔다
+	var shop_button := Button.new()
+	shop_button.name = "shop-open-button"
+	shop_button.text = "상점 (C)"
+	shop_button.position = Vector2(1000, 8)
+	shop_button.focus_mode = Control.FOCUS_NONE
+	shop_button.pressed.connect(func() -> void:
+		if not get_tree().paused:
+			toggle_menu())
+	add_child(shop_button)
 	EconomyManager.gold_changed.connect(_on_gold_changed)
 	EconomyManager.exp_changed.connect(_on_exp_changed)
 	EconomyManager.level_up.connect(_on_level_up)
@@ -38,7 +48,7 @@ func _process(_delta: float) -> void:
 
 
 func refresh_hud() -> void:
-	hud.text = "골드 %d   Lv.%d   EXP %d / %d   [C] 구매" % [EconomyManager.gold(), EconomyManager.level, EconomyManager.exp_points, EconomyManager.exp_to_next()]
+	hud.text = "골드 %d   Lv.%d   EXP %d / %d   [C] 상점" % [EconomyManager.gold(), EconomyManager.level, EconomyManager.exp_points, EconomyManager.exp_to_next()]
 
 
 func toggle_menu() -> void:
@@ -49,14 +59,19 @@ func toggle_menu() -> void:
 
 func _fill_menu() -> void:
 	_clear(_menu_box)
-	# C 메뉴는 선반 구매만 다룬다. 칸 추가는 선반을 열어서 (버튼 또는 + 키)
-	_section("[ 선반 구매 ]")
+	# 상점 (C): 선반과 가방을 산다. 칸 추가는 선반을 열어서 (버튼 또는 + 키)
+	_section("[ 상점 ]")
+	_section("선반 구매")
 	var n := room.shelves.size()
 	if n >= EconomyManager.config["shelf_prices"].size() + 1:
 		_info("새 선반: 최대 %d개입니다" % n)
 	else:
 		_buy_button("새 선반 사기 (%d번째)" % (n + 1), EconomyManager.shelf_price(n), func() -> void: room.buy_shelf())
 		_info("새 선반은 칸 3개로 시작합니다. 칸 추가는 선반을 열고 버튼이나 + 키")
+	_section("가방 구매")
+	var bag_price := EconomyManager.bag_price(ItemManager)
+	_buy_button("가방 확장 (현재 %d)" % ItemManager.bag_size, bag_price, func() -> void: EconomyManager.buy_bag(ItemManager))
+	_info("가방은 손에 드는 개수를 늘립니다")
 	var close := Button.new()
 	close.name = "menu-close-button"
 	close.text = "닫기 (C)"
