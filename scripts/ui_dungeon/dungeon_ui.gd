@@ -32,6 +32,7 @@ var _shop_active := false
 var _shop_close_timer := 0.0
 var _shop_pending := 0.0
 var _visit_label: Label
+var _shop_bag_button: Button
 var _shelf_hint: Label
 
 
@@ -216,6 +217,8 @@ func _open_shop() -> void:
 		shop.buy_finished.connect(_on_buy_finished)
 	_shop_active = true
 	_shop_close_timer = 0.0
+	_shop_bag_button.visible = true
+	_refresh_shop_bag_button()
 	var override: Dictionary = room.sell_override() if room.has_method("sell_override") else {}
 	shop.open(override)
 	if shop.quests.is_active():
@@ -226,6 +229,7 @@ func _open_shop() -> void:
 func _process_shop(delta: float) -> void:
 	shop.tick(delta)
 	_zone_label.text = "전달 선반\n" + _summary()
+	_refresh_shop_bag_button()
 	_refresh_quest()
 	if shop.state == ShopFlow.State.DONE:
 		_shop_close_timer -= delta
@@ -268,9 +272,26 @@ func resume_next_dungeon() -> void:
 
 
 ## 상점 종료 후 다음 던전을 시작한다
+## 상점의 가방 확장 버튼: 현재 가방 크기와 가격 표시. 최대이거나 골드가 부족하면 누를 수 없다
+func _refresh_shop_bag_button() -> void:
+	var price := EconomyManager.bag_price(ItemManager)
+	var text := "가방 확장 (현재 %d) - %s" % [ItemManager.bag_size, "최대" if price < 0 else "%d 골드" % price]
+	_shop_bag_button.text = text
+	_shop_bag_button.disabled = price < 0 or price > EconomyManager.gold()
+
+
+func _on_shop_bag_pressed() -> void:
+	if EconomyManager.buy_bag(ItemManager):
+		room.show_message("가방이 늘어났어요! 이제 %d개까지 들 수 있어요" % ItemManager.capacity())
+	else:
+		room.show_message("가방을 늘릴 수 없어요 (골드 부족 또는 최대)")
+	_refresh_shop_bag_button()
+
+
 func _finish_shop() -> void:
 	shop.close()
 	_shop_active = false
+	_shop_bag_button.visible = false
 	if tutorial_mode:
 		_running = false
 		tutorial_shop_done.emit()
@@ -317,6 +338,16 @@ func _build_zone() -> void:
 	_zone_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_zone_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_zone_label)
+	# 상점 중에만 보이는 가방 확장 버튼 (운반 개수 증가)
+	_shop_bag_button = Button.new()
+	_shop_bag_button.name = "shop-bag-button"
+	# 방 오른쪽 빈 곳 (튜토리얼 안내창과 겹치지 않게)
+	_shop_bag_button.position = Vector2(990, 380)
+	_shop_bag_button.custom_minimum_size = Vector2(260, 0)
+	_shop_bag_button.focus_mode = Control.FOCUS_NONE
+	_shop_bag_button.visible = false
+	_shop_bag_button.pressed.connect(_on_shop_bag_pressed)
+	add_child(_shop_bag_button)
 
 
 ## 큰 글씨 알림 (약 2초 표시 후 사라짐). 퀘스트 발생을 놓치지 않도록 한다
