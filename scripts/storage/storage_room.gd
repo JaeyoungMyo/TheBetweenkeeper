@@ -415,6 +415,9 @@ func _on_state_changed(id: int, _state: int) -> void:
 
 
 func _refresh() -> void:
+	for i in shelves.size():
+		shelves[i].shelf_index = i
+		shelves[i].refresh_look()
 	list_panel.refresh(ItemManager.carried_items(), ItemManager.capacity())
 	if shelf_panel.visible:
 		open_panel()
