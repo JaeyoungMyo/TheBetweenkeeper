@@ -2,7 +2,7 @@
 extends StorageRoom
 
 const TUTORIAL_IDS := ["potion_hp", "scroll", "sword", "dagger", "helmet"]
-const ITEM_SPOT_Y := 215.0
+const ITEM_SPOT_Y := 262.0
 const MENU_SCENE := "res://scenes/main_menu.tscn"
 
 ## 실행 중에는 true. 테스트에서는 false 로 두어 씬 전환을 막는다
@@ -47,7 +47,7 @@ func _ready() -> void:
 func _create_tutorial_items() -> void:
 	tutorial_items.clear()
 	for i in TUTORIAL_IDS.size():
-		var pos := Vector2(520 + i * 60, ITEM_SPOT_Y)
+		var pos := Vector2(566 + i * 49, ITEM_SPOT_Y)
 		tutorial_items.append(add_item(load("res://data/items/%s.tres" % TUTORIAL_IDS[i]), pos))
 
 
@@ -182,7 +182,7 @@ func _level_up() -> void:
 
 
 func _spawn_floor_item() -> void:
-	_floor_item = add_item(load("res://data/items/axe.tres"), Vector2(420, 470))
+	_floor_item = add_item(load("res://data/items/axe.tres"), Vector2(500, 430))
 
 
 var _floor_carried := false

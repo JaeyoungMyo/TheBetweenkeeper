@@ -3,9 +3,9 @@ class_name DungeonUi
 extends CanvasLayer
 
 ## 전달 선반: 창고 방 오른쪽 아래 고정 위치 (U3-CG-1 = A). 플레이어가 가까이 가서 아이템을 넣는다
-const DELIVERY_SHELF := Rect2(900, 470, 90, 110)
+const DELIVERY_SHELF := Rect2(860, 420, 80, 90)
 ## 입고 아이템이 떨어지는 영역 (선반과 전달 선반을 피한 바닥)
-const INTAKE_AREA := Rect2(260, 480, 560, 150)
+const INTAKE_AREA := Rect2(340, 390, 440, 120)
 ## 전투 길이와 전투 사이 간격 (초기값, 연출 조정 대상)
 const BATTLE_SEC := 16.0
 const BATTLE_GAP_SEC := 4.0

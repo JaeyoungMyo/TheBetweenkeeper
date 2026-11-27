@@ -38,7 +38,7 @@ func test_two_items_on_same_spot_both_listed_and_pickable() -> void:
 	# 같은 자리에 아이템 2개: 둘 다 존재, 호버 목록에 둘 다 표시, 줍기는 한 번에 하나
 	var room = _room()
 	await _frames(3)
-	var spot := Vector2(300, 560)
+	var spot := Vector2(400, 480)
 	var a = room.add_item(load("res://data/items/sword.tres"), spot)
 	var b = room.add_item(load("res://data/items/armor.tres"), spot)
 	await _frames(2)

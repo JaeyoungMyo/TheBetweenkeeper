@@ -14,7 +14,7 @@ const TINTS := [Color(1, 1, 1), Color(0.7, 0.85, 1.0), Color(0.75, 1.0, 0.7), Co
 const EMPTY_TEX := preload("res://art/shelf/shelf_empty.png")
 const FULL_TEX := preload("res://art/shelf/shelf_full.png")
 
-const SIZE := Vector2(96, 40)
+const SIZE := Vector2(40, 40)
 
 
 func _ready() -> void:
