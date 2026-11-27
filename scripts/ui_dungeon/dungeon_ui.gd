@@ -24,6 +24,10 @@ var _gap_timer := 0.0
 var _running := false
 var _shown_quest_text := ""
 var shop: ShopFlow = null
+## 튜토리얼 모드: 상점은 열리지만 다음 던전을 시작하지 않고 튜토리얼에 알린다
+var tutorial_mode := false
+signal tutorial_sell_result(r: Dictionary)
+signal tutorial_shop_done()
 var _shop_active := false
 var _shop_close_timer := 0.0
 var _shop_pending := 0.0
@@ -59,6 +63,9 @@ func _begin_battle() -> void:
 
 
 func _process(delta: float) -> void:
+	_sleep.visible = DungeonManager.flow.state == DungeonFlow.State.SLEEP
+	if _sleep.visible:
+		_sleep_label.text = "용사가 잠들었습니다\n정리 시간 %d초" % ceili(DungeonManager.flow.sleep_left)
 	if _shop_pending > 0.0:
 		_shop_pending -= delta
 		if _shop_pending <= 0.0:
@@ -205,7 +212,8 @@ func _open_shop() -> void:
 		shop.buy_finished.connect(_on_buy_finished)
 	_shop_active = true
 	_shop_close_timer = 0.0
-	shop.open()
+	var override: Dictionary = room.sell_override() if room.has_method("sell_override") else {}
+	shop.open(override)
 	if shop.quests.is_active():
 		_announce("판매 퀘스트 발생!", Color(0.5, 1, 0.6))
 	room.show_message("상점 방문: 판매 퀘스트 시작")
@@ -222,6 +230,7 @@ func _process_shop(delta: float) -> void:
 
 
 func _on_sell_finished(r: Dictionary) -> void:
+	tutorial_sell_result.emit(r)
 	match r["result"]:
 		"success":
 			room.show_message("판매 성공! 골드 +%d, EXP +%d" % [r["gold"], r["exp"]])
@@ -232,8 +241,9 @@ func _on_sell_finished(r: Dictionary) -> void:
 
 
 func _on_buy_finished(lines: Array) -> void:
-	SaveService.shop_visits += 1
-	SaveService.save_point("shop_clear")
+	if not tutorial_mode:
+		SaveService.shop_visits += 1
+		SaveService.save_point("shop_clear")
 	var parts := PackedStringArray()
 	for l: Dictionary in lines:
 		parts.append("%s %s" % [_name(l["item_id"]), "구매" if l["bought"] else "골드 부족"])
@@ -257,6 +267,10 @@ func resume_next_dungeon() -> void:
 func _finish_shop() -> void:
 	shop.close()
 	_shop_active = false
+	if tutorial_mode:
+		_running = false
+		tutorial_shop_done.emit()
+		return
 	DungeonManager.start_dungeon(DungeonManager.flow.dungeon_no + 1)
 	_running = true
 	_begin_battle()

@@ -1,100 +1,66 @@
-# 튜토리얼 (US-01): 아이템 5개를 한 단계씩 따라 하며 조작을 배운다. 끝나면 설명 페이지 후 던전 1 시작
+# 튜토리얼 (7단계): 메인 메뉴의 "튜토리얼" 에서만 실행. 끝나면 완료 표시 후 메인 메뉴로 돌아간다
 extends StorageRoom
 
-signal tutorial_completed
-
-## 튜토리얼 아이템 (5개, 무게 합 13 → 선반 1개에 들어감)
 const TUTORIAL_IDS := ["potion_hp", "scroll", "sword", "dagger", "helmet"]
 const ITEM_SPOT_Y := 215.0
+const MENU_SCENE := "res://scenes/main_menu.tscn"
 
+## 실행 중에는 true. 테스트에서는 false 로 두어 씬 전환을 막는다
+var auto_return := true
 var tutorial_items: Array[ItemInstance] = []
 var completed := false
 var take_out_count := 0
 
+var _ui: DungeonUi
 var _guide: CanvasLayer
 var _guide_label: RichTextLabel
 var _guide_button: Button
 var _steps: Array = []
 var _step := 0
 var _guide_running := false
+var _quest_kind := ""
+var _sell_ok := false
+var _floor_item: ItemInstance = null
 
 
-func _ready() -> void:
-	super()
-	tutorial_completed.connect(_start_dungeon)
-	_build_guide()
-	if SaveService.has_save():
-		_offer_continue()
-	else:
-		_create_tutorial_items()
-
-
-## 튜토리얼은 선반 1개로 시작한다
 func _initial_shelf_count() -> int:
 	return 1
 
 
-func _create_tutorial_items() -> void:
-	tutorial_items.clear()
-	EconomyManager.choices_enabled = false  # 튜토리얼 중에는 증강 선택이 나오지 않는다
-	for i in TUTORIAL_IDS.size():
-		# 선반 1 (610, 140) 앞쪽에 가깝게 둔다
-		var pos := Vector2(520 + i * 60, ITEM_SPOT_Y)
-		tutorial_items.append(add_item(load("res://data/items/%s.tres" % TUTORIAL_IDS[i]), pos))
+func _ready() -> void:
+	super()
+	EconomyManager.reset_run()
+	ItemManager.reset_run()
+	DungeonManager.reset_run()
+	SaveService.delete_save()
+	EconomyManager.choices_enabled = false  # 1~2단계 동안 증강은 나오지 않는다
+	DungeonManager.start_dungeon(1)
+	_ui = find_child("DungeonUi", true, false) as DungeonUi
+	_ui.tutorial_mode = true
+	_ui.tutorial_shop_done.connect(_on_tutorial_shop_done)
+	_ui.tutorial_sell_result.connect(_on_tutorial_sell)
+	_build_guide()
+	_create_tutorial_items()
 	_start_guide()
 
 
-## 저장 파일이 있으면 이어하기 / 새 게임 중 고른다
-func _offer_continue() -> void:
-	var layer := CanvasLayer.new()
-	layer.layer = 5
-	add_child(layer)
-	var box := VBoxContainer.new()
-	box.position = Vector2(520, 300)
-	layer.add_child(box)
-	var label := Label.new()
-	label.text = "저장된 진행이 있습니다"
-	box.add_child(label)
-	var cont := Button.new()
-	cont.text = "이어하기"
-	cont.pressed.connect(func() -> void:
-		layer.queue_free()
-		_continue_game())
-	box.add_child(cont)
-	var fresh := Button.new()
-	fresh.text = "새 게임 (튜토리얼)"
-	fresh.pressed.connect(func() -> void:
-		layer.queue_free()
-		SaveService.delete_save()
-		_create_tutorial_items())
-	box.add_child(fresh)
+func _create_tutorial_items() -> void:
+	tutorial_items.clear()
+	for i in TUTORIAL_IDS.size():
+		var pos := Vector2(520 + i * 60, ITEM_SPOT_Y)
+		tutorial_items.append(add_item(load("res://data/items/%s.tres" % TUTORIAL_IDS[i]), pos))
 
 
-## 저장 지점에 맞춰 다시 시작: 던전 완료 저장 → 상점부터, 상점 완료 저장 → 다음 던전
-func _continue_game() -> void:
-	var d := SaveService.load_save()
-	if d.is_empty():
-		show_message("저장 파일이 손상되어 새 게임으로 시작합니다")
-		SaveService.delete_save()
-		_create_tutorial_items()
-		return
-	restore_layout(d["shelves"])
-	completed = true
-	var ui := find_child("DungeonUi", true, false) as DungeonUi
-	if ui == null:
-		return
-	if d["point"] == "dungeon_clear":
-		ui.resume_at_shop()
-	else:
-		ui.resume_next_dungeon()
+## 튜토리얼 상점의 판매 퀘스트: 검 1개 (DungeonUi 가 상점을 열 때 사용)
+func sell_override() -> Dictionary:
+	return {"fixed_lines": [{"item_kind": "sword", "required": 1}], "time_limit": 120.0, "exp": 40, "gold": 0}
 
 
-## 선반에서 꺼내기 (StorageRoom 이 호출)
 func on_take_out_done() -> void:
 	take_out_count += 1
 
 
-# ---------- 단계별 안내 ----------
+# ---------- 단계 ----------
 
 func _build_guide() -> void:
 	_guide = CanvasLayer.new()
@@ -128,20 +94,38 @@ func _start_guide() -> void:
 
 
 func _build_steps() -> Array:
-	var steps := []
-	steps.append({"text": "1/8 아이템에게 다가가세요. [b]WASD[/b] 로 움직이거나 빈 바닥을 클릭하세요.", "check": func() -> bool: return _near_any_item()})
-	steps.append({"text": "2/8 [b]X[/b] 키로 아이템을 주우세요.", "check": func() -> bool: return not ItemManager.carried_ids.is_empty()})
-	steps.append({"text": "3/8 선반에 다가가세요. 선반 [b]앞[/b] 까지 걸어가세요.", "check": func() -> bool: return _near_shelf0()})
-	steps.append({"text": "4/8 [b]X[/b] 키로 선반을 여세요.", "check": func() -> bool: return shelf_panel.visible})
-	steps.append({"text": "5/8 선반이 열린 상태에서 [b]1[/b] 키를 누르면 들고 있는 아이템이 1번 칸에 들어갑니다. 1 키를 누르세요.", "check": func() -> bool: return _stored_count() >= 1})
-	steps.append({"text": "6/8 같은 방법으로 남은 아이템을 넣으세요. 아이템을 집고 → 선반 앞 → [b]X[/b] → [b]1·2·3[/b] 키 (칸 번호).", "check": func() -> bool: return _all_stored()})
-	steps.append({"text": "7/8 이제 선반에서 꺼내 봅시다. 선반 앞에서 [b]X[/b] 로 선반을 열고, 손을 비운 상태에서 [b]1[/b] 키를 누르세요. 그 칸의 맨 위 아이템이 나옵니다.", "check": func() -> bool: return take_out_count >= 1})
-	steps.append({"text": "8/8 꺼낸 아이템을 다시 넣으세요 (선반 열림 상태에서 1·2·3 키). 모두 넣으면 다음 안내로 넘어갑니다.", "check": func() -> bool: return _all_stored()})
-	steps.append({"info": true, "text": "[b]긴급 요청[/b]: 왼쪽 아래 패널에 나온 품목을 들고 [b]전달 선반[/b] (창고 오른쪽 아래 파란 칸) 가까이 가서 [b]Z[/b] 키로 1개씩 넣으세요. 제한 시간 안에 다 넣으면 성공입니다."})
-	steps.append({"info": true, "text": "[b]전투와 수면[/b]: 던전에서는 전투마다 아이템이 들어옵니다. 전투가 끝나면 [b]수면 60초[/b] 동안 정리하고, [b]C[/b] 키로 선반과 칸을 강화할 수 있습니다."})
-	steps.append({"info": true, "text": "[b]상점[/b]: 던전이 끝나면 [b]판매 퀘스트[/b]가 뜹니다. 잡템과 장비를 출력공간 (전달 선반) 에 넣어 팔면 골드와 EXP 를 얻습니다. 구매품은 맵에 떨어집니다."})
-	steps.append({"info": true, "text": "[b]조작 요약[/b]: 이동 WASD · 줍기 X · 내려놓기 Z · 선반 칸 1~3 · 강화 C · 설정 F2. 이제 [b]던전 1[/b] 을 시작합니다."})
-	return steps
+	var s := []
+	# 1. 아이템 적재
+	s.append({"text": "[b]1. 아이템 적재[/b] 아이템에게 다가가세요. [b]WASD[/b] 로 움직이거나 빈 바닥을 클릭하세요.", "check": func() -> bool: return _near_any_item()})
+	s.append({"text": "[b]1. 아이템 적재[/b] [b]X[/b] 키로 아이템을 주우세요.", "check": func() -> bool: return not ItemManager.carried_ids.is_empty()})
+	s.append({"text": "[b]1. 아이템 적재[/b] 선반 [b]앞[/b] 으로 가세요.", "check": func() -> bool: return _near_shelf0()})
+	s.append({"text": "[b]1. 아이템 적재[/b] [b]X[/b] 키로 선반을 여세요.", "check": func() -> bool: return _ui != null and room_panel_visible()})
+	s.append({"text": "[b]1. 아이템 적재[/b] 선반이 열린 상태에서 [b]1[/b] 키를 누르면 들고 있는 아이템이 1번 칸에 들어갑니다.", "check": func() -> bool: return _stored_count() >= 1})
+	s.append({"text": "[b]1. 아이템 적재[/b] 남은 아이템도 같은 방법으로 넣으세요 (집고 → 선반 앞 → X → 1·2·3 키).", "check": func() -> bool: return _all_stored()})
+	# 2. 긴급 퀘스트 (아이템 꺼내서 전달)
+	s.append({"text": "[b]2. 긴급 퀘스트[/b] 왼쪽 아래에 [b]긴급 요청[/b] 이 떴습니다. 요청 품목을 선반에서 꺼내야 합니다. 선반을 열고 손을 비운 채 [b]1[/b] 키를 누르세요 (칸의 맨 위 아이템이 나옵니다).", "enter": func() -> void: _spawn_quest_from_top(), "check": func() -> bool: return take_out_count >= 1 and not ItemManager.carried_ids.is_empty()})
+	s.append({"text": "[b]2. 긴급 퀘스트[/b] 들고 [b]전달 선반[/b] (오른쪽 아래 파란 칸) 앞에서 [b]Z[/b] 를 누르세요.", "check": func() -> bool: return _quest_done()})
+	# 3. 증강 선택
+	s.append({"text": "[b]3. 증강 선택[/b] 레벨이 올랐습니다! 나온 증강 중 하나를 고르세요.", "enter": func() -> void: _level_up(), "check": func() -> bool: return not EconomyManager.augments.is_empty() and EconomyManager.pending_choices == 0})
+	# 4. 아이템 드랍
+	s.append({"text": "[b]4. 아이템 드랍[/b] 바닥의 아이템에 다가가 [b]X[/b] 로 줍고, 선반에서 떨어진 곳에서 [b]Z[/b] 로 내려놓으세요.", "enter": func() -> void: _spawn_floor_item(), "check": func() -> bool: return _dropped_on_floor()})
+	# 5. 수면
+	s.append({"text": "[b]5. 수면[/b] 용사가 잠듭니다 (튜토리얼은 6초). 수면 중에도 [b]C[/b] 로 선반과 칸을 강화할 수 있습니다.", "enter": func() -> void: _start_sleep(), "check": func() -> bool: return _ui != null and _ui._shop_active})
+	# 6. 상점 퀘스트
+	s.append({"text": "[b]6. 상점 퀘스트[/b] 상점이 열렸습니다. 요청 품목 [b]검[/b] 을 선반에서 꺼내 [b]전달 선반[/b] 에 [b]Z[/b] 로 넣으세요. 판매되면 골드와 EXP 를 얻습니다.", "check": func() -> bool: return _sell_ok})
+	# 7. 선반 구매와 확장
+	s.append({"text": "[b]7. 선반 구매[/b] 튜토리얼 지원금 300골드를 드렸습니다. [b]C[/b] 키로 메뉴를 열고 [b]선반 추가[/b] 를 누르세요.", "enter": func() -> void: EconomyManager.add_gold(300), "check": func() -> bool: return room_shelves() >= 2})
+	s.append({"text": "[b]7. 선반 확장[/b] 같은 메뉴에서 [b]선반 1 칸 추가[/b] 를 눌러 칸을 늘리세요.", "check": func() -> bool: return shelves[0].state.slot_count > 3})
+	s.append({"info": true, "text": "[b]튜토리얼 완료![/b] 이제 메인 메뉴에서 [b]새 게임[/b] 을 눌러 시작하세요. 시작 버튼을 누르면 메인 메뉴로 돌아갑니다."})
+	return s
+
+
+func room_panel_visible() -> bool:
+	return shelf_panel.visible
+
+
+func room_shelves() -> int:
+	return shelves.size()
 
 
 func _process(delta: float) -> void:
@@ -156,9 +140,12 @@ func _process(delta: float) -> void:
 
 func _show_step() -> void:
 	if _step >= _steps.size():
-		_finish_guide()
+		_finish_tutorial()
 		return
 	var step: Dictionary = _steps[_step]
+	if step.has("enter") and not step.get("entered", false):
+		step["entered"] = true
+		step["enter"].call()
 	_guide_label.text = step["text"]
 	_guide_button.visible = step.get("info", false)
 	_guide_button.text = "시작" if _step == _steps.size() - 1 else "다음"
@@ -169,17 +156,61 @@ func _on_guide_next() -> void:
 	_show_step()
 
 
-func _finish_guide() -> void:
-	_guide_running = false
-	_guide.visible = false
-	completed = true
-	SaveService.tutorial_done = true
+# ----- 단계별 동작 -----
+
+func _spawn_quest_from_top() -> void:
+	var ids: Array = shelves[0].state.slot_items[0]
+	var top: ItemInstance = ItemManager.items[ids.back()]
+	_quest_kind = top.data.item_id
+	DungeonManager.spawn_quest_now({"quantity": 1, "line_max": 1, "time_limit": 120.0, "gold": 10, "exp": 10, "fixed_lines": [{"item_kind": _quest_kind, "required": 1}]})
+
+
+func _quest_done() -> bool:
+	return DungeonManager.quests.quest != null and DungeonManager.quests.quest.status == Quest.Status.SUCCESS
+
+
+func _level_up() -> void:
 	EconomyManager.choices_enabled = true
-	# 튜토리얼 끝: 본 게임 선반 3개가 되도록 2개 추가
-	while shelves.size() < StorageRoom.START_SHELVES:
-		add_shelf()
-	show_message("튜토리얼 완료!")
-	tutorial_completed.emit()
+	EconomyManager.add_exp(EconomyManager.exp_to_next() - EconomyManager.exp_points)
+
+
+func _spawn_floor_item() -> void:
+	_floor_item = add_item(load("res://data/items/axe.tres"), Vector2(420, 470))
+
+
+var _floor_carried := false
+
+
+## 바닥 아이템을 들었다가 (Z) 내려놓았는지
+func _dropped_on_floor() -> bool:
+	if _floor_item == null:
+		return false
+	if ItemManager.carried_ids.has(_floor_item.instance_id):
+		_floor_carried = true
+	return _floor_carried and _floor_item.state == ItemInstance.State.INCOMING and ItemManager.carried_ids.is_empty()
+
+
+func _start_sleep() -> void:
+	DungeonManager.flow.begin_sleep()
+	DungeonManager.flow.sleep_left = 6.0
+
+
+func _on_tutorial_sell(r: Dictionary) -> void:
+	if r.get("result") == "success":
+		_sell_ok = true
+
+
+func _on_tutorial_shop_done() -> void:
+	pass
+
+
+func _finish_tutorial() -> void:
+	_guide_running = false
+	completed = true
+	SaveService.mark_tutorial_done()
+	if auto_return:
+		show_message("튜토리얼 완료! 메인 메뉴로 돌아갑니다")
+		get_tree().create_timer(2.5).timeout.connect(func() -> void: get_tree().change_scene_to_file(MENU_SCENE))
 
 
 func _near_any_item() -> bool:
@@ -203,10 +234,3 @@ func _stored_count() -> int:
 
 func _all_stored() -> bool:
 	return not tutorial_items.is_empty() and _stored_count() == tutorial_items.size()
-
-
-## 튜토리얼 완료 후 던전 1 시작 (U3-CG-2 = A)
-func _start_dungeon() -> void:
-	var ui := find_child("DungeonUi", true, false) as DungeonUi
-	if ui != null:
-		ui.start_run()

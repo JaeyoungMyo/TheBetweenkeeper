@@ -34,6 +34,24 @@ func load_save() -> Dictionary:
 	return d
 
 
+const SETTINGS_PATH := "user://settings.cfg"
+
+
+## 튜토리얼 완료 표시 (저장 파일과 별도, 게임 진행 저장을 지워도 남는다)
+func tutorial_done_saved() -> bool:
+	var cfg := ConfigFile.new()
+	if cfg.load(SETTINGS_PATH) != OK:
+		return false
+	return bool(cfg.get_value("progress", "tutorial_done", false))
+
+
+func mark_tutorial_done() -> void:
+	var cfg := ConfigFile.new()
+	cfg.load(SETTINGS_PATH)
+	cfg.set_value("progress", "tutorial_done", true)
+	cfg.save(SETTINGS_PATH)
+
+
 func delete_save() -> void:
 	if has_save():
 		DirAccess.remove_absolute(ProjectSettings.globalize_path(PATH))

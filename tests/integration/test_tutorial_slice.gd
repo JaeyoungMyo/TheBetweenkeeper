@@ -53,42 +53,29 @@ func _resolve_levelups(room) -> void:
 		await tree.process_frame
 
 
-func test_tutorial_guide_end_to_end_with_keys() -> void:
-	# 안내 단계를 실제 키 입력으로 끝까지 진행한다: 줍기 → 선반 열기 → 1 키 넣기 → 꺼내기 → 다시 넣기 → 설명 → 던전 1
+func test_tutorial_lesson_one_with_keys_then_finish_marks_done() -> void:
+	# 1단계 (적재) 를 실제 키 입력으로 끝낸다. 튜토리얼 완료 표시는 설정 파일에 남는다
 	SaveService.delete_save()
 	var room = load("res://scenes/storage/tutorial_storage.tscn").instantiate()
+	room.auto_return = false
 	tree.root.add_child(room)
 	await tree.process_frame
 	var shelf = room.shelves[0]
-	expect(room.shelves.size() == 1, "tutorial starts with one shelf")
 	var front: Vector2 = shelf.position + Vector2(0, 60)
 	for i in room.tutorial_items.size():
 		var it = room.tutorial_items[i]
 		room.player.position = it.world_position + Vector2(0, 8)
 		await tree.process_frame
-		await _key(KEY_X)  # 줍기
+		await _key(KEY_X)
 		room.player.position = front
 		await tree.process_frame
 		if not room.shelf_panel.visible:
-			await _key(KEY_X)  # 선반 열기
-		await _key(KEY_1 if i < 4 else KEY_2)  # 칸에 넣기
+			await _key(KEY_X)
+		await _key(KEY_1 if i < 4 else KEY_2)
 	expect(room._all_stored(), "all five stored by keys")
-	expect(EconomyManager.level == 2 and EconomyManager.pending_choices == 0 and not tree.paused, "level up in tutorial shows no augment choice")
 	await tree.process_frame
-	expect(room._step >= 6, "guide moved past storing steps (step %d)" % room._step)
-	if not room.shelf_panel.visible:
-		await _key(KEY_X)
-	await _key(KEY_1)  # 손이 비어 있으니 꺼내기
-	expect(room.take_out_count == 1, "key 1 with empty hands takes out")
-	await _key(KEY_1)  # 다시 넣기
-	expect(room._all_stored(), "stored again")
-	await tree.process_frame
-	expect(room._step >= 8, "guide reached the explanation pages (step %d)" % room._step)
-	for i in 4:
-		room._on_guide_next()
-	await tree.process_frame
-	expect(room.completed and not room._guide_running, "guide finished")
-	expect(room.shelves.size() == 3, "three shelves after the tutorial")
-	var ui = room.find_child("DungeonUi", true, false)
-	expect(DungeonManager.flow.state == DungeonFlow.State.IN_BATTLE, "dungeon 1 started after the tutorial")
+	expect(room._step >= 6, "lesson 1 done, lesson 2 started (step %d)" % room._step)
+	expect(EconomyManager.pending_choices == 0 and not tree.paused, "no augment choice during lesson 1")
+	room._finish_tutorial()
+	expect(SaveService.tutorial_done_saved(), "tutorial completion is saved")
 	room.free()

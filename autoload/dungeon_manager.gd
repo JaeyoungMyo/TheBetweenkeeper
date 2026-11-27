@@ -27,6 +27,14 @@ func reset_run() -> void:
 	failures.reset()
 
 
+## 지정한 퀘스트를 바로 발생 (튜토리얼용)
+func spawn_quest_now(spec: Dictionary) -> void:
+	var r := quests.spawn(spec, _stored_kinds(), rng)
+	if r["status"] == "started":
+		quest_started.emit()
+	_handle(_outcome(r))
+
+
 ## F1 디버그: 전투 중이면 퀘스트를 바로 발생시킨다
 func debug_spawn_quest() -> void:
 	if flow.state == DungeonFlow.State.IN_BATTLE:

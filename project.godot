@@ -6,7 +6,7 @@ config_version=5
 [application]
 
 config/name="아공간 관리인"
-run/main_scene="res://scenes/storage/tutorial_storage.tscn"
+run/main_scene="res://scenes/main_menu.tscn"
 config/features=PackedStringArray("4.7", "Compatibility")
 
 [autoload]

@@ -25,7 +25,8 @@ func _init(space: DeliverySpace, place: Callable) -> void:
 	rng.randomize()
 
 
-func open() -> void:
+## override: 튜토리얼 등에서 판매 퀘스트 값을 바꿀 때 (예: fixed_lines, quantity, time_limit)
+func open(override: Dictionary = {}) -> void:
 	state = State.SELL
 	var kinds := ShopRules.sellable_kinds(ItemManager.items.values(), config["sell_excluded_categories"])
 	var spec := {
@@ -35,6 +36,7 @@ func open() -> void:
 		"gold": 0,
 		"exp": int(config["sell_reward_exp"]),
 	}
+	spec.merge(override, true)
 	var r := quests.spawn(spec, kinds, rng)
 	if r["status"] == "skipped":
 		_end_sell({"result": "skipped"})
