@@ -23,7 +23,7 @@ func test_continue_after_dungeon_clear_opens_shop() -> void:
 	var room = _game()
 	await _frames(2)
 	var ui = room.find_child("DungeonUi", true, false)
-	ui._process(3.0)  # 상점 방문 중 표시 (2.5초) 가 지난 뒤 상점이 열린다
+	ui._process(3.0)  # 마을 방문 중 표시 (2.5초) 가 지난 뒤 상점이 열린다
 	expect(ui._shop_active, "dungeon_clear save resumes at the shop")
 	room.free()
 	GameSession.continue_requested = false

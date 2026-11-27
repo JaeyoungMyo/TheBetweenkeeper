@@ -29,7 +29,7 @@ func _ready() -> void:
 	# 오른쪽 위 상점 버튼 (C 키와 같은 동작). 일시정지 버튼 왼쪽에 둔다
 	var shop_button := Button.new()
 	shop_button.name = "shop-open-button"
-	shop_button.text = "상점 (C)"
+	shop_button.text = "구매 (C)"
 	shop_button.position = Vector2(1000, 8)
 	shop_button.focus_mode = Control.FOCUS_NONE
 	shop_button.pressed.connect(func() -> void:
@@ -48,7 +48,7 @@ func _process(_delta: float) -> void:
 
 
 func refresh_hud() -> void:
-	hud.text = "골드 %d   Lv.%d   EXP %d / %d   [C] 상점" % [EconomyManager.gold(), EconomyManager.level, EconomyManager.exp_points, EconomyManager.exp_to_next()]
+	hud.text = "골드 %d   Lv.%d   EXP %d / %d   [C] 구매" % [EconomyManager.gold(), EconomyManager.level, EconomyManager.exp_points, EconomyManager.exp_to_next()]
 
 
 func toggle_menu() -> void:
@@ -60,7 +60,7 @@ func toggle_menu() -> void:
 func _fill_menu() -> void:
 	_clear(_menu_box)
 	# 상점 (C): 선반과 가방을 산다. 칸 추가는 선반을 열어서 (버튼 또는 + 키)
-	_section("[ 상점 ]")
+	_section("[ 구매 ]")
 	_section("선반 구매")
 	var n := room.shelves.size()
 	if n >= EconomyManager.config["shelf_prices"].size() + 1:

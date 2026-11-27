@@ -205,7 +205,7 @@ func _on_game_over(failures: int) -> void:
 func _on_shop_visit() -> void:
 	_running = false
 	_shop_pending = 2.5
-	_visit_label.text = "상점 방문 중..."
+	_visit_label.text = "마을 방문 중..."
 	_visit_label.visible = true
 
 
@@ -220,7 +220,7 @@ func _open_shop() -> void:
 	shop.open(override)
 	if shop.quests.is_active():
 		_announce("판매 퀘스트 발생!", Color(0.5, 1, 0.6))
-	room.show_message("상점 방문: 판매 퀘스트 시작")
+	room.show_message("마을 방문: 판매 퀘스트 시작")
 
 
 func _process_shop(delta: float) -> void:
