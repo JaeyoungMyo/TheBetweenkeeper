@@ -105,8 +105,8 @@ func test_click_walks_player_to_point() -> void:
 	room.free()
 
 
-func test_delivery_shelf_click_then_key_one_moves_one_item() -> void:
-	# 전달 선반: 가까이서 클릭해 열고, 1 키로 들고 있는 아이템 1개를 넣는다
+func test_delivery_shelf_z_moves_one_item_not_floor() -> void:
+	# 전달 선반 근처에서 Z 는 들고 있는 아이템 1개를 선반에 넣는다 (바닥에 내려놓지 않음)
 	var room = _room()
 	await _frames(3)
 	var ui = room.find_child("DungeonUi", true, false)
@@ -117,12 +117,10 @@ func test_delivery_shelf_click_then_key_one_moves_one_item() -> void:
 	var shelf_pos: Vector2 = ui.DELIVERY_SHELF.get_center()
 	room.player.position = shelf_pos + Vector2(0, -30)
 	await _frames(2)
-	await _click(shelf_pos)
+	var before: int = DungeonManager.delivery.size()
+	await _key(KEY_Z)
 	await _frames(2)
-	expect(ui._shelf_open, "click opens delivery shelf")
-	var before := DungeonManager.delivery.size()
-	await _key(KEY_1)
-	await _frames(2)
-	expect(DungeonManager.delivery.size() == before + 1, "key 1 moves exactly one item")
+	expect(DungeonManager.delivery.size() == before + 1, "Z moves exactly one item to the delivery shelf")
 	expect(ItemManager.carried_ids.size() == 1, "one item still carried")
+	expect(not ui.DELIVERY_SHELF.has_point(a.world_position), "item was not dropped on the floor")
 	room.free()

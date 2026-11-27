@@ -29,6 +29,7 @@ func test_continue_after_dungeon_clear_opens_shop() -> void:
 	expect(room.tutorial_items.is_empty(), "continue screen skips tutorial items")
 	room._continue_game()
 	await _frames(2)
+	ui._process(3.0)  # 상점 방문 중 표시 (2.5초) 가 지난 뒤 상점이 열린다
 	expect(ui._shop_active, "dungeon_clear save resumes at the shop")
 	room.free()
 	SaveService.delete_save()

@@ -26,7 +26,8 @@ var _shown_quest_text := ""
 var shop: ShopFlow = null
 var _shop_active := false
 var _shop_close_timer := 0.0
-var _shelf_open := false
+var _shop_pending := 0.0
+var _visit_label: Label
 var _shelf_hint: Label
 
 
@@ -41,6 +42,8 @@ func _ready() -> void:
 	DungeonManager.game_over_reached.connect(_on_game_over)
 	DungeonManager.shop_visit_ready.connect(_on_shop_visit)
 	DungeonManager.delivery_changed.connect(_on_delivery_changed)
+	DungeonManager.quest_started.connect(func() -> void: _announce("긴급 요청 발생!", Color(1, 0.85, 0.3)))
+	room.drop_override = Callable(self, "drop_to_shelf")
 
 
 ## 튜토리얼 완료 후 던전 1 을 시작한다 (U3-CG-2 = A)
@@ -56,6 +59,13 @@ func _begin_battle() -> void:
 
 
 func _process(delta: float) -> void:
+	if _shop_pending > 0.0:
+		_shop_pending -= delta
+		if _shop_pending <= 0.0:
+			_shop_pending = 0.0
+			_visit_label.visible = false
+			_open_shop()
+		return
 	if _shop_active:
 		_process_shop(delta)
 		return
@@ -77,35 +87,21 @@ func _process(delta: float) -> void:
 		_sleep_label.text = "용사가 잠들었습니다\n정리 시간 %d초" % ceili(flow.sleep_left)
 	_battle_label.text = "던전 %d · 전투 %d / %d" % [flow.dungeon_no, flow.battle_index, flow.battle_total]
 	_zone_label.text = "전달 선반\n" + _summary()
-	if _shelf_open and not _near_shelf():
-		_close_shelf()
-	_shelf_hint.visible = _near_shelf()
-	_shelf_hint.text = "1 키: 1개 넣기 (열림)" if _shelf_open else "클릭: 열기 / 드래그로 넣기"
+	_shelf_hint.visible = _near_shelf() and not ItemManager.carried_ids.is_empty()
+	_shelf_hint.text = "Z: 1개 넣기 / 드래그로 넣기"
 	_refresh_quest()
-
-
-## 선반처럼 가까이 가서 클릭하면 연다. 열린 상태에서 1 키를 누르면 들고 있는 아이템 1개를 넣는다
-func _input(event: InputEvent) -> void:
-	if DungeonManager.flow.state == DungeonFlow.State.GAME_OVER:
-		return
-	var mouse := event as InputEventMouseButton
-	if mouse != null and mouse.pressed and mouse.button_index == MOUSE_BUTTON_LEFT:
-		if DELIVERY_SHELF.has_point(mouse.position) and _near_shelf():
-			_shelf_open = not _shelf_open
-			get_viewport().set_input_as_handled()
-		return
-	var key := event as InputEventKey
-	if key != null and key.pressed and not key.echo and key.keycode == KEY_1 and _shelf_open:
-		_deliver_one()
-		get_viewport().set_input_as_handled()
 
 
 func _near_shelf() -> bool:
 	return StorageService.near_rect(room.player.position, DELIVERY_SHELF)
 
 
-func _close_shelf() -> void:
-	_shelf_open = false
+## Z (전달 선반 근처): 들고 있는 맨 위 1개를 넣는다. 바닥에 내려놓지 않는다
+func drop_to_shelf() -> bool:
+	if DungeonManager.flow.state == DungeonFlow.State.GAME_OVER or not _near_shelf() or ItemManager.carried_ids.is_empty():
+		return false
+	_deliver_one()
+	return true
 
 
 ## 들고 있는 아이템 중 맨 위 1개만 넣는다 (한 번에 여러 개 넣지 않음)
@@ -194,8 +190,15 @@ func _on_game_over(failures: int) -> void:
 	_running = false
 
 
+## 수면이 끝나면 먼저 "상점 방문 중" 을 보여 주고, 잠시 뒤 상점 판매 퀘스트를 연다
 func _on_shop_visit() -> void:
 	_running = false
+	_shop_pending = 2.5
+	_visit_label.text = "상점 방문 중..."
+	_visit_label.visible = true
+
+
+func _open_shop() -> void:
 	if shop == null:
 		shop = ShopFlow.new(DungeonManager.delivery, Callable(self, "_place_floor"))
 		shop.sell_finished.connect(_on_sell_finished)
@@ -203,6 +206,8 @@ func _on_shop_visit() -> void:
 	_shop_active = true
 	_shop_close_timer = 0.0
 	shop.open()
+	if shop.quests.is_active():
+		_announce("판매 퀘스트 발생!", Color(0.5, 1, 0.6))
 	room.show_message("상점 방문: 판매 퀘스트 시작")
 
 
@@ -296,6 +301,23 @@ func _build_zone() -> void:
 	add_child(_zone_label)
 
 
+## 큰 글씨 알림 (약 2초 표시 후 사라짐). 퀘스트 발생을 놓치지 않도록 한다
+func _announce(text: String, color: Color) -> void:
+	var banner := Label.new()
+	banner.text = text
+	banner.add_theme_font_size_override("font_size", 36)
+	banner.add_theme_color_override("font_color", color)
+	banner.add_theme_color_override("font_outline_color", Color(0, 0, 0))
+	banner.add_theme_constant_override("outline_size", 6)
+	banner.position = Vector2(400, 230)
+	banner.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(banner)
+	var tween := create_tween()
+	tween.tween_interval(1.6)
+	tween.tween_property(banner, "modulate:a", 0.0, 0.6)
+	tween.tween_callback(banner.queue_free)
+
+
 func _build_hud() -> void:
 	_quest_box = PanelContainer.new()
 	_quest_box.position = Vector2(8, 560)
@@ -313,6 +335,12 @@ func _build_hud() -> void:
 	_quest_text.custom_minimum_size = Vector2(230, 0)
 	_quest_box.add_child(_quest_text)
 	add_child(_quest_box)
+	_visit_label = Label.new()
+	_visit_label.position = Vector2(520, 650)
+	_visit_label.add_theme_font_size_override("font_size", 24)
+	_visit_label.visible = false
+	_visit_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_visit_label)
 	_battle_label = Label.new()
 	_battle_label.position = Vector2(540, 690)
 	_battle_label.mouse_filter = Control.MOUSE_FILTER_IGNORE

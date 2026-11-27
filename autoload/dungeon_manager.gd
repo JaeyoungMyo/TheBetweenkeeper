@@ -6,6 +6,7 @@ signal quest_result(result: Dictionary)
 signal game_over_reached(failures: int)
 signal shop_visit_ready()
 signal delivery_changed()
+signal quest_started()
 
 var flow := DungeonFlow.new()
 var delivery := DeliverySpace.new()
@@ -40,7 +41,10 @@ func start_dungeon(no: int) -> void:
 func start_battle() -> void:
 	var due := flow.begin_battle()
 	for i in due:
-		_handle(_outcome(quests.spawn(flow.quest_spec(), _stored_kinds(), rng)))
+		var r := quests.spawn(flow.quest_spec(), _stored_kinds(), rng)
+		if r["status"] == "started":
+			quest_started.emit()
+		_handle(_outcome(r))
 
 
 func finish_battle() -> void:

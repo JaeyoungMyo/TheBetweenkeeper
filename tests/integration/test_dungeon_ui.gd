@@ -20,6 +20,8 @@ func test_dungeon_ui_runs_to_shop_handoff() -> void:
 		DungeonManager._process(0.1)
 		guard += 1
 	expect(DungeonManager.flow.state == DungeonFlow.State.SHOP_HANDOFF, "reaches shop handoff")
+	ui._process(3.0)
+	expect(ui._shop_active, "shop opens after the visit message")
 	expect(DungeonManager.flow.shop_handoffs == 1, "shop handoff exactly once")
 	expect(not DungeonManager.failures.is_game_over(), "no game over without quests")
 	tree.root.remove_child(room)

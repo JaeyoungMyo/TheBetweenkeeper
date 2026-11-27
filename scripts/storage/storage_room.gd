@@ -258,7 +258,13 @@ func _process(_d: float) -> void:
 
 
 ## Z: 목록 맨 위 아이템을 발 아래에 내려놓는다
+## 전달 선반 등 다른 곳이 Z 를 가로챌 때 쓴다. true 를 돌려주면 바닥에 내려놓지 않는다
+var drop_override: Callable
+
+
 func drop_first() -> void:
+	if drop_override.is_valid() and drop_override.call():
+		return
 	if not ItemManager.carried_ids.is_empty():
 		drop_to_floor(ItemManager.carried_ids[0])
 
