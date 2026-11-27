@@ -5,6 +5,8 @@ extends PanelContainer
 signal slot_dropped(slot_index: int, item_id: int)
 signal closed
 signal slot_purchase_requested
+## 선반 칸의 아이템을 클릭했을 때 (바로 들기)
+signal item_clicked(item_id: int)
 
 var _box := VBoxContainer.new()
 
@@ -64,5 +66,7 @@ func _make_slot(state: FacilityState, items: Dictionary, i: int) -> Control:
 	for id in state.slot_items[i]:
 		var entry := ItemListPanel.make_entry(items[id])
 		entry.tooltip_text = slot.tooltip_text
+		var clicked_id: int = id
+		entry.pressed.connect(func() -> void: item_clicked.emit(clicked_id))
 		flow.add_child(entry)
 	return slot

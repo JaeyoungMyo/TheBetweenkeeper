@@ -183,6 +183,7 @@ func _build_ui() -> void:
 	layer.add_child(shelf_panel)
 	shelf_panel.closed.connect(shelf_panel.hide)
 	shelf_panel.slot_purchase_requested.connect(buy_current_slot)
+	shelf_panel.item_clicked.connect(_on_take_out)
 	shelf_panel.slot_dropped.connect(func(s: int, id: int) -> void: ItemManager.place_carried(id, shelf.state, s))
 	hover_list = Label.new()
 	hover_list.name = "hover-item-list"

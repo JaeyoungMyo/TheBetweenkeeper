@@ -139,3 +139,25 @@ func test_shelf_upgrade_menu_usable_during_sleep() -> void:
 	expect(room.buy_shelf() and room.shelves.size() == n + 1, "shelf bought during sleep")
 	room.free()
 	DungeonManager.flow.state = DungeonFlow.State.READY
+
+
+func test_click_shelf_item_moves_it_to_hands() -> void:
+	# 선반 패널에서 아이템을 클릭하면 바로 손으로 옮겨진다 (드래그 불필요)
+	var room = _room()
+	await _frames(3)
+	var im = room.get_node("/root/ItemManager")
+	var it = room.tutorial_items[0]
+	im.try_pick_up(it, it.world_position)
+	im.place_carried(it.instance_id, room.shelves[0].state, 0)
+	room.shelf = room.shelves[0]
+	room.shelf_panel.show_for(room.shelf.state, im.items, "선반 1", 0)
+	await _frames(2)
+	var entry = room.shelf_panel.find_child("item-entry-%d" % it.instance_id, true, false)
+	expect(entry != null, "shelf panel lists the stored item")
+	if entry == null:
+		room.free()
+		return
+	entry.pressed.emit()
+	await _frames(2)
+	expect(it.state == ItemInstance.State.CARRIED and im.carried_ids.has(it.instance_id), "click moves the item into hands")
+	room.free()
