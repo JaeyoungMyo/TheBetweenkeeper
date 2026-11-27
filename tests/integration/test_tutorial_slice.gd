@@ -67,7 +67,7 @@ func test_tutorial_shelf_close_step_waits_for_close() -> void:
 	room._steps = room._build_steps()
 	var idx := -1
 	for i in room._steps.size():
-		if "선반을 닫아 볼까요" in room._steps[i]["text"]:
+		if "선반을 닫아 주세요" in room._steps[i]["text"]:
 			idx = i
 	expect(idx >= 0, "shelf close step exists")
 	room._step = idx

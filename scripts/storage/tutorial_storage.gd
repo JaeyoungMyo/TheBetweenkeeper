@@ -135,15 +135,16 @@ func _build_steps() -> Array:
 	s.append({"text": "[b]1. 아이템 적재[/b] 좋아요! [b]X[/b] 키를 눌러서 아이템을 주워 볼까요?", "check": func() -> bool: return not ItemManager.carried_ids.is_empty()})
 	s.append({"text": "[b]1. 아이템 적재[/b] 잘했어요! 이제 저기 선반 [b]앞[/b] 으로 가 볼까요?", "check": func() -> bool: return _near_shelf0()})
 	s.append({"text": "[b]1. 아이템 적재[/b] 선반 앞에 도착했어요~ [b]E[/b] 키를 누르면 선반이 열려요!", "check": func() -> bool: return _ui != null and room_panel_visible()})
-	# 1-b. 선반 닫기: 열었다가 E 로 닫아야 이동이 풀린다
-	s.append({"text": "[b]1. 아이템 적재[/b] 선반을 닫아 볼까요? 선반 앞에서 [b]E[/b] 로 열었다면, 다시 [b]E[/b] 를 눌러 닫아 주세요. 선반이 열려 있는 동안에는 이동이 잠겨요.", "enter": func() -> void:
-		_was_open = false
+	# 1-b. 선반이 열린 채로 1 키로 넣기
+	s.append({"text": "[b]1. 아이템 적재[/b] 선반이 열렸어요! [b]1[/b] 키를 누르면 들고 있는 아이템이 1번 칸에 쏙 들어가요~", "check": func() -> bool: return _stored_count() >= 1})
+	# 1-c. 선반 닫기: E 로 닫아야 이동이 풀린다
+	s.append({"text": "[b]1. 아이템 적재[/b] 잘 넣었어요! 이제 [b]E[/b] 를 눌러 선반을 닫아 주세요. 선반이 열려 있는 동안에는 이동이 잠겨요.", "enter": func() -> void:
+		_was_open = room_panel_visible()
 		shelf_closed_by_key = false, "check": func() -> bool:
 		if room_panel_visible():
 			_was_open = true
 			return false
 		return _was_open and shelf_closed_by_key})
-	s.append({"text": "[b]1. 아이템 적재[/b] 이제 다시 [b]E[/b] 로 열고, [b]1[/b] 키를 누르면 들고 있는 아이템이 1번 칸에 쏙 들어가요!", "check": func() -> bool: return _stored_count() >= 1})
 	s.append({"text": "[b]1. 아이템 적재[/b] 나머지도 같은 방법으로 넣어 봐요~ (집고 → 선반 앞 → E → 1·2·3 키) 손에는 [b]2개[/b] 까지 들 수 있고, 칸이 가득 차면 다른 칸 번호를 눌러 보세요!", "check": func() -> bool: return _all_stored()})
 	# 2. 아이템 드랍
 	s.append({"text": "[b]2. 아이템 드랍[/b] 바닥에 떨어진 아이템 쪽으로 가서 [b]X[/b] 로 주워 볼까요? 그다음 선반에서 조금 떨어진 곳에서 [b]Z[/b] 를 누르면 내려놓을 수 있어요~", "enter": func() -> void: _spawn_floor_item(), "check": func() -> bool: return _dropped_on_floor()})
