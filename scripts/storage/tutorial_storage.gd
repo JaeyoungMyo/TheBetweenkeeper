@@ -131,32 +131,32 @@ func _start_guide() -> void:
 func _build_steps() -> Array:
 	var s := []
 	# 1. 아이템 적재
-	s.append({"text": "[b]1. 아이템 적재[/b] 아이템에게 다가가세요. [b]WASD[/b] 로 움직이거나 빈 바닥을 클릭하세요.", "check": func() -> bool: return _near_any_item()})
-	s.append({"text": "[b]1. 아이템 적재[/b] [b]X[/b] 키로 아이템을 주우세요.", "check": func() -> bool: return not ItemManager.carried_ids.is_empty()})
-	s.append({"text": "[b]1. 아이템 적재[/b] 선반 [b]앞[/b] 으로 가세요.", "check": func() -> bool: return _near_shelf0()})
-	s.append({"text": "[b]1. 아이템 적재[/b] [b]E[/b] 키로 선반을 여세요.", "check": func() -> bool: return _ui != null and room_panel_visible()})
-	s.append({"text": "[b]1. 아이템 적재[/b] 선반이 열린 상태에서 [b]1[/b] 키를 누르면 들고 있는 아이템이 1번 칸에 들어갑니다.", "check": func() -> bool: return _stored_count() >= 1})
-	s.append({"text": "[b]1. 아이템 적재[/b] 남은 아이템도 같은 방법으로 넣으세요 (집고 → 선반 앞 → E → 1·2·3 키). 손에는 [b]2개[/b] 까지 들 수 있고, 칸이 가득 차면 다른 칸 번호를 누르세요.", "check": func() -> bool: return _all_stored()})
+	s.append({"text": "[b]1. 아이템 적재[/b] 반짝이는 아이템 쪽으로 살금살금 다가가 볼까요? [b]WASD[/b] 로 움직이거나 빈 바닥을 클릭하면 돼요~", "check": func() -> bool: return _near_any_item()})
+	s.append({"text": "[b]1. 아이템 적재[/b] 좋아요! [b]X[/b] 키를 눌러서 아이템을 주워 볼까요?", "check": func() -> bool: return not ItemManager.carried_ids.is_empty()})
+	s.append({"text": "[b]1. 아이템 적재[/b] 잘했어요! 이제 저기 선반 [b]앞[/b] 으로 가 볼까요?", "check": func() -> bool: return _near_shelf0()})
+	s.append({"text": "[b]1. 아이템 적재[/b] 선반 앞에 도착했어요~ [b]E[/b] 키를 누르면 선반이 열려요!", "check": func() -> bool: return _ui != null and room_panel_visible()})
+	s.append({"text": "[b]1. 아이템 적재[/b] 선반이 열렸죠? [b]1[/b] 키를 누르면 들고 있는 아이템이 1번 칸에 쏙 들어가요!", "check": func() -> bool: return _stored_count() >= 1})
+	s.append({"text": "[b]1. 아이템 적재[/b] 나머지도 같은 방법으로 넣어 봐요~ (집고 → 선반 앞 → E → 1·2·3 키) 손에는 [b]2개[/b] 까지 들 수 있고, 칸이 가득 차면 다른 칸 번호를 눌러 보세요!", "check": func() -> bool: return _all_stored()})
 	# 2. 아이템 드랍
-	s.append({"text": "[b]2. 아이템 드랍[/b] 바닥의 아이템에 다가가 [b]X[/b] 로 줍고, 선반에서 떨어진 곳에서 [b]Z[/b] 로 내려놓으세요.", "enter": func() -> void: _spawn_floor_item(), "check": func() -> bool: return _dropped_on_floor()})
+	s.append({"text": "[b]2. 아이템 드랍[/b] 바닥에 떨어진 아이템 쪽으로 가서 [b]X[/b] 로 주워 볼까요? 그다음 선반에서 조금 떨어진 곳에서 [b]Z[/b] 를 누르면 내려놓을 수 있어요~", "enter": func() -> void: _spawn_floor_item(), "check": func() -> bool: return _dropped_on_floor()})
 	# 3. 긴급 퀘스트 (아이템 꺼내서 전달)
-	s.append({"text": "[b]3. 긴급 퀘스트[/b] 왼쪽 아래에 [b]긴급 요청 (회복약 1개)[/b] 이 떴습니다. 선반을 열고 [b]회복약[/b] 을 ↑↓ 로 고른 뒤 [b]Enter[/b] 로 꺼내세요 (이름을 클릭해도 됩니다).", "enter": func() -> void: _ensure_on_shelf("potion_hp"); _spawn_potion_quest(), "check": func() -> bool: return _carrying("potion_hp")})
-	s.append({"text": "[b]3. 긴급 퀘스트[/b] 들고 [b]전달 선반[/b] (오른쪽 아래 파란 칸) 앞에서 [b]Z[/b] 를 누르세요.", "check": func() -> bool: return _quest_done()})
+	s.append({"text": "[b]3. 긴급 퀘스트[/b] 큰일이에요! 왼쪽 아래에 [b]긴급 요청 (회복약 1개)[/b] 이 떴어요. 선반을 열고 [b]회복약[/b] 을 ↑↓ 로 고른 뒤 [b]Enter[/b] 로 꺼내 주세요 (이름을 클릭해도 돼요)!", "enter": func() -> void: _ensure_on_shelf("potion_hp"); _spawn_potion_quest(), "check": func() -> bool: return _carrying("potion_hp")})
+	s.append({"text": "[b]3. 긴급 퀘스트[/b] 회복약을 들고 [b]전달 선반[/b] (오른쪽 아래 파란 칸) 앞에서 [b]Z[/b] 를 눌러 주세요.", "check": func() -> bool: return _quest_done()})
 	# 4. 증강 선택
-	s.append({"text": "[b]4. 증강 선택[/b] 레벨이 올랐습니다! 나온 증강 중 하나를 고르세요. (고르는 동안 게임이 잠시 멈춥니다)", "enter": func() -> void: _level_up(), "check": func() -> bool: return not EconomyManager.augments.is_empty() and EconomyManager.pending_choices == 0})
+	s.append({"text": "[b]4. 증강 선택[/b] 와아, 레벨이 올랐어요! 나온 증강 중에서 하나를 골라 주세요~ (고르는 동안 게임이 잠시 멈춰요)", "enter": func() -> void: _level_up(), "check": func() -> bool: return not EconomyManager.augments.is_empty() and EconomyManager.pending_choices == 0})
 	# 5. 수면
-	s.append({"text": "[b]5. 수면[/b] 용사가 잠듭니다 (튜토리얼은 6초). 수면 중에도 [b]C[/b] 로 새 선반을 살 수 있습니다. 칸 추가는 선반을 열고 [b]+[/b] 키.", "enter": func() -> void: _start_sleep(), "check": func() -> bool: return _ui != null and _ui._shop_active})
+	s.append({"text": "[b]5. 수면[/b] 용사님이 잠이 들었어요. 쿨쿨~ (튜토리얼은 6초예요). 수면 중에도 [b]C[/b] 로 새 선반을 살 수 있어요. 칸 추가는 선반을 열고 [b]+[/b] 키!", "enter": func() -> void: _start_sleep(), "check": func() -> bool: return _ui != null and _ui._shop_active})
 	# 6. 상점 퀘스트
-	s.append({"text": "[b]6. 상점 퀘스트[/b] 상점이 열렸습니다. 요청 품목 [b]검[/b] 과 [b]투구[/b] 를 선반에서 꺼내 [b]전달 선반[/b] 에 [b]Z[/b] 로 넣으세요. 판매되면 골드와 EXP 를 얻습니다.", "enter": func() -> void: _ensure_on_shelf("sword"); _ensure_on_shelf("helmet"), "check": func() -> bool: return _sell_ok})
+	s.append({"text": "[b]6. 상점 퀘스트[/b] 상점이 열렸어요! 요청 품목 [b]검[/b] 과 [b]투구[/b] 를 선반에서 꺼내서 [b]전달 선반[/b] 에 [b]Z[/b] 로 넣어 주세요. 팔리면 골드와 EXP 를 받을 수 있어요~", "enter": func() -> void: _ensure_on_shelf("sword"); _ensure_on_shelf("helmet"), "check": func() -> bool: return _sell_ok})
 	# 7. 선반 구매와 확장
-	s.append({"text": "[b]7. 선반 구매[/b] 튜토리얼 지원금 500골드를 드렸습니다. [b]C[/b] 키로 메뉴를 열고 [b]새 선반 사기[/b] 를 누르세요. (C 메뉴는 선반 구매만 합니다)", "enter": func() -> void: EconomyManager.add_gold(500), "check": func() -> bool: return room_shelves() >= 2})
-	s.append({"text": "[b]7. 칸 확장[/b] 선반 [b]앞[/b] 에서 [b]E[/b] 로 선반을 열고, 패널 맨 위 [b]칸 추가[/b] 버튼을 누르거나 [b]+[/b] 키를 누르세요. 선반마다 따로 늘립니다.", "check": func() -> bool: return shelves[0].state.slot_count > 3})
-	s.append({"info": true, "text": "[b]던전 흐름[/b] 던전은 전투 3~5회로 이루어집니다. 전투가 끝날 때마다 아이템이 들어오니, 바닥에 쌓이기 전에 선반에 정리하세요. 던전이 끝나면 [b]수면[/b] → [b]상점[/b] 순서로 진행합니다."})
-	s.append({"info": true, "text": "[b]실패와 게임오버[/b] 긴급 요청을 시간 안에 못 채우면 실패가 1 쌓입니다. [b]실패 3번[/b] 이면 게임오버입니다. 던전이나 상점이 끝날 때마다 자동 저장되며, 메인 메뉴의 [b]이어하기[/b] 로 이어할 수 있습니다."})
-	s.append({"info": true, "text": "[b]상점 구매와 무게[/b] 상점은 판매 후 골드로 아이템을 [b]구매[/b] 해 바닥에 떨어뜨립니다. 골드가 모자라면 그 품목은 건너뜁니다. 선반 칸 하나는 무게 [b]12[/b] 까지만 들어갑니다. 넘치면 다른 칸을 쓰세요."})
-	s.append({"info": true, "text": "[b]가방, 일시정지, 설정[/b] 손에 드는 개수는 아이템 목록 아래 [b]가방 확장[/b] 으로 늘립니다. [b]P[/b] 는 일시정지, [b]F2[/b] 는 설정 (전체 화면)입니다."})
-	s.append({"info": true, "text": "[b]조작 요약[/b] 이동 WASD · 줍기 X · 선반 열기 E (열면 이동 잠금) · 선반 고르기 ↑↓ · 꺼내기 Enter · 넣기 1~3 · 내려놓기 Z · 선반 칸 1~3 · 칸 추가 + · 선반 구매 C · 일시정지 P · 설정 F2."})
-	s.append({"info": true, "text": "[b]튜토리얼 완료![/b] 이제 메인 메뉴에서 [b]새 게임[/b] 을 눌러 시작하세요. 시작 버튼을 누르면 메인 메뉴로 돌아갑니다."})
+	s.append({"text": "[b]7. 선반 구매[/b] 튜토리얼 지원금 500골드를 드릴게요! [b]C[/b] 키로 메뉴를 열고 [b]새 선반 사기[/b] 를 눌러 보세요. (C 메뉴에서는 선반 구매만 할 수 있어요)", "enter": func() -> void: EconomyManager.add_gold(500), "check": func() -> bool: return room_shelves() >= 2})
+	s.append({"text": "[b]7. 칸 확장[/b] 선반 [b]앞[/b] 에서 [b]E[/b] 로 선반을 열고, 패널 맨 위 [b]칸 추가[/b] 버튼을 누르거나 [b]+[/b] 키를 눌러 주세요. 선반마다 따로 늘릴 수 있어요~", "check": func() -> bool: return shelves[0].state.slot_count > 3})
+	s.append({"info": true, "text": "[b]던전 흐름[/b] 던전은 전투 3~5회로 이루어져요. 전투가 끝날 때마다 아이템이 들어오니까, 바닥에 쌓이기 전에 선반에 정리해 주세요! 던전이 끝나면 [b]수면[/b] → [b]상점[/b] 순서로 진행돼요."})
+	s.append({"info": true, "text": "[b]실패와 게임오버[/b] 긴급 요청을 시간 안에 못 채우면 실패가 1 쌓여요. [b]실패 3번[/b] 이면 게임오버예요ㅠ 던전이나 상점이 끝날 때마다 자동 저장되니까, 메인 메뉴의 [b]이어하기[/b] 로 이어서 할 수 있어요."})
+	s.append({"info": true, "text": "[b]상점 구매와 무게[/b] 상점에서는 판매 후 골드로 아이템을 [b]구매[/b] 할 수 있고, 구매한 아이템은 바닥에 떨어져요. 골드가 모자라면 그 품목은 건너뛰어요. 선반 칸 하나는 무게 [b]12[/b] 까지만 들어가니까, 넘치면 다른 칸을 써 주세요!"})
+	s.append({"info": true, "text": "[b]가방, 일시정지, 설정[/b] 손에 드는 개수는 아이템 목록 아래 [b]가방 확장[/b] 으로 늘릴 수 있어요. [b]P[/b] 는 일시정지, [b]F2[/b] 는 설정(전체 화면)이에요~"})
+	s.append({"info": true, "text": "[b]조작 요약[/b] 이동 WASD · 줍기 X · 선반 열기 E (열면 이동이 잠겨요) · 선반 고르기 ↑↓ · 꺼내기 Enter · 넣기 1~3 · 내려놓기 Z · 칸 추가 + · 선반 구매 C · 일시정지 P · 설정 F2. 헷갈리면 언제든 다시 봐 주세요!"})
+	s.append({"info": true, "text": "[b]튜토리얼 완료![/b] 정말 잘했어요! 이제 메인 메뉴에서 [b]새 게임[/b] 을 눌러 시작해 봐요. 시작 버튼을 누르면 메인 메뉴로 돌아가요~"})
 	return s
 
 
