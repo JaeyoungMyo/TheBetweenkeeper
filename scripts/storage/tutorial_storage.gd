@@ -102,13 +102,13 @@ func _build_steps() -> Array:
 	s.append({"text": "[b]1. 아이템 적재[/b] [b]X[/b] 키로 선반을 여세요.", "check": func() -> bool: return _ui != null and room_panel_visible()})
 	s.append({"text": "[b]1. 아이템 적재[/b] 선반이 열린 상태에서 [b]1[/b] 키를 누르면 들고 있는 아이템이 1번 칸에 들어갑니다.", "check": func() -> bool: return _stored_count() >= 1})
 	s.append({"text": "[b]1. 아이템 적재[/b] 남은 아이템도 같은 방법으로 넣으세요 (집고 → 선반 앞 → X → 1·2·3 키).", "check": func() -> bool: return _all_stored()})
-	# 2. 긴급 퀘스트 (아이템 꺼내서 전달)
-	s.append({"text": "[b]2. 긴급 퀘스트[/b] 왼쪽 아래에 [b]긴급 요청[/b] 이 떴습니다. 요청 품목을 선반에서 꺼내야 합니다. 선반을 열고 손을 비운 채 [b]1[/b] 키를 누르세요 (칸의 맨 위 아이템이 나옵니다).", "enter": func() -> void: _spawn_quest_from_top(), "check": func() -> bool: return take_out_count >= 1 and not ItemManager.carried_ids.is_empty()})
-	s.append({"text": "[b]2. 긴급 퀘스트[/b] 들고 [b]전달 선반[/b] (오른쪽 아래 파란 칸) 앞에서 [b]Z[/b] 를 누르세요.", "check": func() -> bool: return _quest_done()})
-	# 3. 증강 선택
-	s.append({"text": "[b]3. 증강 선택[/b] 레벨이 올랐습니다! 나온 증강 중 하나를 고르세요.", "enter": func() -> void: _level_up(), "check": func() -> bool: return not EconomyManager.augments.is_empty() and EconomyManager.pending_choices == 0})
-	# 4. 아이템 드랍
-	s.append({"text": "[b]4. 아이템 드랍[/b] 바닥의 아이템에 다가가 [b]X[/b] 로 줍고, 선반에서 떨어진 곳에서 [b]Z[/b] 로 내려놓으세요.", "enter": func() -> void: _spawn_floor_item(), "check": func() -> bool: return _dropped_on_floor()})
+	# 2. 아이템 드랍
+	s.append({"text": "[b]2. 아이템 드랍[/b] 바닥의 아이템에 다가가 [b]X[/b] 로 줍고, 선반에서 떨어진 곳에서 [b]Z[/b] 로 내려놓으세요.", "enter": func() -> void: _spawn_floor_item(), "check": func() -> bool: return _dropped_on_floor()})
+	# 3. 긴급 퀘스트 (아이템 꺼내서 전달)
+	s.append({"text": "[b]3. 긴급 퀘스트[/b] 왼쪽 아래에 [b]긴급 요청[/b] 이 떴습니다. 요청 품목을 선반에서 꺼내야 합니다. 선반을 열고 손을 비운 채 [b]1[/b] 키를 누르세요 (칸의 맨 위 아이템이 나옵니다).", "enter": func() -> void: _spawn_quest_from_top(), "check": func() -> bool: return take_out_count >= 1 and not ItemManager.carried_ids.is_empty()})
+	s.append({"text": "[b]3. 긴급 퀘스트[/b] 들고 [b]전달 선반[/b] (오른쪽 아래 파란 칸) 앞에서 [b]Z[/b] 를 누르세요.", "check": func() -> bool: return _quest_done()})
+	# 4. 증강 선택
+	s.append({"text": "[b]4. 증강 선택[/b] 레벨이 올랐습니다! 나온 증강 중 하나를 고르세요.", "enter": func() -> void: _level_up(), "check": func() -> bool: return not EconomyManager.augments.is_empty() and EconomyManager.pending_choices == 0})
 	# 5. 수면
 	s.append({"text": "[b]5. 수면[/b] 용사가 잠듭니다 (튜토리얼은 6초). 수면 중에도 [b]C[/b] 로 선반과 칸을 강화할 수 있습니다.", "enter": func() -> void: _start_sleep(), "check": func() -> bool: return _ui != null and _ui._shop_active})
 	# 6. 상점 퀘스트
