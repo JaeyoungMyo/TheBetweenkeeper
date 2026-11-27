@@ -180,44 +180,44 @@ func test_only_e_closes_shelf() -> void:
 
 
 func test_arrows_move_items_in_slot_and_switch_shelves() -> void:
-	# ←→ 는 선반 전체 아이템을 순환하고, ↑↓ 는 선반 사이를 순환한다
+	# ←→ 는 선택된 칸 안의 아이템을 고르고, ↑↓ 는 같은 선반의 칸 1 ↔ 칸 N 을 옮긴다
 	var room = _room()
 	await _frames(3)
-	room.add_shelf()
 	var im = room.get_node("/root/ItemManager")
 	var shelf0 = room.shelves[0]
 	var a = room.tutorial_items[0]
 	var b = room.tutorial_items[1]
+	var c = room.tutorial_items[2]
 	im.try_pick_up(a, a.world_position)
 	im.place_carried(a.instance_id, shelf0.state, 0)
 	im.try_pick_up(b, b.world_position)
 	im.place_carried(b.instance_id, shelf0.state, 0)
+	im.try_pick_up(c, c.world_position)
+	im.place_carried(c.instance_id, shelf0.state, 1)
 	room.player.position = shelf0.position + Vector2(0, 60)
 	room.shelf = shelf0
 	room.open_panel()
+	room.shelf_panel.reset_selection()
 	await _frames(1)
-	var first: int = room.shelf_panel.selected_id()
-	expect(first == a.instance_id or first == b.instance_id, "first item of slot 1 is selected")
+	expect(room.shelf_panel.selected_id() == a.instance_id, "slot 1 first item is selected")
 	await _key(KEY_RIGHT)
 	await _frames(1)
-	expect(room.shelf_panel.selected_id() != first, "RIGHT moves to the next item in the slot")
+	expect(room.shelf_panel.selected_id() == b.instance_id, "RIGHT moves to the next item in the slot")
 	await _key(KEY_RIGHT)
 	await _frames(1)
-	expect(room.shelf_panel.selected_id() == first, "RIGHT past the last item wraps to the first")
-	await _key(KEY_LEFT)
-	await _frames(1)
-	expect(room.shelf_panel.selected_id() != first, "LEFT from the first item wraps to the last")
-	await _key(KEY_RIGHT)
-	await _frames(1)
+	expect(room.shelf_panel.selected_id() == a.instance_id, "RIGHT wraps inside the slot, not into slot 2")
 	await _key(KEY_DOWN)
 	await _frames(1)
-	expect(room.shelf == room.shelves[1], "DOWN focuses the next shelf")
-	expect(room.shelf_panel.visible, "panel stays open when switching shelves")
+	expect(room.shelf == shelf0, "DOWN stays on the same shelf")
+	expect(room.shelf_panel.selected_slot() == 1 and room.shelf_panel.selected_id() == c.instance_id, "DOWN moves to slot 2")
+	await _key(KEY_DOWN)
+	await _frames(1)
+	expect(room.shelf_panel.selected_slot() == 2 and room.shelf_panel.selected_id() == -1, "empty slot 3 has no item")
+	await _key(KEY_DOWN)
+	await _frames(1)
+	expect(room.shelf_panel.selected_slot() == 0, "DOWN on the last slot wraps to slot 1")
 	await _key(KEY_UP)
 	await _frames(1)
-	expect(room.shelf == shelf0, "UP focuses the previous shelf")
-	await _key(KEY_UP)
-	await _frames(1)
-	expect(room.shelf == room.shelves[-1], "UP on the first shelf wraps to the last")
+	expect(room.shelf_panel.selected_slot() == 2, "UP on slot 1 wraps to the last slot")
 	room.free()
 

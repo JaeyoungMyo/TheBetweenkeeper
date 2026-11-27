@@ -9,8 +9,12 @@ signal slot_purchase_requested
 signal item_clicked(item_id: int)
 
 var _box := VBoxContainer.new()
-## 키보드 선택: 모든 칸의 아이템을 칸 순서대로 나열한 목록 위를 ↑/↓ 로 이동한다
+## 키보드 선택: ↑↓ 로 칸을 고르고, ←→ 로 그 칸 안의 아이템을 고른다
 var _order: Array[int] = []
+## 칸별 아이템 id 목록과 선택된 칸
+var _slot_ids: Array = []
+var _sel_slot := 0
+var _slot_bgs: Array = []
 var _buttons := {}
 var _selected_id := -1
 ## 아이템 id → 칸 번호
@@ -44,27 +48,53 @@ func show_for(state: FacilityState, items: Dictionary, title := "", price := -2)
 	_order.clear()
 	_buttons.clear()
 	_slot_of.clear()
+	_slot_ids.clear()
+	_slot_bgs.clear()
 	for i in state.slot_count:
 		_box.add_child(_make_slot(state, items, i))
-	if not _order.has(_selected_id):
-		_selected_id = _order[0] if not _order.is_empty() else -1
+	_sel_slot = clampi(_sel_slot, 0, state.slot_count - 1)
+	if _slot_of.has(_selected_id):
+		_sel_slot = _slot_of[_selected_id]
+	else:
+		_selected_id = _first_in(_sel_slot)
 	_highlight()
 	show()
 
 
-## ←/→ (delta -1/+1): 선반의 아이템을 칸 순서대로 이동 (칸을 넘어가도 이어진다). 끝에서는 멈춘다
+## ←/→ (delta -1/+1): 선택된 칸 안의 아이템을 고른다 (칸 안에서 순환)
 func move_selection(delta: int) -> void:
-	if _order.is_empty() or _selected_id < 0:
+	var ids: Array = _slot_ids[_sel_slot] if _sel_slot < _slot_ids.size() else []
+	if ids.is_empty():
 		return
-	var idx := _order.find(_selected_id)
-	_selected_id = _order[posmod(idx + delta, _order.size())]  # 선반 전체 아이템을 순환
+	var idx := ids.find(_selected_id)
+	_selected_id = ids[posmod(idx + delta, ids.size())] if idx >= 0 else ids[0]
 	_highlight()
 
 
-## 선반을 바꾼 뒤: 첫 칸의 첫 아이템을 고른다 (없으면 -1)
+## ↑/↓ (delta -1/+1): 칸 1 ↔ 칸 N 사이를 옮긴다 (순환). 옮긴 칸의 첫 아이템을 고른다
+func move_slot(delta: int) -> void:
+	if _slot_ids.is_empty():
+		return
+	_sel_slot = posmod(_sel_slot + delta, _slot_ids.size())
+	_selected_id = _first_in(_sel_slot)
+	_highlight()
+
+
+## 선반을 새로 열었을 때: 칸 1 의 첫 아이템을 고른다 (없으면 -1)
 func reset_selection() -> void:
-	_selected_id = _order[0] if not _order.is_empty() else -1
+	_sel_slot = 0
+	_selected_id = _first_in(0)
 	_highlight()
+
+
+func selected_slot() -> int:
+	return _sel_slot
+
+
+func _first_in(slot: int) -> int:
+	if slot < 0 or slot >= _slot_ids.size() or _slot_ids[slot].is_empty():
+		return -1
+	return _slot_ids[slot][0]
 
 
 ## X: 선택된 아이템 id (없으면 -1)
@@ -76,6 +106,8 @@ func _highlight() -> void:
 	for id in _buttons:
 		var b: Button = _buttons[id]
 		b.modulate = Color(1.0, 0.92, 0.45) if id == _selected_id else Color.WHITE
+	for i in _slot_bgs.size():
+		_slot_bgs[i].color = Color(0.36, 0.28, 0.14) if i == _sel_slot else Color(0.2, 0.16, 0.12)
 
 
 func _make_slot(state: FacilityState, items: Dictionary, i: int) -> Control:
@@ -93,6 +125,8 @@ func _make_slot(state: FacilityState, items: Dictionary, i: int) -> Control:
 	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
 	bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	slot.add_child(bg)
+	_slot_bgs.append(bg)
+	_slot_ids.append(state.slot_items[i].duplicate())
 	# 칸 안의 아이템은 스크롤 격자에 작은 칸으로 보인다 (6개 이상도 모두 보이고 누를 수 있다)
 	var label := Label.new()
 	label.text = "[%d] 칸 %d: %d / %d" % [i + 1, i + 1, WeightRules.total(state.slot_weights[i]), state.slot_limit]
