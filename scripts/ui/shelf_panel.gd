@@ -52,14 +52,12 @@ func show_for(state: FacilityState, items: Dictionary, title := "", price := -2)
 	show()
 
 
-## ←/→ (delta -1/+1): 같은 칸 안에서 선택 항목 이동. 칸의 끝에서는 멈춘다
+## ←/→ (delta -1/+1): 선반의 아이템을 칸 순서대로 이동 (칸을 넘어가도 이어진다). 끝에서는 멈춘다
 func move_selection(delta: int) -> void:
 	if _order.is_empty() or _selected_id < 0:
 		return
-	var slot: int = _slot_of[_selected_id]
-	var in_slot: Array = _order.filter(func(id: int) -> bool: return _slot_of[id] == slot)
-	var idx := in_slot.find(_selected_id)
-	_selected_id = in_slot[clampi(idx + delta, 0, in_slot.size() - 1)]
+	var idx := _order.find(_selected_id)
+	_selected_id = _order[clampi(idx + delta, 0, _order.size() - 1)]
 	_highlight()
 
 

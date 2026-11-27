@@ -203,7 +203,7 @@ func test_arrows_move_items_in_slot_and_switch_shelves() -> void:
 	expect(room.shelf_panel.selected_id() != first, "RIGHT moves to the next item in the slot")
 	await _key(KEY_RIGHT)
 	await _frames(1)
-	expect(room.shelf_panel.selected_id() != first, "RIGHT stops at the end of the slot")
+	expect(room.shelf_panel.selected_id() != first, "RIGHT keeps moving through the shelf")
 	await _key(KEY_LEFT)
 	await _frames(1)
 	expect(room.shelf_panel.selected_id() == first, "LEFT moves back")

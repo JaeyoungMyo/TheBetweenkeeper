@@ -250,8 +250,8 @@ func _on_buy_finished(lines: Array) -> void:
 		SaveService.save_point("village_clear")
 	var parts := PackedStringArray()
 	for l: Dictionary in lines:
-		parts.append("%s %s" % [_name(l["item_id"]), "구매" if l["bought"] else "골드 부족"])
-	room.show_message("구매: " + ", ".join(parts))
+		parts.append(_name(l["item_id"]) if l["bought"] else "%s (골드 부족)" % _name(l["item_id"]))
+	room.show_message("용사가 마을에서 사 옴: " + ", ".join(parts))
 	_village_close_timer = 3.0
 
 
