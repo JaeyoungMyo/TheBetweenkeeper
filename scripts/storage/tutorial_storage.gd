@@ -79,16 +79,20 @@ func _build_guide() -> void:
 	bubble.content_margin_top = 10
 	bubble.content_margin_bottom = 10
 	panel.add_theme_stylebox_override("panel", bubble)
-	# 꼬리는 말풍선 왼쪽 윗부분에 붙어 캐릭터 쪽을 가리킨다 (말풍선 local 좌표)
+	# 꼬리는 말풍선 오른쪽 윗부분에 붙어 캐릭터 쪽(오른쪽)을 가리킨다. 말풍선 크기가 바뀌면 따라 옮긴다
 	var tail := Polygon2D.new()
 	tail.name = "guide-bubble-tail"
 	tail.color = Color(0.45, 0.32, 0.55)
-	tail.polygon = PackedVector2Array([Vector2(0, 12), Vector2(-20, 20), Vector2(0, 28)])
 	panel.add_child(tail)
 	var tail_fill := Polygon2D.new()
 	tail_fill.color = Color(1.0, 0.98, 0.93)
-	tail_fill.polygon = PackedVector2Array([Vector2(2, 15), Vector2(-14, 20), Vector2(2, 25)])
 	panel.add_child(tail_fill)
+	var place_tail := func() -> void:
+		var w := panel.size.x
+		tail.polygon = PackedVector2Array([Vector2(w, 12), Vector2(w + 20, 20), Vector2(w, 28)])
+		tail_fill.polygon = PackedVector2Array([Vector2(w - 2, 15), Vector2(w + 14, 20), Vector2(w - 2, 25)])
+	panel.resized.connect(place_tail)
+	place_tail.call()
 	_guide.add_child(panel)
 	# 안내 캐릭터: 대화창 왼쪽에서 설명해 주는 느낌 (화면 밖으로 나가지 않도록 아래쪽에 맞춘다)
 	var guide_img := TextureRect.new()
@@ -96,7 +100,7 @@ func _build_guide() -> void:
 	guide_img.texture = load("res://art/guide/guide_character.png")
 	guide_img.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	guide_img.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	guide_img.position = Vector2(60, 500)
+	guide_img.position = Vector2(1010, 500)
 	guide_img.size = Vector2(220, 221)
 	guide_img.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_guide.add_child(guide_img)
