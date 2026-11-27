@@ -26,7 +26,7 @@ func spawn(spec: Dictionary, kinds: Array, rng: RandomNumberGenerator) -> Dictio
 
 
 func _start(spec: Dictionary, kinds: Array, rng: RandomNumberGenerator) -> Dictionary:
-	var lines := QuestRules.build_lines(kinds, int(spec["quantity"]), int(spec["line_max"]), rng)
+	var lines: Array = spec["fixed_lines"].duplicate(true) if spec.has("fixed_lines") else QuestRules.build_lines(kinds, int(spec["quantity"]), int(spec["line_max"]), rng)
 	if lines.is_empty():
 		return {"status": "skipped"}  # BR-U3-08
 	quest = Quest.new(lines, float(spec["time_limit"]), int(spec["gold"]), int(spec["exp"]))

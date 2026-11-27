@@ -168,9 +168,9 @@ func _name(kind: String) -> String:
 	return kind
 
 
-func _on_intake(count: int) -> void:
+func _on_intake(count: int, kinds: Array) -> void:
 	for i in count:
-		var id: String = room.ITEM_IDS.pick_random()
+		var id: String = kinds[i] if i < kinds.size() else room.ITEM_IDS.pick_random()
 		var pos := Vector2(randf_range(INTAKE_AREA.position.x, INTAKE_AREA.end.x), randf_range(INTAKE_AREA.position.y, INTAKE_AREA.end.y))
 		room.add_item(load("res://data/items/%s.tres" % id), pos)
 	room.show_message("아이템 %d개가 입고되었습니다" % count)

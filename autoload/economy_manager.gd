@@ -10,6 +10,8 @@ var augment_table: Array
 var level := 1
 var exp_points := 0
 var pending_choices := 0
+## 증강 선택 허용 여부 (튜토리얼 중에는 끈다)
+var choices_enabled := true
 var augments: Dictionary = {}
 var rng := RandomNumberGenerator.new()
 var _ledger := GoldLedger.new()
@@ -31,6 +33,7 @@ func reset_run() -> void:
 	level = 1
 	exp_points = 0
 	pending_choices = 0
+	choices_enabled = true
 	augments = {}
 	_ledger = GoldLedger.new()
 	_ledger.add(int(config["start_gold"]))
@@ -78,7 +81,8 @@ func add_exp(amount: int) -> void:
 	var r := ExpCalculator.apply(level, exp_points, amount, int(config["level_base"]), int(config["level_step"]))
 	level = r["level"]
 	exp_points = r["exp"]
-	pending_choices += r["gained"]
+	if choices_enabled:
+		pending_choices += r["gained"]
 	exp_changed.emit(level, exp_points)
 	if r["gained"] > 0:
 		level_up.emit(level)

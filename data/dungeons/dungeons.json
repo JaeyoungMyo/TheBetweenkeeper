@@ -11,7 +11,21 @@
     "quest_reward_gold": 30,
     "quest_reward_exp": 20,
     "intake_min": 4,
-    "intake_max": 8
+    "intake_max": 8,
+    "fixed_intake_battle1": [
+      "potion_hp",
+      "potion_hp",
+      "scroll",
+      "sword",
+      "dagger"
+    ],
+    "fixed_quest_battle": 2,
+    "fixed_quest_lines": [
+      {
+        "item_kind": "potion_hp",
+        "required": 2
+      }
+    ]
   },
   {
     "no": 2,

@@ -1,7 +1,7 @@
 # DungeonManager (오토로드, U3). 던전 흐름 · 퀘스트 · 전달 공간 · 실패 누적을 묶는 창구
 extends Node
 
-signal intake_ready(count: int)
+signal intake_ready(count: int, kinds: Array)
 signal quest_result(result: Dictionary)
 signal game_over_reached(failures: int)
 signal shop_visit_ready()
@@ -49,7 +49,7 @@ func start_battle() -> void:
 
 func finish_battle() -> void:
 	var r := flow.finish_battle()
-	intake_ready.emit(int(r["intake"]))
+	intake_ready.emit(int(r["intake"]), r["fixed_kinds"])
 	if r["completed"]:
 		_handle(quests.fail_active())
 		quests.clear_pending()

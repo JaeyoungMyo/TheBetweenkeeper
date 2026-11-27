@@ -71,17 +71,15 @@ func test_tutorial_guide_end_to_end_with_keys() -> void:
 		if not room.shelf_panel.visible:
 			await _key(KEY_X)  # 선반 열기
 		await _key(KEY_1 if i < 4 else KEY_2)  # 칸에 넣기
-		await _resolve_levelups(room)
 	expect(room._all_stored(), "all five stored by keys")
+	expect(EconomyManager.level == 2 and EconomyManager.pending_choices == 0 and not tree.paused, "level up in tutorial shows no augment choice")
 	await tree.process_frame
 	expect(room._step >= 6, "guide moved past storing steps (step %d)" % room._step)
 	if not room.shelf_panel.visible:
 		await _key(KEY_X)
-	await _resolve_levelups(room)
 	await _key(KEY_1)  # 손이 비어 있으니 꺼내기
 	expect(room.take_out_count == 1, "key 1 with empty hands takes out")
 	await _key(KEY_1)  # 다시 넣기
-	await _resolve_levelups(room)
 	expect(room._all_stored(), "stored again")
 	await tree.process_frame
 	expect(room._step >= 8, "guide reached the explanation pages (step %d)" % room._step)

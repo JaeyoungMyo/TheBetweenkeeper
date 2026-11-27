@@ -105,3 +105,23 @@ func test_quest_tick_ignored_when_not_active() -> void:
 	q.start()
 	q.status = Quest.Status.SUCCESS
 	expect(not q.tick(100.0), "finished quest does not time out")
+
+
+func test_dungeon_one_fixed_intake_and_quest() -> void:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 21
+	var flow := DungeonFlow.new()
+	flow.start(1, rng)
+	flow.begin_battle()
+	var r := flow.finish_battle()
+	expect((r["fixed_kinds"] as Array).size() == 5 and r["intake"] == 5, "battle 1 intake is the fixed list")
+	expect(flow.quest_spec().has("fixed_lines"), "dungeon 1 quest has fixed lines")
+	expect(flow.quest_battles == [2], "fixed quest at battle 2")
+
+
+func test_tutorial_choices_disabled_gives_no_augment() -> void:
+	EconomyManager.reset_run()
+	EconomyManager.choices_enabled = false
+	EconomyManager.add_exp(60)
+	expect(EconomyManager.level == 2 and EconomyManager.pending_choices == 0, "level up without augment choice")
+	EconomyManager.reset_run()

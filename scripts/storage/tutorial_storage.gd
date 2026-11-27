@@ -31,6 +31,7 @@ func _ready() -> void:
 
 func _create_tutorial_items() -> void:
 	tutorial_items.clear()
+	EconomyManager.choices_enabled = false  # 튜토리얼 중에는 증강 선택이 나오지 않는다
 	for i in TUTORIAL_IDS.size():
 		# 선반 1 (610, 140) 앞쪽에 가깝게 둔다
 		var pos := Vector2(520 + i * 60, ITEM_SPOT_Y)
@@ -168,6 +169,7 @@ func _finish_guide() -> void:
 	_guide.visible = false
 	completed = true
 	SaveService.tutorial_done = true
+	EconomyManager.choices_enabled = true
 	show_message("튜토리얼 완료!")
 	tutorial_completed.emit()
 
