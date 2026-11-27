@@ -104,7 +104,7 @@ func _build_steps() -> Array:
 	# 2. 아이템 드랍
 	s.append({"text": "[b]2. 아이템 드랍[/b] 바닥의 아이템에 다가가 [b]X[/b] 로 줍고, 선반에서 떨어진 곳에서 [b]Z[/b] 로 내려놓으세요.", "enter": func() -> void: _spawn_floor_item(), "check": func() -> bool: return _dropped_on_floor()})
 	# 3. 긴급 퀘스트 (아이템 꺼내서 전달)
-	s.append({"text": "[b]3. 긴급 퀘스트[/b] 왼쪽 아래에 [b]긴급 요청 (회복약 1개)[/b] 이 떴습니다. 선반을 열고 [b]회복약[/b] 이름을 클릭해서 꺼내세요.", "enter": func() -> void: _spawn_potion_quest(), "check": func() -> bool: return _carrying("potion_hp")})
+	s.append({"text": "[b]3. 긴급 퀘스트[/b] 왼쪽 아래에 [b]긴급 요청 (회복약 1개)[/b] 이 떴습니다. 선반을 열고 [b]회복약[/b] 을 ↑↓ 로 고른 뒤 [b]Enter[/b] 로 꺼내세요 (이름을 클릭해도 됩니다).", "enter": func() -> void: _spawn_potion_quest(), "check": func() -> bool: return _carrying("potion_hp")})
 	s.append({"text": "[b]3. 긴급 퀘스트[/b] 들고 [b]전달 선반[/b] (오른쪽 아래 파란 칸) 앞에서 [b]Z[/b] 를 누르세요.", "check": func() -> bool: return _quest_done()})
 	# 4. 증강 선택
 	s.append({"text": "[b]4. 증강 선택[/b] 레벨이 올랐습니다! 나온 증강 중 하나를 고르세요. (고르는 동안 게임이 잠시 멈춥니다)", "enter": func() -> void: _level_up(), "check": func() -> bool: return not EconomyManager.augments.is_empty() and EconomyManager.pending_choices == 0})
@@ -119,7 +119,7 @@ func _build_steps() -> Array:
 	s.append({"info": true, "text": "[b]실패와 게임오버[/b] 긴급 요청을 시간 안에 못 채우면 실패가 1 쌓입니다. [b]실패 3번[/b] 이면 게임오버입니다. 던전이나 상점이 끝날 때마다 자동 저장되며, 메인 메뉴의 [b]이어하기[/b] 로 이어할 수 있습니다."})
 	s.append({"info": true, "text": "[b]상점 구매와 무게[/b] 상점은 판매 후 골드로 아이템을 [b]구매[/b] 해 바닥에 떨어뜨립니다. 골드가 모자라면 그 품목은 건너뜁니다. 선반 칸 하나는 무게 [b]12[/b] 까지만 들어갑니다. 넘치면 다른 칸을 쓰세요."})
 	s.append({"info": true, "text": "[b]가방, 일시정지, 설정[/b] 손에 드는 개수는 아이템 목록 아래 [b]가방 확장[/b] 으로 늘립니다. [b]P[/b] 는 일시정지, [b]F2[/b] 는 설정 (전체 화면)입니다."})
-	s.append({"info": true, "text": "[b]조작 요약[/b] 이동 WASD · 줍기 X · 선반 열기 E · 내려놓기 Z · 선반 칸 1~3 · 칸 추가 + · 선반 구매 C · 일시정지 P · 설정 F2."})
+	s.append({"info": true, "text": "[b]조작 요약[/b] 이동 WASD · 줍기 X · 선반 열기 E (열면 이동 잠금) · 선반 고르기 ↑↓ · 꺼내기 Enter · 넣기 1~3 · 내려놓기 Z · 선반 칸 1~3 · 칸 추가 + · 선반 구매 C · 일시정지 P · 설정 F2."})
 	s.append({"info": true, "text": "[b]튜토리얼 완료![/b] 이제 메인 메뉴에서 [b]새 게임[/b] 을 눌러 시작하세요. 시작 버튼을 누르면 메인 메뉴로 돌아갑니다."})
 	return s
 

@@ -27,7 +27,15 @@ func _ready() -> void:
 	add_child(body)
 
 
+## 선반 패널이 열려 있는 동안 true: 이동을 멈춘다
+var locked := false
+
+
 func _physics_process(delta: float) -> void:
+	if locked:
+		velocity = Vector2.ZERO
+		stop_moving()
+		return
 	var dir := Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	if dir != Vector2.ZERO:
 		stop_moving()
@@ -84,6 +92,9 @@ static func _ensure_actions() -> void:
 		"move_down": [KEY_S, KEY_DOWN],
 		"interact": [KEY_X],
 		"open_shelf": [KEY_E],
+		"shelf_up": [KEY_UP],
+		"shelf_down": [KEY_DOWN],
+		"shelf_take": [KEY_ENTER, KEY_KP_ENTER],
 		"drop_item": [KEY_Z],
 		"shop_menu": [KEY_C],
 		"debug_menu": [KEY_F1],

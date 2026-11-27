@@ -263,6 +263,15 @@ func _process(_d: float) -> void:
 		interact()
 	if Input.is_action_just_pressed("open_shelf"):
 		toggle_shelf()
+	# 선반 패널이 열려 있으면 이동을 잠그고, ↑↓ 로 고르고 Enter 로 꺼낸다
+	player.locked = shelf_panel.visible
+	if shelf_panel.visible:
+		if Input.is_action_just_pressed("shelf_up"):
+			shelf_panel.move_selection(-1)
+		if Input.is_action_just_pressed("shelf_down"):
+			shelf_panel.move_selection(1)
+		if Input.is_action_just_pressed("shelf_take") and shelf_panel.selected_id() >= 0:
+			_on_take_out(shelf_panel.selected_id())
 	if Input.is_action_just_pressed("drop_item"):
 		drop_first()
 	for i in 6:
@@ -283,27 +292,14 @@ func drop_first() -> void:
 
 
 ## 숫자 키 1~6: 패널이 열려 있으면 목록 맨 위 아이템을 해당 칸에 적재
-## 숫자 키 1~6 (선반 열림 상태): 들고 있으면 그 칸에 넣고, 손이 비어 있으면 그 칸의 맨 위 아이템을 꺼낸다
+## 숫자 키 1~6 (선반 열림 상태): 들고 있는 맨 위 아이템을 그 칸에 넣는다 (꺼내기는 ↑↓ + Enter 또는 클릭)
 func store_in_slot(slot: int) -> void:
 	if not shelf_panel.visible or slot >= shelf.state.slot_count:
 		return
 	if ItemManager.carried_ids.is_empty():
-		take_out_from_slot(slot)
+		show_message("들고 있는 아이템이 없습니다. ↑↓ 로 고르고 Enter 로 꺼내세요")
 		return
 	ItemManager.place_carried(ItemManager.carried_ids[0], shelf.state, slot)
-
-
-func take_out_from_slot(slot: int) -> void:
-	var ids: Array = shelf.state.slot_items[slot]
-	if ids.is_empty():
-		show_message("이 칸은 비어 있습니다")
-		return
-	var item: ItemInstance = ItemManager.items[ids.back()]
-	if ItemManager.take_out(item, shelf.state):
-		show_message("%s 를 꺼냈습니다" % item.data.display_name)
-		on_take_out_done()
-	else:
-		show_message("더 들 수 없습니다")
 
 
 ## 선반에서 꺼낸 뒤 호출 (튜토리얼이 확인에 쓴다)

@@ -803,3 +803,10 @@
 - 튜토리얼 문구(1단계, 1단계 남은 아이템, 7단계, 조작 요약)와 TEST.md 체크리스트를 E 기준으로 수정
 - 테스트: 선반 열기 입력을 KEY_E 로 변경 (test_behavior_input, test_tutorial_slice), 줍기 입력은 KEY_X 유지
 - 검증: `godot --headless --path . -s res://tests/run_tests.gd` → PBT seed=20261124 tests=110 failed=0
+
+## 선반 꺼내기 키보드화: 패널 열림 시 이동 잠금, ↑↓ 선택, Enter 꺼내기, 숫자 키는 넣기 전용
+- 요청: 키보드만 쓰는 유저가 칸에 여러 개 쌓인 아이템을 꺼내기 어려움. 방향키는 이동과 겹치므로 선반 열림 중 이동을 잠그는 방식 승인. 숫자 키 꺼내기 삭제
+- 변경: 선반 패널이 열려 있으면 `player.locked` 로 이동 정지. ↑/↓ 로 칸 순서대로 모든 아이템 중 선택(노란 강조), Enter 로 선택 아이템 꺼내기. 숫자 1~3 은 들고 있을 때만 넣기, 손이 비면 안내 메시지. 마우스 클릭 꺼내기 유지
+- 튜토리얼: 긴급 퀘스트 안내와 조작 요약 갱신. TEST.md 체크 항목 갱신
+- 테스트: Enter 꺼내기 및 숫자 키 빈 손 무동작 검증 추가 (test_behavior_input), test_tutorial_slice 의 숫자 키 꺼내기 검증을 새 동작으로 교체. 추가 테스트는 room.free() 로 정리 (미정리 시 다음 P 키 테스트 실패)
+- 검증: PBT seed=20261124 tests=111 failed=0

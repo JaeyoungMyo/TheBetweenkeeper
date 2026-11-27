@@ -9,6 +9,10 @@ signal slot_purchase_requested
 signal item_clicked(item_id: int)
 
 var _box := VBoxContainer.new()
+## 키보드 선택: 모든 칸의 아이템을 칸 순서대로 나열한 목록 위를 ↑/↓ 로 이동한다
+var _order: Array[int] = []
+var _buttons := {}
+var _selected_id := -1
 
 
 func _ready() -> void:
@@ -35,9 +39,34 @@ func show_for(state: FacilityState, items: Dictionary, title := "", price := -2)
 		buy.focus_mode = Control.FOCUS_NONE
 		buy.pressed.connect(func() -> void: slot_purchase_requested.emit())
 		_box.add_child(buy)
+	_order.clear()
+	_buttons.clear()
 	for i in state.slot_count:
 		_box.add_child(_make_slot(state, items, i))
+	if not _order.has(_selected_id):
+		_selected_id = _order[0] if not _order.is_empty() else -1
+	_highlight()
 	show()
+
+
+## ↑/↓ (delta -1/+1): 선택 항목 이동. 목록 끝에서는 멈춘다
+func move_selection(delta: int) -> void:
+	if _order.is_empty():
+		return
+	var idx := _order.find(_selected_id)
+	_selected_id = _order[clampi(idx + delta, 0, _order.size() - 1)]
+	_highlight()
+
+
+## Enter: 선택된 아이템 id (없으면 -1)
+func selected_id() -> int:
+	return _selected_id
+
+
+func _highlight() -> void:
+	for id in _buttons:
+		var b: Button = _buttons[id]
+		b.modulate = Color(1.0, 0.92, 0.45) if id == _selected_id else Color.WHITE
 
 
 func _make_slot(state: FacilityState, items: Dictionary, i: int) -> Control:
@@ -78,6 +107,8 @@ func _make_slot(state: FacilityState, items: Dictionary, i: int) -> Control:
 		var clicked_id: int = id
 		entry.pressed.connect(func() -> void: item_clicked.emit(clicked_id))
 		grid.add_child(entry)
+		_order.append(id)
+		_buttons[id] = entry
 	return slot
 
 
