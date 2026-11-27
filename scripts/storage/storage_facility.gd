@@ -14,7 +14,7 @@ const TINTS := [Color(1, 1, 1), Color(0.7, 0.85, 1.0), Color(0.75, 1.0, 0.7), Co
 const EMPTY_TEX := preload("res://art/shelf/shelf_empty.png")
 const FULL_TEX := preload("res://art/shelf/shelf_full.png")
 
-const SIZE := Vector2(40, 40)
+const SIZE := Vector2(32, 32)
 
 
 func _ready() -> void:
@@ -30,6 +30,7 @@ func _ready() -> void:
 	add_child(shape)
 	body = TextureRect.new()
 	body.stretch_mode = TextureRect.STRETCH_SCALE
+	body.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	body.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	body.size = SIZE
 	body.position = -SIZE / 2
@@ -73,9 +74,12 @@ func refresh_look() -> void:
 			var r := TextureRect.new()
 			r.texture = ItemManager.items[id].data.icon()
 			r.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-			r.custom_minimum_size = Vector2(16, 16)
+			r.custom_minimum_size = Vector2(10, 10)
+			r.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 			r.mouse_filter = Control.MOUSE_FILTER_IGNORE
 			_icons.add_child(r)
 			shown += 1
 	body.texture = FULL_TEX if shown > 0 else EMPTY_TEX
 	body.modulate = TINTS[shelf_index % TINTS.size()]
+	body.size = SIZE
+	body.position = -SIZE / 2
