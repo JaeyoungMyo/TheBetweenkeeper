@@ -161,3 +161,25 @@ func test_click_shelf_item_moves_it_to_hands() -> void:
 	await _frames(2)
 	expect(it.state == ItemInstance.State.CARRIED and im.carried_ids.has(it.instance_id), "click moves the item into hands")
 	room.free()
+
+
+func test_six_potions_in_one_shelf_slot_are_all_listed_and_clickable() -> void:
+	# 물약 6개를 한 칸에 넣으면 6개 모두 선반 패널에 보이고 각각 누를 수 있다
+	var room = _room()
+	await _frames(3)
+	var im = room.get_node("/root/ItemManager")
+	var ids: Array = []
+	for k in 6:
+		var it = im.create_item(load("res://data/items/potion_hp.tres"), 0)
+		im.try_pick_up(it, it.world_position)
+		im.place_carried(it.instance_id, room.shelves[0].state, 0)
+		ids.append(it.instance_id)
+	room.shelf = room.shelves[0]
+	room.shelf_panel.show_for(room.shelf.state, im.items, "선반 1", 0)
+	await _frames(2)
+	var listed := 0
+	for id in ids:
+		if room.shelf_panel.find_child("item-entry-%d" % id, true, false) != null:
+			listed += 1
+	expect(listed == 6, "all six potions listed in the shelf panel (got %d)" % listed)
+	room.free()

@@ -55,18 +55,42 @@ func _make_slot(state: FacilityState, items: Dictionary, i: int) -> Control:
 	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
 	bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	slot.add_child(bg)
-	var flow := HFlowContainer.new()
-	flow.set_anchors_preset(Control.PRESET_FULL_RECT)
-	flow.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	slot.add_child(flow)
+	# 칸 안의 아이템은 스크롤 격자에 작은 칸으로 보인다 (6개 이상도 모두 보이고 누를 수 있다)
 	var label := Label.new()
 	label.text = "[%d] 칸 %d: %d / %d" % [i + 1, i + 1, WeightRules.total(state.slot_weights[i]), state.slot_limit]
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	flow.add_child(label)
+	label.position = Vector2(4, 2)
+	slot.add_child(label)
+	var scroll := ScrollContainer.new()
+	scroll.position = Vector2(0, 22)
+	scroll.size = Vector2(250, slot.custom_minimum_size.y - 24)
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	slot.add_child(scroll)
+	var grid := GridContainer.new()
+	grid.columns = 3
+	grid.add_theme_constant_override("h_separation", 4)
+	grid.add_theme_constant_override("v_separation", 4)
+	scroll.add_child(grid)
 	for id in state.slot_items[i]:
-		var entry := ItemListPanel.make_entry(items[id])
-		entry.tooltip_text = slot.tooltip_text
+		var item: ItemInstance = items[id]
+		var entry := _compact_entry(item)
+		entry.tooltip_text = "%s (무게 %d)" % [item.data.display_name, item.weight()]
 		var clicked_id: int = id
 		entry.pressed.connect(func() -> void: item_clicked.emit(clicked_id))
-		flow.add_child(entry)
+		grid.add_child(entry)
 	return slot
+
+
+## 선반 칸용 작은 항목: 아이콘 + 짧은 이름 (칸에 많이 들어가도록)
+func _compact_entry(item: ItemInstance) -> Button:
+	var b: Button = preload("res://scripts/ui/item_list_entry.gd").new()
+	b.name = "item-entry-%d" % item.instance_id
+	b.item_id = item.instance_id
+	b.text = item.data.display_name
+	b.icon = item.data.icon()
+	b.expand_icon = true
+	b.custom_minimum_size = Vector2(76, 30)
+	b.clip_text = true
+	b.mouse_filter = Control.MOUSE_FILTER_PASS
+	b.focus_mode = Control.FOCUS_NONE
+	return b
