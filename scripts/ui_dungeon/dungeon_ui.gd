@@ -13,7 +13,7 @@ const BATTLE_GAP_SEC := 4.0
 var room: StorageRoom
 var _quest_box: PanelContainer
 var _quest_text: RichTextLabel
-var _battle_label: Label
+var _progress: DungeonProgressBar
 var _zone_label: Label
 var _sleep: ColorRect
 var _sleep_label: Label
@@ -31,7 +31,6 @@ signal tutorial_village_done()
 var _village_active := false
 var _village_close_timer := 0.0
 var _village_pending := 0.0
-var _visit_label: Label
 var _shelf_hint: Label
 
 
@@ -69,7 +68,6 @@ func _process(delta: float) -> void:
 		_village_pending -= delta
 		if _village_pending <= 0.0:
 			_village_pending = 0.0
-			_visit_label.visible = false
 			_open_village()
 		return
 	if _village_active:
@@ -98,12 +96,51 @@ func _refresh_hud() -> void:
 		_focus_first_button(_sleep)
 	if _sleep.visible:
 		_sleep_label.text = "용사가 잠들었습니다\n정리 시간 %d초" % ceili(flow.sleep_left)
-	_battle_label.visible = _running
-	_battle_label.text = "던전 %d · 전투 %d / %d" % [flow.dungeon_no, flow.battle_index, flow.battle_total]
+	_refresh_progress(flow)
 	_zone_label.text = "전달 선반\n" + _summary()
 	_shelf_hint.visible = _near_shelf() and not ItemManager.carried_ids.is_empty()
 	_shelf_hint.text = "Z: 1개 넣기"
 	_refresh_quest()
+
+
+## 진행 바 내용: 지금 무슨 단계인지 (전투 / 정비 / 수면 / 마을 / 완료 / 게임 오버)
+func _refresh_progress(flow: DungeonFlow) -> void:
+	var title := "던전 %d" % flow.dungeon_no
+	var info := "실패 %d / %d" % [DungeonManager.failures.count, FailureCounter.LIMIT]
+	var total := flow.battle_total
+	var done := 0
+	var active := -1
+	var fill := 0.0
+	var phase := "준비 중"
+	var color := Color(0.8, 0.8, 0.8)
+	if _village_active or _village_pending > 0.0:
+		phase = "마을 방문 중..."
+		color = Color(0.5, 1, 0.6)
+		done = total
+	elif flow.state == DungeonFlow.State.SLEEP:
+		phase = "수면 · 정리 %d초" % ceili(flow.sleep_left)
+		color = Color(0.86, 0.78, 1)
+		done = total
+	elif flow.state == DungeonFlow.State.GAME_OVER:
+		phase = "게임 오버"
+		color = Color(1, 0.4, 0.4)
+	elif not _running:
+		phase = "던전 완료" if flow.state == DungeonFlow.State.DUNGEON_COMPLETE else "준비 중"
+		done = total
+		color = Color(0.95, 0.78, 0.3)
+	elif flow.state == DungeonFlow.State.IN_BATTLE:
+		done = flow.battle_index - 1
+		active = flow.battle_index - 1
+		fill = 1.0 - _battle_timer / BATTLE_SEC
+		phase = "전투 %d / %d · %d초" % [flow.battle_index, total, ceili(_battle_timer)]
+		color = Color(1, 0.5, 0.3)
+	else:
+		done = flow.battle_index
+		active = flow.battle_index
+		fill = 1.0 - _gap_timer / BATTLE_GAP_SEC
+		phase = "정비 · 다음 전투까지 %d초" % ceili(_gap_timer)
+		color = Color(0.45, 0.75, 1)
+	_progress.set_view(title, phase, info, total, done, active, fill, color)
 
 
 func _near_shelf() -> bool:
@@ -209,8 +246,6 @@ func _on_game_over(failures: int) -> void:
 func _on_village_visit() -> void:
 	_running = false
 	_village_pending = 2.5
-	_visit_label.text = "마을 방문 중..."
-	_visit_label.visible = true
 
 
 func _open_village() -> void:
@@ -351,16 +386,12 @@ func _build_hud() -> void:
 	_quest_text.custom_minimum_size = Vector2(230, 0)
 	_quest_box.add_child(_quest_text)
 	add_child(_quest_box)
-	_visit_label = Label.new()
-	_visit_label.position = Vector2(520, 650)
-	_visit_label.add_theme_font_size_override("font_size", 24)
-	_visit_label.visible = false
-	_visit_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(_visit_label)
-	_battle_label = Label.new()
-	_battle_label.position = Vector2(540, 690)
-	_battle_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(_battle_label)
+	# 아래쪽 던전 진행 바: 전투 칸과 지금 단계 (전투 · 정비 · 수면 · 마을 방문)
+	_progress = DungeonProgressBar.new()
+	_progress.name = "dungeon-progress"
+	_progress.position = Vector2(300, 648)
+	_progress.size = Vector2(680, 64)
+	add_child(_progress)
 
 
 func _build_sleep() -> void:
