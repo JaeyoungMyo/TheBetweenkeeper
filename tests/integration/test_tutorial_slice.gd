@@ -75,8 +75,12 @@ func test_tutorial_shelf_close_step_waits_for_close() -> void:
 	expect(not room._steps[idx]["check"].call(), "closed shelf does not pass the close step")
 	room.shelf_panel.show()
 	expect(not room._steps[idx]["check"].call(), "open shelf does not pass yet")
+	room.toggle_shelf()
+	expect(room._steps[idx]["check"].call(), "closing the open shelf with E passes the close step")
+	room.shelf_panel.show()
+	room.shelf_closed_by_key = false
 	room.shelf_panel.hide()
-	expect(room._steps[idx]["check"].call(), "closing the open shelf passes the close step")
+	expect(not room._steps[idx]["check"].call(), "closing by walking away does not pass")
 	room.free()
 
 
@@ -121,6 +125,7 @@ func test_tutorial_lesson_one_with_keys_then_finish_marks_done() -> void:
 		if not room.shelf_panel.visible:
 			await _key(KEY_E)
 		await _key(KEY_1 if i < 4 else KEY_2)
+		await _key(KEY_E)  # 선반 닫기 (E)
 	expect(room._all_stored(), "all five stored by keys")
 	await tree.process_frame
 	expect(room._step >= 6, "lesson 1 done, lesson 2 started (step %d)" % room._step)

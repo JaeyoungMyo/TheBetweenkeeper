@@ -349,9 +349,14 @@ func interact() -> void:
 			show_message("더 들 수 없습니다 (손이 가득 찼습니다)")
 
 
+## E 로 닫았는지 기록 (튜토리얼의 선반 닫기 단계가 본다. 멀어져서 닫힌 것과 구분)
+var shelf_closed_by_key := false
+
+
 func toggle_shelf() -> void:
 	if shelf_panel.visible:
 		shelf_panel.hide()
+		shelf_closed_by_key = true
 	elif near_shelf():
 		open_panel()
 
