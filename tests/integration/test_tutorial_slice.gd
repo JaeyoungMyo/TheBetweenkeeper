@@ -91,7 +91,8 @@ func test_tutorial_quest_panel_shows_when_quest_starts() -> void:
 	var it = room.tutorial_items[0]
 	ItemManager.try_pick_up(it, it.world_position)
 	ItemManager.place_carried(it.instance_id, room.shelves[0].state, 0)
-	room._spawn_quest_from_top()
+	room._spawn_potion_quest()
+	expect(room.tutorial_items[0].data.item_id == "potion_hp", "tutorial quest needs the potion")
 	var ui = room.find_child("DungeonUi", true, false)
 	ui._process(0.1)
 	expect(ui._quest_box.visible, "quest panel visible during the tutorial")
