@@ -36,6 +36,26 @@ func test_tutorial_pieces() -> void:
 	room.free()
 
 
+func test_tutorial_refills_missing_shelf_item() -> void:
+	# 선반에 회복약이 없어도 긴급 퀘스트 단계에서 바닥의 회복약을 선반에 넣어 채운다 (새로 만들지 않는다)
+	SaveService.delete_save()
+	var room = load("res://scenes/storage/tutorial_storage.tscn").instantiate()
+	tree.root.add_child(room)
+	await tree.process_frame
+	var im = room.get_node("/root/ItemManager")
+	expect(not room._stored_kind("potion_hp"), "potion starts off the shelf")
+	room._ensure_on_shelf("potion_hp")
+	expect(room._stored_kind("potion_hp"), "missing potion is put on the shelf")
+	var total := 0
+	for id in im.items:
+		if im.items[id].data.item_id == "potion_hp":
+			total += 1
+	expect(total == 1, "no duplicate potion created (total %d)" % total)
+	room._ensure_on_shelf("potion_hp")
+	expect(im.carried_ids.is_empty(), "already on shelf: nothing happens")
+	room.free()
+
+
 func _key(k: Key) -> void:
 	for p in [true, false]:
 		var ev := InputEventKey.new()

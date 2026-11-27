@@ -104,14 +104,14 @@ func _build_steps() -> Array:
 	# 2. 아이템 드랍
 	s.append({"text": "[b]2. 아이템 드랍[/b] 바닥의 아이템에 다가가 [b]X[/b] 로 줍고, 선반에서 떨어진 곳에서 [b]Z[/b] 로 내려놓으세요.", "enter": func() -> void: _spawn_floor_item(), "check": func() -> bool: return _dropped_on_floor()})
 	# 3. 긴급 퀘스트 (아이템 꺼내서 전달)
-	s.append({"text": "[b]3. 긴급 퀘스트[/b] 왼쪽 아래에 [b]긴급 요청 (회복약 1개)[/b] 이 떴습니다. 선반을 열고 [b]회복약[/b] 을 ↑↓ 로 고른 뒤 [b]Enter[/b] 로 꺼내세요 (이름을 클릭해도 됩니다).", "enter": func() -> void: _spawn_potion_quest(), "check": func() -> bool: return _carrying("potion_hp")})
+	s.append({"text": "[b]3. 긴급 퀘스트[/b] 왼쪽 아래에 [b]긴급 요청 (회복약 1개)[/b] 이 떴습니다. 선반을 열고 [b]회복약[/b] 을 ↑↓ 로 고른 뒤 [b]Enter[/b] 로 꺼내세요 (이름을 클릭해도 됩니다).", "enter": func() -> void: _ensure_on_shelf("potion_hp"); _spawn_potion_quest(), "check": func() -> bool: return _carrying("potion_hp")})
 	s.append({"text": "[b]3. 긴급 퀘스트[/b] 들고 [b]전달 선반[/b] (오른쪽 아래 파란 칸) 앞에서 [b]Z[/b] 를 누르세요.", "check": func() -> bool: return _quest_done()})
 	# 4. 증강 선택
 	s.append({"text": "[b]4. 증강 선택[/b] 레벨이 올랐습니다! 나온 증강 중 하나를 고르세요. (고르는 동안 게임이 잠시 멈춥니다)", "enter": func() -> void: _level_up(), "check": func() -> bool: return not EconomyManager.augments.is_empty() and EconomyManager.pending_choices == 0})
 	# 5. 수면
 	s.append({"text": "[b]5. 수면[/b] 용사가 잠듭니다 (튜토리얼은 6초). 수면 중에도 [b]C[/b] 로 새 선반을 살 수 있습니다. 칸 추가는 선반을 열고 [b]+[/b] 키.", "enter": func() -> void: _start_sleep(), "check": func() -> bool: return _ui != null and _ui._shop_active})
 	# 6. 상점 퀘스트
-	s.append({"text": "[b]6. 상점 퀘스트[/b] 상점이 열렸습니다. 요청 품목 [b]검[/b] 과 [b]투구[/b] 를 선반에서 꺼내 [b]전달 선반[/b] 에 [b]Z[/b] 로 넣으세요. 판매되면 골드와 EXP 를 얻습니다.", "check": func() -> bool: return _sell_ok})
+	s.append({"text": "[b]6. 상점 퀘스트[/b] 상점이 열렸습니다. 요청 품목 [b]검[/b] 과 [b]투구[/b] 를 선반에서 꺼내 [b]전달 선반[/b] 에 [b]Z[/b] 로 넣으세요. 판매되면 골드와 EXP 를 얻습니다.", "enter": func() -> void: _ensure_on_shelf("sword"); _ensure_on_shelf("helmet"), "check": func() -> bool: return _sell_ok})
 	# 7. 선반 구매와 확장
 	s.append({"text": "[b]7. 선반 구매[/b] 튜토리얼 지원금 500골드를 드렸습니다. [b]C[/b] 키로 메뉴를 열고 [b]새 선반 사기[/b] 를 누르세요. (C 메뉴는 선반 구매만 합니다)", "enter": func() -> void: EconomyManager.add_gold(500), "check": func() -> bool: return room_shelves() >= 2})
 	s.append({"text": "[b]7. 칸 확장[/b] 선반 [b]앞[/b] 에서 [b]E[/b] 로 선반을 열고, 패널 맨 위 [b]칸 추가[/b] 버튼을 누르거나 [b]+[/b] 키를 누르세요. 선반마다 따로 늘립니다.", "check": func() -> bool: return shelves[0].state.slot_count > 3})
@@ -166,6 +166,38 @@ func _on_guide_next() -> void:
 func _spawn_potion_quest() -> void:
 	_quest_kind = "potion_hp"
 	DungeonManager.spawn_quest_now({"quantity": 1, "line_max": 1, "time_limit": 120.0, "gold": 10, "exp": 10, "fixed_lines": [{"item_kind": "potion_hp", "required": 1}]})
+
+
+## 튜토리얼 지원: 선반에 kind 아이템이 없으면 (이미 꺼냈거나 빠진 경우) 새로 만들어 선반에 넣는다
+## 손에 들고 있거나 선반에 있으면 아무것도 하지 않는다. 칸이 없으면 바닥에 둔다
+func _ensure_on_shelf(kind: String) -> void:
+	if _carrying(kind) or _stored_kind(kind):
+		return
+	# 바닥에 있는 같은 종류 아이템이 있으면 그것을 쓰고, 없으면 새로 만든다
+	var item: ItemInstance = null
+	for id in ItemManager.items:
+		var it: ItemInstance = ItemManager.items[id]
+		if it.state == ItemInstance.State.INCOMING and it.data.item_id == kind:
+			item = it
+			break
+	if item == null:
+		item = add_item(load("res://data/items/%s.tres" % kind), shelves[0].position + Vector2(0, 60))
+	if not ItemManager.try_pick_up(item, item.world_position):
+		return
+	for s in shelves:
+		for slot in s.state.slot_count:
+			if ItemManager.place_carried(item.instance_id, s.state, slot)["ok"]:
+				_refresh()
+				return
+
+
+## 선반(어느 칸이든)에 kind 아이템이 들어 있는지
+func _stored_kind(kind: String) -> bool:
+	for id in ItemManager.items:
+		var it: ItemInstance = ItemManager.items[id]
+		if it.state == ItemInstance.State.STORED and it.data.item_id == kind:
+			return true
+	return false
 
 
 ## 손에 든 아이템 중에 kind 가 있는지
