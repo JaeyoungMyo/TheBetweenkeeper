@@ -6,12 +6,12 @@
     "quest_count": 1,
     "quest_quantity": 2,
     "line_max": 1,
-    "sleep_sec": 30,
+    "sleep_sec": 60,
     "quest_time_limit_sec": 30,
     "quest_reward_gold": 30,
     "quest_reward_exp": 20,
-    "intake_min": 5,
-    "intake_max": 10
+    "intake_min": 4,
+    "intake_max": 8
   },
   {
     "no": 2,
@@ -20,12 +20,12 @@
     "quest_count": 1,
     "quest_quantity": 2,
     "line_max": 1,
-    "sleep_sec": 30,
+    "sleep_sec": 60,
     "quest_time_limit_sec": 30,
     "quest_reward_gold": 35,
     "quest_reward_exp": 25,
-    "intake_min": 5,
-    "intake_max": 10
+    "intake_min": 4,
+    "intake_max": 8
   },
   {
     "no": 3,
@@ -34,12 +34,12 @@
     "quest_count": 2,
     "quest_quantity": 3,
     "line_max": 2,
-    "sleep_sec": 30,
+    "sleep_sec": 60,
     "quest_time_limit_sec": 30,
     "quest_reward_gold": 40,
     "quest_reward_exp": 30,
-    "intake_min": 5,
-    "intake_max": 10
+    "intake_min": 4,
+    "intake_max": 8
   },
   {
     "no": 4,
@@ -48,12 +48,12 @@
     "quest_count": 2,
     "quest_quantity": 3,
     "line_max": 2,
-    "sleep_sec": 30,
+    "sleep_sec": 60,
     "quest_time_limit_sec": 30,
     "quest_reward_gold": 45,
     "quest_reward_exp": 35,
-    "intake_min": 5,
-    "intake_max": 10
+    "intake_min": 4,
+    "intake_max": 8
   },
   {
     "no": 5,
@@ -62,12 +62,12 @@
     "quest_count": 2,
     "quest_quantity": 4,
     "line_max": 2,
-    "sleep_sec": 30,
+    "sleep_sec": 60,
     "quest_time_limit_sec": 30,
     "quest_reward_gold": 50,
     "quest_reward_exp": 40,
-    "intake_min": 5,
-    "intake_max": 10
+    "intake_min": 4,
+    "intake_max": 8
   },
   {
     "no": 6,
@@ -76,12 +76,12 @@
     "quest_count": 3,
     "quest_quantity": 5,
     "line_max": 2,
-    "sleep_sec": 30,
+    "sleep_sec": 60,
     "quest_time_limit_sec": 30,
     "quest_reward_gold": 60,
     "quest_reward_exp": 50,
-    "intake_min": 5,
-    "intake_max": 10
+    "intake_min": 4,
+    "intake_max": 8
   },
   {
     "no": 7,
@@ -90,12 +90,12 @@
     "quest_count": 3,
     "quest_quantity": 6,
     "line_max": 3,
-    "sleep_sec": 30,
+    "sleep_sec": 60,
     "quest_time_limit_sec": 30,
     "quest_reward_gold": 70,
     "quest_reward_exp": 60,
-    "intake_min": 5,
-    "intake_max": 10
+    "intake_min": 4,
+    "intake_max": 8
   },
   {
     "no": 8,
@@ -104,12 +104,12 @@
     "quest_count": 4,
     "quest_quantity": 7,
     "line_max": 3,
-    "sleep_sec": 30,
+    "sleep_sec": 60,
     "quest_time_limit_sec": 30,
     "quest_reward_gold": 80,
     "quest_reward_exp": 70,
-    "intake_min": 5,
-    "intake_max": 10
+    "intake_min": 4,
+    "intake_max": 8
   },
   {
     "no": 9,
@@ -118,12 +118,12 @@
     "quest_count": 5,
     "quest_quantity": 8,
     "line_max": 3,
-    "sleep_sec": 30,
+    "sleep_sec": 60,
     "quest_time_limit_sec": 30,
     "quest_reward_gold": 90,
     "quest_reward_exp": 80,
-    "intake_min": 5,
-    "intake_max": 10
+    "intake_min": 4,
+    "intake_max": 8
   },
   {
     "no": 10,
@@ -132,11 +132,11 @@
     "quest_count": 6,
     "quest_quantity": 10,
     "line_max": 3,
-    "sleep_sec": 30,
+    "sleep_sec": 60,
     "quest_time_limit_sec": 30,
     "quest_reward_gold": 100,
     "quest_reward_exp": 90,
-    "intake_min": 5,
-    "intake_max": 10
+    "intake_min": 4,
+    "intake_max": 8
   }
 ]

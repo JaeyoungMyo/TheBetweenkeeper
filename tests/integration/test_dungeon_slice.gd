@@ -40,13 +40,13 @@ func test_dungeon_one_full_flow_without_scene() -> void:
 		completed = bool(fin["completed"])
 
 	expect(flow.battle_index == flow.battle_total, "all battles fought")
-	expect(intake_total >= 5 * flow.battle_total and intake_total <= 10 * flow.battle_total, "intake 5..10 per battle")
+	expect(intake_total >= 4 * flow.battle_total and intake_total <= 8 * flow.battle_total, "intake 4..8 per battle")
 	expect(quests_seen == 1, "dungeon 1 has 1 quest")
 	expect(flow.state == DungeonFlow.State.DUNGEON_COMPLETE, "dungeon complete")
 	expect(not quests.is_active(), "no active quest after completion")
 
 	flow.begin_sleep()
-	expect(not flow.tick_sleep(29.0), "still sleeping at 29s")
-	expect(flow.tick_sleep(1.0), "sleep over at 30s")
+	expect(not flow.tick_sleep(59.0), "still sleeping at 59s")
+	expect(flow.tick_sleep(1.0), "sleep over at 60s")
 	expect(flow.state == DungeonFlow.State.SHOP_HANDOFF and flow.shop_handoffs == 1, "shop handoff exactly once")
 	expect(not failures.is_game_over(), "no failures")

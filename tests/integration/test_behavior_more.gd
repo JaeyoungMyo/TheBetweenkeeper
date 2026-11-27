@@ -117,3 +117,22 @@ func test_slot_rejects_over_weight_limit() -> void:
 	expect(first["ok"] and second["ok"], "6 + 6 = 12 fits exactly")
 	expect(not third["ok"], "third 6 rejected, limit 12")
 	room.free()
+
+
+func test_shelf_upgrade_menu_usable_during_sleep() -> void:
+	# 수면 (60초) 중에도 C 메뉴로 선반 · 칸 구매가 된다 (BR-U3-20: 정리와 강화는 가능)
+	var room = _room()
+	await _frames(3)
+	var ui = room.find_child("DungeonUi", true, false)
+	ui._running = false
+	DungeonManager.flow.state = DungeonFlow.State.SLEEP
+	DungeonManager.flow.sleep_left = 60.0
+	EconomyManager.add_gold(1000)
+	var n: int = room.shelves.size()
+	await _key(KEY_C)
+	await _frames(2)
+	var growth = room.get_node("GrowthUi")
+	expect(growth.menu.visible, "C opens the upgrade menu during sleep")
+	expect(room.buy_shelf() and room.shelves.size() == n + 1, "shelf bought during sleep")
+	room.free()
+	DungeonManager.flow.state = DungeonFlow.State.READY

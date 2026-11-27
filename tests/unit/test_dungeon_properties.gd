@@ -10,8 +10,8 @@ func _rng(i: int) -> RandomNumberGenerator:
 
 func test_intake_always_in_range() -> void:
 	for i in Pbt.RUNS:
-		var n := DungeonRules.roll_intake(_rng(i), 5, 10)
-		expect(n >= 5 and n <= 10, "intake in 5..10")
+		var n := DungeonRules.roll_intake(_rng(i), 4, 8)
+		expect(n >= 4 and n <= 8, "intake in 4..8")
 
 
 func test_battle_count_always_in_range() -> void:
