@@ -21,7 +21,9 @@ func _ready() -> void:
 	_hint = _corner_label("메뉴 (P · ESC)", 1098, 8)
 	add_child(_hint)
 	_overlay = ColorRect.new()
-	_overlay.color = Color(0, 0, 0, 0.6)
+	# 메뉴 뒤 화면은 흐리게 (블러 + 어둡게). 뒤의 물건이나 퀘스트 위치를 읽을 수 없게 한다
+	_overlay.material = ShaderMaterial.new()
+	_overlay.material.shader = load("res://shaders/menu_blur.gdshader")
 	_overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
 	_overlay.visible = false
