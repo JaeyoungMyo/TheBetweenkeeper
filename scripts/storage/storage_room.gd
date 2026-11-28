@@ -169,10 +169,10 @@ func _build_ui() -> void:
 	var layer := CanvasLayer.new()
 	add_child(layer)
 	list_panel = preload("res://scenes/ui_storage/item_list_panel.tscn").instantiate()
-	list_panel.position = Vector2(0, 40)
+	list_panel.position = Vector2(32, 40)
 	layer.add_child(list_panel)
 	shelf_panel = preload("res://scenes/ui_storage/shelf_panel.tscn").instantiate()
-	shelf_panel.position = Vector2(1015, 60)
+	shelf_panel.position = Vector2(988, 60)
 	layer.add_child(shelf_panel)
 	message = Label.new()
 	message.position = Vector2(560, 20)
@@ -183,9 +183,6 @@ func _build_ui() -> void:
 	dungeon.room = self
 	add_child(dungeon)
 	SaveService.shelves_provider = Callable(self, "_capture_shelves")
-	var settings := SettingsPanel.new()
-	settings.name = "SettingsPanel"
-	add_child(settings)
 	var pause := PauseMenu.new()
 	pause.name = "PauseMenu"
 	add_child(pause)

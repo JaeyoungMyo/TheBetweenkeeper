@@ -125,9 +125,10 @@ func _refresh_progress(flow: DungeonFlow) -> void:
 		phase = "게임 오버"
 		color = Color(1, 0.4, 0.4)
 	elif not _running:
-		phase = "던전 완료" if flow.state == DungeonFlow.State.DUNGEON_COMPLETE else "준비 중"
-		done = total
-		color = Color(0.95, 0.78, 0.3)
+		if flow.state == DungeonFlow.State.DUNGEON_COMPLETE:
+			phase = "던전 완료"
+			done = total
+			color = Color(0.95, 0.78, 0.3)
 	elif flow.state == DungeonFlow.State.IN_BATTLE:
 		done = flow.battle_index - 1
 		active = flow.battle_index - 1

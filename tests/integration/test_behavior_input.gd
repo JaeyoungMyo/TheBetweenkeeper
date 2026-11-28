@@ -61,7 +61,7 @@ func test_drop_key_puts_item_on_floor() -> void:
 
 
 func test_menu_keys_open_and_close() -> void:
-	# F1 디버그 메뉴, F2 설정 패널 토글
+	# F1 디버그 메뉴, ESC 메뉴 토글
 	var room = _room()
 	await _frames(3)
 	var debug = room.get_node("DebugMenu")
@@ -71,13 +71,13 @@ func test_menu_keys_open_and_close() -> void:
 	await _key(KEY_F1)
 	await _frames(2)
 	expect(not debug.panel.visible, "F1 closes debug menu")
-	var settings = room.get_node("SettingsPanel")
-	await _key(KEY_F2)
+	# 설정은 메뉴 (P · ESC) 안에 있다. F2 는 더 이상 쓰지 않는다
+	await _key(KEY_ESCAPE)
 	await _frames(2)
-	expect(settings._panel.visible, "F2 opens settings")
-	await _key(KEY_F2)
+	expect(room.get_node("PauseMenu")._overlay.visible, "ESC opens the menu")
+	await _key(KEY_ESCAPE)
 	await _frames(2)
-	expect(not settings._panel.visible, "F2 closes settings")
+	expect(not room.get_node("PauseMenu")._overlay.visible, "ESC closes the menu")
 	room.free()
 
 
