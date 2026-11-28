@@ -17,11 +17,8 @@ var _resume_button: Button
 func _ready() -> void:
 	layer = 7
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	# 상단 표시만 (마우스 버튼 없음)
-	_hint = Label.new()
-	_hint.text = "메뉴 (P · ESC)"
-	_hint.position = Vector2(1120, 8)
-	_hint.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	# 오른쪽 위 안내 (오른쪽 여백 32px 에 맞춘다)
+	_hint = _corner_label("메뉴 (P · ESC)", 1098, 8)
 	add_child(_hint)
 	_overlay = ColorRect.new()
 	_overlay.color = Color(0, 0, 0, 0.6)
@@ -29,42 +26,61 @@ func _ready() -> void:
 	_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
 	_overlay.visible = false
 	add_child(_overlay)
-	var title := Label.new()
-	title.text = "메뉴"
-	title.position = Vector2(560, 150)
-	title.add_theme_font_size_override("font_size", 36)
-	_overlay.add_child(title)
+	# 모든 줄을 화면 가운데에 쌓는다 (글자와 버튼이 같은 중심선에 맞는다)
+	var column := VBoxContainer.new()
+	column.set_anchors_preset(Control.PRESET_FULL_RECT)
+	column.offset_top = 140
+	column.alignment = BoxContainer.ALIGNMENT_BEGIN
+	column.add_theme_constant_override("separation", 10)
+	_overlay.add_child(column)
+	var title := _centered_label("메뉴", 36)
+	column.add_child(title)
 	_buttons = VBoxContainer.new()
-	_buttons.position = Vector2(500, 220)
 	_buttons.custom_minimum_size = Vector2(280, 0)
-	_overlay.add_child(_buttons)
+	_buttons.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	_buttons.add_theme_constant_override("separation", 8)
+	column.add_child(_buttons)
 	_resume_button = _add_button("계속하기 (P)", toggle)
-	_add_button("구매 (C)", _open_buy)
 	_add_button("전체 화면 전환", func() -> void: _toggle_fullscreen())
 	_add_button("조작 안내", _show_help)
 	_add_button("메인 메뉴로", go_to_menu)
-	_help = Label.new()
-	_help.text = CONTROLS
-	_help.position = Vector2(440, 200)
+	_help = _centered_label(CONTROLS, 20)
 	_help.visible = false
-	_help.add_theme_font_size_override("font_size", 20)
-	_overlay.add_child(_help)
+	column.add_child(_help)
 	_back = Button.new()
 	_back.text = "뒤로"
-	_back.position = Vector2(560, 470)
+	_back.custom_minimum_size = Vector2(160, 44)
+	_back.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	_back.visible = false
 	_back.pressed.connect(_hide_help)
-	_overlay.add_child(_back)
-	var note := Label.new()
-	note.text = "(마지막 자동 저장 이후 진행은 저장되지 않습니다)"
-	note.position = Vector2(440, 520)
-	_overlay.add_child(note)
+	column.add_child(_back)
+	column.add_child(_centered_label("(마지막 자동 저장 이후 진행은 저장되지 않습니다)", 16))
+
+
+func _centered_label(text: String, font_size: int) -> Label:
+	var l := Label.new()
+	l.text = text
+	l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	l.add_theme_font_size_override("font_size", font_size)
+	l.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	return l
+
+
+func _corner_label(text: String, x: float, y: float) -> Label:
+	var l := Label.new()
+	l.text = text
+	l.position = Vector2(x, y)
+	l.size = Vector2(1248 - x, 24)
+	l.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	l.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	return l
 
 
 func _add_button(text: String, action: Callable) -> Button:
 	var b := Button.new()
 	b.text = text
 	b.custom_minimum_size = Vector2(280, 44)
+	b.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	b.pressed.connect(action)
 	_buttons.add_child(b)
 	return b
@@ -82,14 +98,6 @@ func _hide_help() -> void:
 	_help.visible = false
 	_back.visible = false
 	_resume_button.call_deferred("grab_focus")
-
-
-## 구매: 메뉴를 닫고 구매 메뉴를 연다 (구매 메뉴는 게임이 움직일 때만 열린다)
-func _open_buy() -> void:
-	toggle()
-	var growth = get_parent().find_child("GrowthUi", true, false)
-	if growth != null and not growth.menu.visible:
-		growth.toggle_menu()
 
 
 func _toggle_fullscreen() -> void:

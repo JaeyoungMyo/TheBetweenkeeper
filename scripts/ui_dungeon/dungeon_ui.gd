@@ -372,8 +372,9 @@ func _announce(text: String, color: Color) -> void:
 
 func _build_hud() -> void:
 	_quest_box = PanelContainer.new()
-	_quest_box.position = Vector2(8, 560)
-	_quest_box.custom_minimum_size = Vector2(240, 0)
+	# 아이템 목록과 같은 왼쪽 열 (x 32, 폭 200)
+	_quest_box.position = Vector2(32, 560)
+	_quest_box.custom_minimum_size = Vector2(200, 0)
 	_quest_box.visible = false
 	_quest_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var box_style := StyleBoxFlat.new()
@@ -384,7 +385,7 @@ func _build_hud() -> void:
 	_quest_text = RichTextLabel.new()
 	_quest_text.bbcode_enabled = true
 	_quest_text.fit_content = true
-	_quest_text.custom_minimum_size = Vector2(230, 0)
+	_quest_text.custom_minimum_size = Vector2(184, 0)
 	_quest_box.add_child(_quest_text)
 	add_child(_quest_box)
 	# 아래쪽 던전 진행 바: 전투 칸과 지금 단계 (전투 · 정비 · 수면 · 마을 방문)

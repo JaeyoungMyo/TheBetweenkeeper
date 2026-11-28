@@ -13,7 +13,7 @@ var _choice_box := VBoxContainer.new()
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	layer = 2
-	hud.position = Vector2(12, 12)
+	hud.position = Vector2(32, 12)
 	hud.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(hud)
 	menu.position = Vector2(440, 180)
@@ -30,7 +30,10 @@ func _ready() -> void:
 	var buy_hint := Label.new()
 	buy_hint.name = "buy-open-button"
 	buy_hint.text = "구매 (C)"
-	buy_hint.position = Vector2(1000, 8)
+	# 오른쪽 위 안내 줄 (메뉴 안내와 같은 오른쪽 여백에 맞춘다)
+	buy_hint.position = Vector2(948, 8)
+	buy_hint.size = Vector2(150, 24)
+	buy_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	buy_hint.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(buy_hint)
 	EconomyManager.gold_changed.connect(_on_gold_changed)
